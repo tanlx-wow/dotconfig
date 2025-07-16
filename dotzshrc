@@ -115,6 +115,4 @@ alias cl="clear"
 alias v="nvim"
 # lazygit
 alias lag="lazygit"
-# rm ask
-alias rm="rm -i"
 
