@@ -111,9 +111,10 @@ alias pwdcp="pwd | tr -d '\n' | pbcopy"
 
 # clear screen
 alias cl="clear"
-
 # nvim
 alias v="nvim"
-
 # lazygit
 alias lag="lazygit"
+# rm ask
+alias rm="rm -i"
+
