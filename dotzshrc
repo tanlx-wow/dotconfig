@@ -116,3 +116,5 @@ alias v="nvim"
 # lazygit
 alias lag="lazygit"
 
+# windows size
+alias winsize="swift ~/.config/shell_tool/resize_windows.swift"
