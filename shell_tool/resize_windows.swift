@@ -1,12 +1,17 @@
-
 #!/usr/bin/swift
+
+// Required parameters:
 // @raycast.schemaVersion 1
-// @raycast.title Resize to Visible Frame
+// @raycast.title resize all windows
 // @raycast.mode silent
-// @raycast.author Your Name
-// @raycast.authorURL https://github.com/yourname
-// @raycast.description Resize frontmost window to fit visible screen area
-// @raycast.icon 🪟
+
+// Optional parameters:
+// @raycast.icon 🤖
+
+// Documentation:
+// @raycast.description resize all windows based on display resolution
+// @raycast.author TLX
+
 import Cocoa
 import ApplicationServices
 
