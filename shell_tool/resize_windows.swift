@@ -44,6 +44,9 @@ let workspace = NSWorkspace.shared
 for app in workspace.runningApplications {
     guard !app.isHidden, app.activationPolicy == .regular else { continue }
 
+    // Skip Finder windows
+    guard app.bundleIdentifier != "com.apple.finder" else { continue }
+
     let appElement = AXUIElementCreateApplication(app.processIdentifier)
     var value: AnyObject?
 
