@@ -18,7 +18,6 @@ fi
 alias ls="eza --icons=always --git --color=always"
 
 # for terminal theme
-source $HOMEBREW_PREFIX/share/powerlevel10k/powerlevel10k.zsh-theme
 
 
 # history setup
@@ -35,8 +34,6 @@ bindkey '^[[A' history-search-backward
 bindkey '^[[B' history-search-forward
 
 
-source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # ---- FZF -----
 
