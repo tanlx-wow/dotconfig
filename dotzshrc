@@ -16,6 +16,8 @@ fi
 
 # eza (better ls function)
 alias ls="eza --icons=always --git --color=always"
+# list all function
+alias ll="ls -lh"
 
 # for terminal theme
 
