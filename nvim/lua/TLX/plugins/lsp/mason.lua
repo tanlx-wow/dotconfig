@@ -35,7 +35,6 @@ return {
 				"bashls",
 				"harper_ls",
 				"marksman",
-				"nil_ls",
 			},
 		})
 
