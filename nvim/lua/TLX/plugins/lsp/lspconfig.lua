@@ -10,6 +10,9 @@ return {
 		-- import lspconfig plugin
 		local lspconfig = require("lspconfig")
 
+		-- import util from lscpconfig
+		local util = require("lspconfig.util")
+
 		-- import mason_lspconfig plugin
 		local mason_lspconfig = require("mason-lspconfig")
 
@@ -89,6 +92,24 @@ return {
 					[vim.diagnostic.severity.HINT] = " ",
 				},
 			},
+		})
+
+		lscpconfig.pyright.setup({
+			root_dir = util.root_pattern("pixi.toml", ".git"),
+			before_init = function(_, config)
+				local root = config.root_dir or vim.fn.getcwd()
+				local pixi_python = root .. "/.pixi/envs/default/bin/python"
+
+				if vim.fn.excutable(pixi_python) == 1 then
+					config.settings = {
+						python = {
+							pythonPath = pixi_python,
+						},
+					}
+				else
+					vim.notify("Pixi Python not found in project:" .. pixi_python, vim.log.levels.WARN)
+				end
+			end,
 		})
 	end,
 }
