@@ -100,7 +100,7 @@ return {
 				local root = config.root_dir or vim.fn.getcwd()
 				local pixi_python = root .. "/.pixi/envs/default/bin/python"
 
-				if vim.fn.excutable(pixi_python) == 1 then
+				if vim.fn.executable(pixi_python) == 1 then
 					config.settings = {
 						python = {
 							pythonPath = pixi_python,
