@@ -27,28 +27,28 @@ return {
 		mason_lspconfig.setup({
 			-- list of servers for mason to install
 			ensure_installed = {
-				"html",
-				"lua_ls",
-				"prismals",
-				"pyright",
-				"rust_analyzer",
-				"bashls",
-				"harper_ls",
-				"marksman",
+				-- "html",
+				-- "lua_ls",
+				-- "prismals",
+				-- "pyright",
+				-- "rust_analyzer",
+				-- "bashls",
+				-- "harper_ls",
+				-- "marksman",
 			},
 		})
 
 		mason_tool_installer.setup({
 			ensure_installed = {
-				"prettier", -- prettier formatter
-				"stylua", -- lua formatter
-				"isort", -- python formatter
-				"black", -- python formatter
-				"pylint", -- python linter
-				"eslint_d", -- js linter
-				"shellharden", --shell formatter linter
-				"markdownlint", -- md formatter linter
-				"nixpkgs-fmt", --nixpkgs fromatter
+				-- "prettier", -- prettier formatter
+				-- "stylua", -- lua formatter
+				-- "isort", -- python formatter
+				-- "black", -- python formatter
+				-- "pylint", -- python linter
+				-- "eslint_d", -- js linter
+				-- "shellharden", --shell formatter linter
+				-- "markdownlint", -- md formatter linter
+				-- "nixpkgs-fmt", --nixpkgs fromatter
 			},
 		})
 	end,
