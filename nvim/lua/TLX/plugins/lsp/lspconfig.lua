@@ -81,6 +81,6 @@ return {
 			},
 		})
 		-- load individual server configs
-		require("lsp.servers.pyright")()
+		require("TLX.plugins.lsp.servers.pyright")()
 	end,
 }
