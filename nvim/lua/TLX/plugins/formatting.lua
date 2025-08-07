@@ -19,7 +19,7 @@ return {
 				graphql = { "prettier" },
 				rust = { "rustfmt" },
 				lua = { "stylua" },
-				python = { "pylint", "isort", "black" },
+				python = { "isort", "black" },
 				sh = { "shellharden", "shfmt" },
 				nix = { "nixfmt" },
 			},
