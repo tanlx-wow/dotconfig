@@ -44,7 +44,7 @@ return {
 
 				-- 🔧 Custom setup for pyright
 				["pyright"] = function()
-					require("plugins.lsp.servers.pyright") -- 👈 your custom file
+					require("plugins.lsp.servers.pyright")() -- 👈 your custom file
 				end,
 			},
 		})
