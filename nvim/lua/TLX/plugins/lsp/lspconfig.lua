@@ -94,7 +94,7 @@ return {
 			},
 		})
 
-		lscpconfig.pyright.setup({
+		lspconfig.pyright.setup({
 			root_dir = util.root_pattern("pixi.toml", ".git"),
 			before_init = function(_, config)
 				local root = config.root_dir or vim.fn.getcwd()
