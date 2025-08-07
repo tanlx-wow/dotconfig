@@ -11,6 +11,8 @@ return function()
 					diagnosticMode = "workspace",
 					typeCheckingMode = "basic", -- or "strict"
 				},
+				venvPath = ".pixi/envs",
+				venv = "default",
 			},
 		},
 	})
