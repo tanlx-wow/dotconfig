@@ -36,18 +36,6 @@ return {
 				"harper_ls",
 				"marksman",
 			},
-			handlers = {
-				-- Default handler for all other servers
-				function(server_name)
-					require("lspconfig")[server_name].setup({})
-				end,
-
-				-- -- 🔧 Custom setup for pyright
-				["pyright"] = function()
-					local config = require("plugins.lsp.servers.pyright")
-					require("lspconfig").pyright.setup(config)
-				end,
-			},
 		})
 
 		mason_tool_installer.setup({
