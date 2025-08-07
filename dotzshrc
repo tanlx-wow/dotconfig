@@ -94,7 +94,7 @@ alias lag="lazygit"
 alias winsize="swift ~/.config/shell_tool/resize_windows.swift"
 
 # micromamba 
-alias mamba="micromamba"
+# alias mamba="micromamba"
 
 # reload zshrc
 alias zshrl="source ~/.zshrc"
