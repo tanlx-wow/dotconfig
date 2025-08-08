@@ -48,7 +48,6 @@ return {
 				"eslint_d", -- js linter
 				"shellharden", --shell formatter linter
 				"markdownlint", -- md formatter linter
-				"nixpkgs-fmt", --nixpkgs fromatter
 			},
 		})
 	end,
