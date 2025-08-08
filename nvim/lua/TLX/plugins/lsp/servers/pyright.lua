@@ -1,25 +1,25 @@
--- ~/.config/nvim/lua/TLX/plugins/lsp/servers/pyright.lua
 return function(capabilities)
-	local python_path = vim.fn.getcwd() .. "/.pixi/envs/default/bin/python"
+	local cwd = vim.fn.getcwd()
+	local pixi_python = cwd .. "/.pixi/envs/default/bin/python"
 
-	local function get_python_version(python)
+	local function detect_python_version(python)
 		local handle =
-			io.popen(python .. " -c \"import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')\"")
+			io.popen(python .. " -c 'import sys; print(f\"{sys.version_info.major}.{sys.version_info.minor}\")'")
 		if not handle then
-			return "3.12"
+			return "3"
 		end
 		local version = handle:read("*a"):gsub("%s+", "")
 		handle:close()
 		return version
 	end
 
-	local version = get_python_version(python_path)
+	local python_version = detect_python_version(pixi_python)
 
 	require("lspconfig").pyright.setup({
 		capabilities = capabilities,
 		settings = {
 			python = {
-				pythonPath = python_path,
+				pythonPath = pixi_python,
 				venv = "default",
 				venvPath = ".pixi/envs",
 				analysis = {
@@ -28,7 +28,7 @@ return function(capabilities)
 					typeCheckingMode = "basic",
 					useLibraryCodeForTypes = true,
 					extraPaths = {
-						string.format(".pixi/envs/default/lib/python%s/site-packages", version),
+						string.format(".pixi/envs/default/lib/python%s/site-packages", python_version),
 					},
 				},
 			},
