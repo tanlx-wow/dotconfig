@@ -2,25 +2,28 @@ return function(capabilities)
 	local cwd = vim.fn.getcwd()
 	local python_bin = cwd .. "/.pixi/envs/default/bin/python"
 
-	-- Get the absolute site-packages path
-	local function get_site_packages(pybin)
-		local handle = io.popen(pybin .. [[ -c "import site; print(site.getsitepackages()[0])" ]])
+	local function get_py_version(pybin)
+		local handle = io.popen(
+			pybin .. [[ -c "import sys; print('{}.{}'.format(sys.version_info.major, sys.version_info.minor))" ]]
+		)
 		if not handle then
 			return nil
 		end
-		local path = handle:read("*a"):gsub("%s+", "")
+		local version = handle:read("*a"):gsub("%s+", "")
 		handle:close()
-		return path
+		return version
 	end
 
-	local site_packages = get_site_packages(python_bin)
+	local py_version = get_py_version(python_bin)
 
-	if not site_packages then
-		vim.notify("Failed to detect site-packages from " .. python_bin, vim.log.levels.ERROR)
+	if not py_version then
+		vim.notify("Failed to detect Python version from " .. python_bin, vim.log.levels.ERROR)
 		return
 	end
 
-	require("lspconfig").pyright.setup({
+	local lspconfig = require("lspconfig")
+
+	lspconfig.pyright.setup({
 		capabilities = capabilities,
 		settings = {
 			python = {
@@ -32,9 +35,13 @@ return function(capabilities)
 					diagnosticMode = "workspace",
 					typeCheckingMode = "basic",
 					useLibraryCodeForTypes = true,
-					extraPaths = { site_packages },
+					extraPaths = {
+						cwd .. string.format("/.pixi/envs/default/lib/python%s/site-packages", py_version),
+					},
 				},
 			},
 		},
 	})
+
+	vim.notify("Configured Pyright with Python " .. py_version, vim.log.levels.INFO)
 end
