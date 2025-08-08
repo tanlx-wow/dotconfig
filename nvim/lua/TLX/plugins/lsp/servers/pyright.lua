@@ -1,33 +1,37 @@
-local uv = vim.loop
+-- ~/.config/nvim/lua/TLX/plugins/lsp/servers/pyright.lua
+return function(capabilities)
+	local python_path = vim.fn.getcwd() .. "/.pixi/envs/default/bin/python"
 
--- function to detect Python version from Pixi env
-local function get_python_version(python_path)
-	local handle =
-		io.popen(python_path .. " -c \"import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')\"")
-	if handle then
+	local function get_python_version(python)
+		local handle =
+			io.popen(python .. " -c \"import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')\"")
+		if not handle then
+			return "3.12"
+		end
 		local version = handle:read("*a"):gsub("%s+", "")
 		handle:close()
 		return version
 	end
-end
 
-local pixi_python = vim.fn.getcwd() .. "/.pixi/envs/default/bin/python"
-local py_ver = get_python_version(pixi_python)
-local site_packages = string.format(".pixi/envs/default/lib/python%s/site-packages", py_ver)
+	local version = get_python_version(python_path)
 
-require("lspconfig").pyright.setup({
-	settings = {
-		python = {
-			pythonPath = pixi_python,
-			venv = "default",
-			venvPath = ".pixi/envs",
-			analysis = {
-				autoSearchPaths = true,
-				useLibraryCodeForTypes = true,
-				diagnosticMode = "workspace",
-				typeCheckingMode = "basic",
-				extraPaths = { site_packages },
+	require("lspconfig").pyright.setup({
+		capabilities = capabilities,
+		settings = {
+			python = {
+				pythonPath = python_path,
+				venv = "default",
+				venvPath = ".pixi/envs",
+				analysis = {
+					autoSearchPaths = true,
+					diagnosticMode = "workspace",
+					typeCheckingMode = "basic",
+					useLibraryCodeForTypes = true,
+					extraPaths = {
+						string.format(".pixi/envs/default/lib/python%s/site-packages", version),
+					},
+				},
 			},
 		},
-	},
-})
+	})
+end
