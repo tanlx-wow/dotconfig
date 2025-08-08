@@ -1,41 +1,40 @@
-local lspconfig = require("lspconfig")
-local util = require("lspconfig.util")
+return function(capabilities)
+	local cwd = vim.fn.getcwd()
+	local python_bin = cwd .. "/.pixi/envs/default/bin/python"
 
--- Try to find pixi python for this project
-local function get_pixi_python()
-	local pixi_python = "./.pixi/envs/default/bin/python3"
-	if vim.fn.filereadable(pixi_python) == 1 then
-		return vim.fn.resolve(pixi_python)
-	end
-	return nil
-end
-
-local function get_pixi_site_packages()
-	local pixi_python = get_pixi_python()
-	if pixi_python then
-		local output = vim.fn.systemlist(pixi_python .. [[ -c "import site; print(site.getsitepackages()[0])"]])
-		if output[1] and output[1] ~= "" then
-			return output[1]
+	-- Get the absolute site-packages path
+	local function get_site_packages(pybin)
+		local handle = io.popen(pybin .. [[ -c "import site; print(site.getsitepackages()[0])" ]])
+		if not handle then
+			return nil
 		end
+		local path = handle:read("*a"):gsub("%s+", "")
+		handle:close()
+		return path
 	end
-	return nil
-end
 
-local pixi_python = get_pixi_python()
-local site_packages = get_pixi_site_packages()
+	local site_packages = get_site_packages(python_bin)
 
-lspconfig.pyright.setup({
-	settings = {
-		python = {
-			analysis = {
-				pythonPath = pixi_python or vim.fn.exepath("python3"),
-				extraPaths = site_packages and { site_packages } or {},
-				autoSearchPaths = true,
-				useLibraryCodeForTypes = true,
-				diagnosticMode = "workspace",
-				reportMissingImports = false,
+	if not site_packages then
+		vim.notify("Failed to detect site-packages from " .. python_bin, vim.log.levels.ERROR)
+		return
+	end
+
+	require("lspconfig").pyright.setup({
+		capabilities = capabilities,
+		settings = {
+			python = {
+				pythonPath = python_bin,
+				venv = "default",
+				venvPath = ".pixi/envs",
+				analysis = {
+					autoSearchPaths = true,
+					diagnosticMode = "workspace",
+					typeCheckingMode = "basic",
+					useLibraryCodeForTypes = true,
+					extraPaths = { site_packages },
+				},
 			},
 		},
-	},
-	root_dir = util.root_pattern(".git", "pyproject.toml", "pyrightconfig.json"),
-})
+	})
+end
