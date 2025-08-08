@@ -2,9 +2,9 @@ return function(capabilities)
 	local cwd = vim.fn.getcwd()
 	local pixi_python = cwd .. "/.pixi/envs/default/bin/python"
 
-	local function detect_python_version(python)
+	local function detect_python_version(python_bin)
 		local handle =
-			io.popen(python .. " -c 'import sys; print(f\"{sys.version_info.major}.{sys.version_info.minor}\")'")
+			io.popen(python_bin .. " -c 'import sys; print(f\"{sys.version_info.major}.{sys.version_info.minor}\")'")
 		if not handle then
 			return "3"
 		end
