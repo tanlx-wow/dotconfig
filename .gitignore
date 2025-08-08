@@ -23,3 +23,5 @@ gtk-2.0/
 menus/
 
 *.log
+
+lazy-lock.json
