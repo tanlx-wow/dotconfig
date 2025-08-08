@@ -4,16 +4,16 @@ return function(capabilities)
 	local python_bin = cwd .. "/.pixi/envs/default/bin/python3"
 
 	-- Get Python site-packages path dynamically
+
 	local function get_site_packages(pybin)
 		local handle = io.popen(pybin .. [[ -c "import site; print(site.getsitepackages()[0])"]])
 		if not handle then
 			return nil
 		end
-		local result = handle:read("*a"):gsub("%s+", "")
+		local result = handle:read("*a")
 		handle:close()
-		return result
+		return result and result:gsub("%s+$", "") or nil -- only strip trailing newline, not full path
 	end
-
 	local function get_py_version(pybin)
 		local handle = io.popen(
 			pybin .. [[ -c "import sys; print('{}.{}'.format(sys.version_info.major, sys.version_info.minor))"]]
