@@ -2,23 +2,21 @@ return function(capabilities)
 	local cwd = vim.fn.getcwd()
 	local python_bin = cwd .. "/.pixi/envs/default/bin/python"
 
-	-- Dynamically detect the version (e.g., "3.13")
-	local function get_py_version(pybin)
-		local handle = io.popen(
-			pybin .. [[ -c "import sys; print('{}.{}'.format(sys.version_info.major, sys.version_info.minor))" ]]
-		)
+	-- Get the absolute site-packages path
+	local function get_site_packages(pybin)
+		local handle = io.popen(pybin .. [[ -c "import site; print(site.getsitepackages()[0])" ]])
 		if not handle then
 			return nil
 		end
-		local version = handle:read("*a"):gsub("%s+", "")
+		local path = handle:read("*a"):gsub("%s+", "")
 		handle:close()
-		return version
+		return path
 	end
 
-	local py_version = get_py_version(python_bin)
+	local site_packages = get_site_packages(python_bin)
 
-	if not py_version then
-		vim.notify("Failed to detect Python version from " .. python_bin, vim.log.levels.ERROR)
+	if not site_packages then
+		vim.notify("Failed to detect site-packages from " .. python_bin, vim.log.levels.ERROR)
 		return
 	end
 
@@ -34,9 +32,7 @@ return function(capabilities)
 					diagnosticMode = "workspace",
 					typeCheckingMode = "basic",
 					useLibraryCodeForTypes = true,
-					extraPaths = {
-						string.format(".pixi/envs/default/lib/python%s/site-packages", py_version),
-					},
+					extraPaths = { site_packages },
 				},
 			},
 		},
