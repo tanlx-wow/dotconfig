@@ -4,8 +4,9 @@ return function(capabilities)
 
 	-- Dynamically detect the version (e.g., "3.13")
 	local function get_py_version(pybin)
-		local handle =
-			io.popen(pybin .. " -c 'import sys; print(f\"{sys.version_info.major}.{sys.version_info.minor}\")'")
+		local handle = io.popen(
+			pybin .. [[ -c "import sys; print('{}.{}'.format(sys.version_info.major, sys.version_info.minor))" ]]
+		)
 		if not handle then
 			return nil
 		end
