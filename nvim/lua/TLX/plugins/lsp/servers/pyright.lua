@@ -1,6 +1,6 @@
 return function(capabilities)
 	local cwd = vim.fn.getcwd()
-	local python_bin = cwd .. "/.pixi/envs/default/bin/python"
+	local python_bin = cwd .. "/.pixi/envs/default/bin/python3"
 
 	local function get_py_version(pybin)
 		local handle = io.popen(
