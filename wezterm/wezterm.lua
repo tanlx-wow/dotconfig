@@ -2,13 +2,13 @@
 -- Pull in the wezterm API
 local wezterm = require("wezterm")
 local constants = require("constants")
-local tmux_keys = require("tmux_func")
+-- local tmux_keys = require("tmux_func")
 -- This will hold the configuration.
 local config = wezterm.config_builder()
 
 -- Load tmux-style leader and keys
-config.leader = tmux_keys.leader
-config.keys = tmux_keys.keys
+-- config.leader = tmux_keys.leader
+-- config.keys = tmux_keys.keys
 
 -- This is where you actually apply your config choices
 
