@@ -28,13 +28,14 @@ return {
 			-- list of servers for mason to install
 			ensure_installed = {
 				"html",
-				"lua_ls",
+				"lua_ls", -- lua lsp
 				"prismals",
-				"pyright",
-				"rust_analyzer",
-				"bashls",
+				"pyright", -- python lsp
+				"rust_analyzer", -- rust lsp
+				"bashls", --bash shell
 				"harper_ls",
-				"marksman",
+				"marksman", -- markdown
+				"taplo", -- toml lsp
 			},
 		})
 
