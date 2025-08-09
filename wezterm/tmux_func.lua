@@ -1,3 +1,4 @@
+-- ./tmux_func.lua
 local wezterm = require("wezterm")
 
 return {
