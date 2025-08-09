@@ -22,6 +22,7 @@ return {
 				python = { "isort", "black" },
 				sh = { "shellharden", "shfmt" },
 				nix = { "nixfmt" },
+				tmol = { "taplo" },
 			},
 			format_on_save = {
 				lsp_fallback = true,
