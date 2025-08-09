@@ -32,7 +32,7 @@ config.font = wezterm.font("MesloLGS Nerd Font Mono")
 config.font_size = 16
 config.line_height = 1
 
-config.enable_tab_bar = false
+config.enable_tab_bar = true
 
 config.window_decorations = "RESIZE"
 config.window_background_opacity = 1
