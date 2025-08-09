@@ -100,5 +100,6 @@ alias winsize="swift ~/.config/shell_tool/resize_windows.swift"
 alias zshrl="source ~/.zshrc"
 
 # output pixi env of trashstorage
-
-alias pixi-trash='pixi --manifest-path ~/MyDev/MyRepo/TrashScriptStorage/pyproject.toml'
+pixi-trash() {
+  pixi "$1" --manifest-path ~/MyDev/MyRepo/TrashScriptStorage/pyproject.toml "${@:2}"
+}
