@@ -6,8 +6,8 @@ return {
 
 	keys = {
 		-- Split panes
-		{ key = "-", mods = "LEADER", action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
-		{ key = "|", mods = "LEADER", action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }) },
+		{ key = "|", mods = "LEADER", action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
+		{ key = "-", mods = "LEADER", action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }) },
 
 		-- Move between panes
 		{ key = "h", mods = "LEADER", action = wezterm.action.ActivatePaneDirection("Left") },
