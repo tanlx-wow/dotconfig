@@ -101,4 +101,4 @@ alias zshrl="source ~/.zshrc"
 
 # output pixi env of trashstorage
 
-alias pixi-myproj='pixi --manifest-path ~/MyDev/MyRepo/TrashScriptStorage/pyproject.toml'
+alias pixi-trash='pixi --manifest-path ~/MyDev/MyRepo/TrashScriptStorage/pyproject.toml'
