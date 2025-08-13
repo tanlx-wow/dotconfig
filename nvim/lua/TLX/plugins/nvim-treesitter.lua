@@ -45,7 +45,7 @@ return {
 					"python",
 					"tcl",
 					"rust",
-					"nix,",
+					"nix",
 				},
 				incremental_selection = {
 					enable = true,
