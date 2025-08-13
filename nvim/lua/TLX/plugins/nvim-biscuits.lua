@@ -4,7 +4,7 @@ return {
 	config = function()
 		require("nvim-biscuits").setup({
 			toggle_keybind = "<leader>cb",
-			show_on_start = false, -- defaults to false
+			show_on_start = true, -- defaults to false
 			prefix_string = " 📎 ",
 		})
 	end,

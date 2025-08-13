@@ -42,9 +42,10 @@ return {
 					"dockerfile",
 					"gitignore",
 					"query",
-          "python",
-          "tcl",
-          "rust",
+					"python",
+					"tcl",
+					"rust",
+					"nix,",
 				},
 				incremental_selection = {
 					enable = true,
