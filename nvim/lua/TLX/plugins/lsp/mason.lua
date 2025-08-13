@@ -36,7 +36,7 @@ return {
 				"harper_ls",
 				"marksman", -- markdown
 				"taplo", -- toml lsp
-				"nil", -- nix lsp
+				"nil_ls", -- nix lsp
 			},
 		})
 
