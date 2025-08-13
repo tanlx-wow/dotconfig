@@ -3,17 +3,11 @@ return {
 	event = "VeryLazy",
 	config = function()
 		require("nvim-biscuits").setup({
-			toggle_keybind = "<leader>cb",
-			show_on_start = false, -- don't show immediately
-			prefix_string = " 🫷📎",
-		})
-
-		-- Only show biscuits when the cursor stays on a line for a moment
-		vim.api.nvim_create_autocmd("CursorHold", {
-			callback = function()
-				-- force refresh biscuits for the current line
-				require("nvim-biscuits").refresh_biscuits()
-			end,
+			show_on_start = false, -- don't draw on buffer load
+			cursor_line_only = true, -- only show on the line with the cursor
+			prefix_string = " 📎 ",
+			-- optional tuning:
+			-- default_config = { max_length = 80, min_distance = 5 },
 		})
 	end,
 }
