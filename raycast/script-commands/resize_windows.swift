@@ -1,0 +1,1 @@
+../../shell_tool/resize_windows.swift
