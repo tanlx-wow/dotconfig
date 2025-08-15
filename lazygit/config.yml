@@ -1,0 +1,2 @@
+gui:
+  startCommand: "\u001b[2 q"
