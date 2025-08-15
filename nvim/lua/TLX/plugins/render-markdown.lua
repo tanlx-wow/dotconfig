@@ -56,7 +56,6 @@ return {
 					stackoverflow = { pattern = "stackoverflow%.com", icon = "󰓌 " },
 					wikipedia = { pattern = "wikipedia%.org", icon = "󰖬 " },
 					youtube = { pattern = "youtube%.com", icon = "󰗃 " },
-				  },
 				},
 			},
 			checkbox = {
