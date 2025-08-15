@@ -12,13 +12,19 @@ function M.setup(opts)
 			return
 		end
 		vim.api.nvim_buf_clear_namespace(buf, ns, 0, -1)
+
+		-- allow hiding the raw HTML
 		vim.opt_local.conceallevel = 2
 		vim.opt_local.concealcursor = "nc"
 
 		local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
 		for i, line in ipairs(lines) do
-			local s, e, name = line:find('<a%s+name="([^"]+)"></a>') or line:find('<a%s+id="([^"]+)"></a>')
-			if s then
+			-- try name="…", then id="…" (support single or double quotes)
+			local s, e, name = line:find("<a%s+name=['\"]([^'\"]+)['\"]></a>")
+			if not s then
+				s, e, name = line:find("<a%s+id=['\"]([^'\"]+)['\"]></a>")
+			end
+			if s and e and name and #name > 0 then
 				local ext = {
 					end_col = e,
 					virt_text = { { icon .. name, hl } },
@@ -35,7 +41,7 @@ function M.setup(opts)
 	end
 
 	vim.api.nvim_create_autocmd({ "BufEnter", "TextChanged", "TextChangedI" }, {
-		pattern = "*.md",
+		pattern = { "*.md", "*.markdown" },
 		callback = function(a)
 			paint(a.buf)
 		end,
