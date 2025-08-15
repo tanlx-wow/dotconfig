@@ -57,7 +57,7 @@ return {
 					wikipedia = { pattern = "wikipedia%.org", icon = "󰖬 " },
 					youtube = { pattern = "youtube%.com", icon = "󰗃 " },
 					html_anchor = {
-						pattern = '<a name=".-">',
+						pattern = '<a name=".-"></a>',
 						icon = "󰌹",
 						kind = "pattern",
 						highlight = "RenderMarkdownLink",
