@@ -69,7 +69,7 @@ return {
 	-- 2) local helper to render `{#id}` anchors (without HTML)
 	{
 		name = "md-attr-anchor",
-		dir = vim.fn.stdpath("config") .. "/lua/local/md_attr_anchor",
+		dir = vim.fn.stdpath("config") .. "/lua/TLX/local/md_attr_anchor",
 		ft = "markdown",
 		dependencies = { "MeanderingProgrammer/render-markdown.nvim" },
 		opts = {
