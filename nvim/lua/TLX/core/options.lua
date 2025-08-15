@@ -1,6 +1,4 @@
-
 local opt = vim.opt -- for conciseness
-
 
 -- line numbers
 opt.relativenumber = true -- show relative line numbers
@@ -42,3 +40,11 @@ opt.splitbelow = true -- split horizontal window to the bottom
 
 -- turn off swapfile
 opt.swapfile = false
+
+-- Solid block in normal/visual/cmd, bar in insert, NO blinking anywhere
+vim.opt.guicursor = table.concat({
+	"n-v-c-sm:block",
+	"i-ci-ve:ver25",
+	"r-cr-o:hor20",
+	"a:blinkwait0-blinkon0-blinkoff0", -- <- no blink
+}, ",")
