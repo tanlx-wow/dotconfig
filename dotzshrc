@@ -19,7 +19,6 @@ alias ls="eza --icons=always --git --color=always"
 # list all function
 alias ll="ls -lh"
 
-# for terminal theme
 
 
 # history setup
@@ -30,6 +29,10 @@ setopt share_history
 setopt hist_expire_dups_first
 setopt hist_ignore_dups
 setopt hist_verify
+
+# bind key forward delete 
+bindkey -e 
+bindkey "^[[3~" delete-char
 
 # completion using arrow keys (based on history)
 bindkey '^[[A' history-search-backward
