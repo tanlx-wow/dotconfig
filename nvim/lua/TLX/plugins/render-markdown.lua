@@ -4,6 +4,8 @@ return {
 		"MeanderingProgrammer/render-markdown.nvim",
 		dependencies = {
 			"nvim-treesitter/nvim-treesitter",
+			"tree-sitter-html/tree-sitter-html",
+			"tree-sitter-latex/tree-sitter-latex",
 			"echasnovski/mini.nvim",
 		},
 		config = function()
@@ -66,19 +68,19 @@ return {
 		end,
 	},
 
-	-- 2) local helper to render `{#id}` anchors (without HTML)
-	{
-		name = "md-html-anchor-overlay",
-		dir = vim.fn.stdpath("config") .. "/lua/TLX/local/md_html_anchor_overlay",
-		ft = "markdown",
-		dependencies = { "MeanderingProgrammer/render-markdown.nvim" },
-		opts = {
-			icon = "󰌹 ", -- "" to hide the overlay
-			highlight = "RenderMarkdownLink",
-			conceal = true, -- false to show raw {#id} text too
-		},
-		config = function(_, opts)
-			require("TLX.local.md_html_anchor_overlay").setup(opts)
-		end,
-	},
+	-- -- 2) local helper to render `{#id}` anchors (without HTML)
+	-- {
+	-- 	name = "md-html-anchor-overlay",
+	-- 	dir = vim.fn.stdpath("config") .. "/lua/TLX/local/md_html_anchor_overlay",
+	-- 	ft = "markdown",
+	-- 	dependencies = { "MeanderingProgrammer/render-markdown.nvim" },
+	-- 	opts = {
+	-- 		icon = "󰌹 ", -- "" to hide the overlay
+	-- 		highlight = "RenderMarkdownLink",
+	-- 		conceal = true, -- false to show raw {#id} text too
+	-- 	},
+	-- 	config = function(_, opts)
+	-- 		require("TLX.local.md_html_anchor_overlay").setup(opts)
+	-- 	end,
+	-- },
 }

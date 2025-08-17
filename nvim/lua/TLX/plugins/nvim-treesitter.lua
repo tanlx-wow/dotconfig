@@ -46,6 +46,7 @@ return {
 					"tcl",
 					"rust",
 					"nix",
+					"latex",
 				},
 				incremental_selection = {
 					enable = true,
