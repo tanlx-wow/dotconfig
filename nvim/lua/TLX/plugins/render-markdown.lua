@@ -4,8 +4,6 @@ return {
 		"MeanderingProgrammer/render-markdown.nvim",
 		dependencies = {
 			"nvim-treesitter/nvim-treesitter",
-			"tree-sitter-html/tree-sitter-html",
-			"tree-sitter-latex/tree-sitter-latex",
 			"echasnovski/mini.nvim",
 		},
 		config = function()
