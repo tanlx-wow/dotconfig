@@ -13,6 +13,13 @@ return {
 			},
 			views = {
 				cmdline_popup = {
+					border = {
+						style = "rounded",
+						text = {
+							top = "🖥️command",
+							top_align = "center",
+						},
+					},
 					position = {
 						row = "50%",
 						col = "50%",
