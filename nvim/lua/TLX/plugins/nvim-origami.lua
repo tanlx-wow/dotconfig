@@ -24,7 +24,7 @@ return {
 			},
 			autoFold = {
 				enabled = true,
-				kinds = { "comment", "imports" }, ---@type lsp.FoldingRangeKind[]
+				kinds = { "Comment" }, ---@type lsp.FoldingRangeKind[]
 			},
 			foldKeymaps = {
 				setup = false, -- modifies `h` and `l`
