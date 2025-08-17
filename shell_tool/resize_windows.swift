@@ -15,7 +15,7 @@
 import Cocoa
 import ApplicationServices
 
-let margin: CGFloat = 32
+let margin: CGFloat = 16
 
 guard let screen = NSScreen.main else {
     print("No screen available.")
