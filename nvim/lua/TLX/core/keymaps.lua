@@ -31,9 +31,9 @@ keymap.set("n", "<leader>tn", "<cmd>tabn<CR>", { desc = "Go to next tab" }) --  
 keymap.set("n", "<leader>tp", "<cmd>tabp<CR>", { desc = "Go to previous tab" }) --  go to previous tab
 keymap.set("n", "<leader>tf", "<cmd>tabnew %<CR>", { desc = "Open current buffer in new tab" }) --  move current buffer to new tab
 
-keymap.set("n", "<leader>mh", function()
-	require("origami").h()
-end, { desc = "Expand the fold" }) -- expand the fold
-keymap.set("n", "<leader>ml", function()
-	require("origami").l()
-end, { desc = "Close the fold" }) -- close the fold
+-- keymap.set("n", "<leader>mh", function()
+-- 	require("origami").h()
+-- end, { desc = "Expand the fold" }) -- expand the fold
+-- keymap.set("n", "<leader>ml", function()
+-- 	require("origami").l()
+-- end, { desc = "Close the fold" }) -- close the fold
