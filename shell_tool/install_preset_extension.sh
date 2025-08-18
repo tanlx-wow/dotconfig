@@ -21,22 +21,10 @@ sleep 0.5
 
 for slug in "${PRESET[@]}"; do
   echo "Installing $slug …"
-
+osascript -e 'open location "raycast://extensions/FezVrasta/emoji"'
   # open the extension page
   osascript -e 'open location "raycast://extensions/'"$slug"'"'
   sleep 1.0  # give Raycast time to load the page
-
-  # simulate hitting ctrl + x and enter to uninstall in Raycast
-  /usr/bin/osascript <<'APPLESCRIPT'
-    tell application "System Events"
-      tell process "Raycast"
-        key code 7 using control down -- ctrl + X
-        keystroke return
-      end tell
-    end tell
-APPLESCRIPT
-
-
 
   # simulate hitting Enter in Raycast
   /usr/bin/osascript <<'APPLESCRIPT'
