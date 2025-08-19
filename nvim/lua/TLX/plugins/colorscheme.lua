@@ -5,7 +5,7 @@ return {
 
 	config = function()
 		-- 1) Set the colorscheme
-		vim.cmd([[colorscheme tokyonight_night]])
+		vim.cmd([[colorscheme tokyonight-night]])
 
 		-- 2) Enable true color
 		vim.opt.termguicolors = true
