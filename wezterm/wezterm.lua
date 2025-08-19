@@ -14,7 +14,7 @@ local config = wezterm.config_builder()
 
 local home = wezterm.home_dir
 
-config.color_scheme = "Catppuccin Mocha"
+config.color_scheme = "tokyonight"
 -- coolnight colorscheme
 
 -- config.colors = {
