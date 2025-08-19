@@ -9,6 +9,10 @@ return {
 			require("tokyonight").setup({
 				style = "moon", -- <-- pick the "moon" variant
 				transparent = true, -- set to true if you want transparent bg
+				styles = {
+					sidebars = transparent and "transparent" or "dark",
+					floats = transparent and "transparent" or "dark",
+				},
 			})
 
 			-- Load the colorscheme
