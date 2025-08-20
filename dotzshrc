@@ -13,6 +13,8 @@ fi
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 
+# default setup
+export EDITOR="nvim"
 
 # eza (better ls function)
 alias ls="eza --icons=always --git --color=always"
