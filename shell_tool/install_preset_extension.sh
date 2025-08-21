@@ -14,7 +14,6 @@ PRESET=(
  "tholanda/script-commands"
  "aiotter/nixpkgs-search"
  "lex-unix/nix-flake-templates"
- "peduarte/hide-all-apps"
 )
 
 open -ga "Raycast" || true
