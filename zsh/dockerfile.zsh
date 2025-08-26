@@ -4,33 +4,27 @@ povray-ctn () {
 
   _say() { printf "%s\n" "$*" >&2; }
   _err() { printf "ERROR: %s\n" "$*" >&2; }
-  _hr()  { printf "%s\n" "----------------------------------------" >&2; }
 
-  # allow non-interactive control (for Tcl etc.)
-  # POVRAY_BUILD_MODE = normal | bypass | ca
-  # POVRAY_CA_PEM     = /path/to/org-root.pem
-  : "${POVRAY_BUILD_MODE:=normal}"
-  : "${POVRAY_BASE:=docker.io/library/debian:stable-slim}"  # switch from fedora:40
+  : "${POVRAY_BUILD_MODE:=normal}"                       # normal | bypass | ca
+  : "${POVRAY_BASE:=docker.io/library/debian:stable-slim}"
 
-  # 0) Ensure Podman VM is up
+  # Ensure Podman VM is up
   podman machine start >/dev/null 2>&1 || true
 
-  # 1) Build helper (returns 0 on success)
   _build_image() {
-    local tlsflag=${1:-}  # e.g. "--tls-verify=false" or empty
+    local tlsflag=${1:-}   # e.g. "--tls-verify=false"
     _say "Building local povray image…"
-    # expand ${POVRAY_BASE} inside heredoc with eval
-    eval "cat <<'DOCKER'
+    cat <<DOCKER | podman build ${tlsflag:+$tlsflag} -t povray:local -f - .
 FROM ${POVRAY_BASE}
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     povray ca-certificates libjpeg62-turbo libpng16-16 zlib1g && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 WORKDIR /work
-ENTRYPOINT [\"povray\"]
-DOCKER" | podman build ${tlsflag:+$tlsflag} -t povray:local -f - .
+ENTRYPOINT ["povray"]
+DOCKER
   }
 
-  # 2) Try to build if image missing
+  # Build if missing
   if ! podman image exists povray:local; then
     case "$POVRAY_BUILD_MODE" in
       bypass) _build_image "--tls-verify=false" || { _err "Bypass build failed."; return 1; } ;;
@@ -47,26 +41,23 @@ DOCKER" | podman build ${tlsflag:+$tlsflag} -t povray:local -f - .
         _build_image || { _err "Build failed after CA install."; return 1; }
         ;;
       normal)
-        if _build_image; then
-          _say "Image built successfully."
-        else
-          _hr; _err "Initial build failed."
+        if ! _build_image; then
+          # detect TLS error and offer one-time bypass (only if interactive)
+          local log rc
           set +e
-          build_log="$(_build_image 2>&1)"; build_rc=$?
+          log="$(_build_image 2>&1)"; rc=$?
           set -e
-          if [[ "$build_log" == *"x509: certificate signed by unknown authority"* || "$build_log" == *"tls: failed to verify certificate"* ]]; then
-            _say "TLS/CA trust problem detected while pulling ${POVRAY_BASE}."
-            # only prompt if interactive and vared exists
-            if [[ -t 0 && -t 1 && $+commands[vared] -eq 1 ]]; then
-              vared -p "Bypass TLS verification just for this build? [y/N]: " -c _ans || _ans=n
-              [[ ${_ans:l} == y || ${_ans:l} == yes ]] && _build_image "--tls-verify=false" || { _err "Build failed"; return 1; }
+          if [[ "$log" == *"x509: certificate signed by unknown authority"* || "$log" == *"tls: failed to verify certificate"* ]]; then
+            if [[ -t 0 && -t 1 ]]; then
+              read -r "?TLS error pulling ${POVRAY_BASE}. Bypass TLS just for this build? [y/N]: " ans
+              [[ ${ans:l} == y || ${ans:l} == yes ]] && _build_image "--tls-verify=false" || { _err "Build failed."; return 1; }
             else
-              _err "Non-interactive shell. Set POVRAY_BUILD_MODE=bypass to proceed."
+              _err "TLS error. Re-run with POVRAY_BUILD_MODE=bypass for non-interactive build."
               return 1
             fi
           else
-            printf "%s\n" "$build_log" >&2
-            return $build_rc
+            printf "%s\n" "$log" >&2
+            return $rc
           fi
         fi
         ;;
@@ -74,17 +65,13 @@ DOCKER" | podman build ${tlsflag:+$tlsflag} -t povray:local -f - .
     esac
   fi
 
-  # 3) Guard against '-I' or '-O' with spaces
+  # Guard against '-I'/'-O' with a space
   for bad in "-I" "-O"; do
-    if [[ " $* " == *" $bad "* ]]; then
-      _err "POV-Ray expects '+I<input.pov>' and '+O<output>' with NO space."
-      _say "Example: +Iscene.pov +Oscene.png"
-      return 2
-    fi
+    [[ " $* " == *" $bad "* ]] && { _err "Use +I<input> and +O<output> with NO space."; return 2; }
   done
 
-  # 4) Run in current directory as /work; ensure host-writable files
-  exec podman run --rm \
+  # Run (no exec → your shell stays alive)
+  podman run --rm \
     -v "$PWD":/work -w /work \
     --user "$(id -u)":"$(id -g)" \
     povray:local \
