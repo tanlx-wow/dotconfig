@@ -50,6 +50,7 @@ return {
 				"shellharden", --shell formatter linter
 				"markdownlint", -- md formatter linter
 				"swiftlint", -- swift linter
+				"hadolint", -- dockerfile linter
 			},
 		})
 	end,
