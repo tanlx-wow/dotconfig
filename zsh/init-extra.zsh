@@ -10,19 +10,16 @@
 povray-ctn () {
   # Ensure Podman VM is up
   podman machine start >/dev/null 2>&1 || true
-
-  # Ensure we have the local image; build it on demand (no network auth needed)
-  if ! podman image exists povray:local; then
-    echo "Building local povray image… (first run only)"
-    podman build -t povray:local - <<'EOF' || { echo "Build failed"; return 1; }
-FROM debian:stable-slim
-RUN apt-get update \
- && apt-get install -y --no-install-recommends povray \
- && rm -rf /var/lib/apt/lists/*
+# Ensure we have the local image; build it on demand (no network auth needed)
+if ! podman image exists povray:local; then
+  echo "Building local povray image… (first run only)"
+  podman build -t povray:local - <<'EOF' || { echo "Build failed"; return 1; }
+FROM registry.fedoraproject.org/fedora:40
+RUN dnf -y install povray && dnf clean all
 WORKDIR /work
 ENTRYPOINT ["povray"]
 EOF
-  fi
+fi
 
   # Basic guidance if the user passed -I/-O with spaces (POV-Ray requires +Ifoo +Obar)
   for bad in "-I" "-O"; do
