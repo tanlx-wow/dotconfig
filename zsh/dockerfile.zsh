@@ -71,13 +71,13 @@ DOCKER
   done
 
   # Run (no exec → your shell stays alive)
-  set +e
-  podman run --rm \
-    -v "$PWD":/work -w /work \
-    --user "$(id -u)":"$(id -g)" \
-    povray:local \
-    "$@"
-  rc=$?
-  set -e
-  return $rc
+  # set +e
+  # podman run --rm \
+  #   -v "$PWD":/work -w /work \
+  #   --user "$(id -u)":"$(id -g)" \
+  #   povray:local \
+  #   "$@"
+  # rc=$?
+  # set -e
+  # return $rc
 }
