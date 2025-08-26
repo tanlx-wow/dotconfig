@@ -24,3 +24,5 @@ menus/
 *.log
 
 lazy-lock.json
+
+docker/
