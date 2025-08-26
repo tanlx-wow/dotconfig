@@ -109,6 +109,8 @@ pixi-trash() {
   pixi "$1" --manifest-path ~/MyDev/MyRepo/TrashScriptStorage/pyproject.toml "${@:2}"
 }
 
-
 # home-manager quick insatll
 alias home-switch="~/MyDev/MyRepo/nix_env/home-switch.sh"
+
+# put the container povray
+alias povray="~/.config/zsh/povray-pod"
