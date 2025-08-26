@@ -113,4 +113,4 @@ pixi-trash() {
 alias home-switch="~/MyDev/MyRepo/nix_env/home-switch.sh"
 
 # put the container povray
-alias povray="~/.config/zsh/povray-pod"
+export PATH="~/.config/zsh/bin:$PATH"
