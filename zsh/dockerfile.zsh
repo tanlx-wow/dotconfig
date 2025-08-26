@@ -1,6 +1,7 @@
 # Containerized POV-Ray runner with CA-repair / TLS-bypass fallback
 povray-ctn () {
-  set -euo pipefail
+  setopt localoptions # make option changes local to the this function
+  set -u -o pipefail # keep strict, but DO NOT enable -e here
 
   _say() { printf "%s\n" "$*" >&2; }
   _err() { printf "ERROR: %s\n" "$*" >&2; }
@@ -71,13 +72,17 @@ DOCKER
   done
 
   # Run (no exec → your shell stays alive)
-  # set +e
-  # podman run --rm \
-  #   -v "$PWD":/work -w /work \
-  #   --user "$(id -u)":"$(id -g)" \
-  #   povray:local \
-  #   "$@"
-  # rc=$?
-  # set -e
-  # return $rc
+  local rc=0
+  if [[ ${POVRAY_SKIP_RUN:-0} -ne 1 ]]; then
+    # guard against errexit even if the login shell has it on
+    set +e
+    podman run --rm \
+      -v "$PWD":/work -w /work \
+      --user "$(id -u)":"$(id -g)" \
+      povray:local \
+      "$@"
+    rc=$?
+    set -e
+  fi
+  return $rc
 }
