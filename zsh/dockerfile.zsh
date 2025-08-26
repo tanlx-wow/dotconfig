@@ -89,4 +89,5 @@ DOCKER" | podman build ${tlsflag:+$tlsflag} -t povray:local -f - .
     --user "$(id -u)":"$(id -g)" \
     povray:local \
     "$@"
+  return $?
 }
