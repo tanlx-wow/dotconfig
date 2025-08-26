@@ -82,7 +82,6 @@ DOCKER
       povray:local \
       "$@"
     rc=$?
-    set -e
   fi
   return $rc
 }
