@@ -96,7 +96,7 @@ alias v="nvim"
 alias lag="lazygit"
 
 # windows size
-alias winsize="swift ~/.config/shell_tool/resize_windows.swift"
+alias winsize="swift $HOME/.config/shell_tool/resize_windows.swift"
 
 # micromamba 
 # alias mamba="micromamba"
@@ -106,11 +106,11 @@ alias zshrl="source ~/.zshrc"
 
 # output pixi env of trashstorage
 pixi-trash() {
-  pixi "$1" --manifest-path ~/MyDev/MyRepo/TrashScriptStorage/pyproject.toml "${@:2}"
+  pixi "$1" --manifest-path $HOME/MyDev/MyRepo/TrashScriptStorage/pyproject.toml "${@:2}"
 }
 
 # home-manager quick insatll
-alias home-switch="~/MyDev/MyRepo/nix_env/home-switch.sh"
+alias home-switch="$HOME/MyDev/MyRepo/nix_env/home-switch.sh"
 
 # put the container povray
-export PATH="~/.config/zsh/bin:$PATH"
+export PATH="$HOME/.config/zsh/bin:$PATH"
