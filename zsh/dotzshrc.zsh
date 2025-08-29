@@ -1,6 +1,9 @@
-source ~/.bash_profile
+# source ~/.bash_profile
 
-fastfetch --logo nixos
+
+# fastfetch 
+alias fs="fastfetch --logo nixos"
+fs
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
@@ -116,3 +119,5 @@ alias home-switch="$HOME/MyDev/MyRepo/nix_env/home-switch.sh"
 
 # put the container povray
 export PATH="$HOME/.config/zsh/bin:$PATH"
+
+
