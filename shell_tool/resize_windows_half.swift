@@ -13,11 +13,18 @@ import Cocoa
 import ApplicationServices
 
 // ---------- layout settings ----------
-let margin: CGFloat = 32           // outer margin & gap between columns
-let alternateSides = true           // true → distribute L/R; false → all to left
+let margin: CGFloat = 32           // outer margin & middle gap
+let alternateSides = true          // true → distribute L/R; false → all to left
 enum Side { case left, right }
 let defaultSide: Side = .left
 // ------------------------------------
+
+// Convert a Cocoa rect (bottom-left origin) to AX rect (top-left origin)
+func cocoaToAX(_ rect: CGRect, on screen: NSScreen) -> CGRect {
+    let screenH = screen.frame.height
+    let axY = screenH - rect.origin.y - rect.size.height
+    return CGRect(x: rect.origin.x, y: axY, width: rect.size.width, height: rect.size.height)
+}
 
 guard let screen = NSScreen.main else {
     print("No screen available.")
@@ -31,11 +38,17 @@ let totalGapX = margin * 3          // left outer + middle gap + right outer
 let colWidth  = (v.width - totalGapX) / 2.0
 let xLeft     = v.origin.x + margin
 let xRight    = v.origin.x + margin * 2 + colWidth
-let yPos      = v.origin.y + margin
+
+// Ensure BOTH top & bottom margins in Cocoa coordinates
+let yCocoa    = v.origin.y + margin
 let colHeight = v.height - 2 * margin
 
-let frameLeft  = CGRect(x: xLeft,  y: yPos, width: colWidth, height: colHeight)
-let frameRight = CGRect(x: xRight, y: yPos, width: colWidth, height: colHeight)
+let frameLeftCocoa  = CGRect(x: xLeft,  y: yCocoa, width: colWidth, height: colHeight)
+let frameRightCocoa = CGRect(x: xRight, y: yCocoa, width: colWidth, height: colHeight)
+
+// Precompute AX-space frames (top-left origin)
+let frameLeftAX  = cocoaToAX(frameLeftCocoa,  on: screen)
+let frameRightAX = cocoaToAX(frameRightCocoa, on: screen)
 
 // Ask for Accessibility (shows prompt if needed)
 let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as NSString: true]
@@ -52,9 +65,9 @@ let skipBundleIdentifier: Set<String> = [
     "com.apple.systempreferences",
 ]
 
-func setWindow(_ win: AXUIElement, to frame: CGRect) {
-    var pos = frame.origin
-    var size = frame.size
+func setWindowAX(_ win: AXUIElement, to frameAX: CGRect) {
+    var pos = frameAX.origin
+    var size = frameAX.size
     if let posValue = AXValueCreate(.cgPoint, &pos) {
         AXUIElementSetAttributeValue(win, kAXPositionAttribute as CFString, posValue)
     }
@@ -76,7 +89,7 @@ for app in workspace.runningApplications {
     guard result == .success, let windows = value as? [AXUIElement] else { continue }
 
     for window in windows {
-        // Skip minimized / invisible windows
+        // Skip minimized windows
         var minimizedObj: AnyObject?
         if AXUIElementCopyAttributeValue(window, kAXMinimizedAttribute as CFString, &minimizedObj) == .success,
            let minimized = minimizedObj as? Bool, minimized { continue }
@@ -90,8 +103,8 @@ for app in workspace.runningApplications {
         }
 
         switch side {
-        case .left:  setWindow(window, to: frameLeft)
-        case .right: setWindow(window, to: frameRight)
+        case .left:  setWindowAX(window, to: frameLeftAX)
+        case .right: setWindowAX(window, to: frameRightAX)
         }
     }
 }
