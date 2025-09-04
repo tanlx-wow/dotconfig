@@ -2,7 +2,7 @@
 
 // Required parameters:
 // @raycast.schemaVersion 1
-// @raycast.title resize all windows
+// @raycast.title maximize all windows
 // @raycast.mode silent
 
 // Optional parameters:
