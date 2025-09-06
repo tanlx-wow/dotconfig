@@ -120,4 +120,5 @@ alias home-switch="$HOME/MyDev/MyRepo/nix_env/home-switch.sh"
 # put the container povray
 export PATH="$HOME/.config/zsh/bin:$PATH"
 
-
+# app id script
+alias getappid="bash $HOME/.config/shell_tool/app_id.sh"

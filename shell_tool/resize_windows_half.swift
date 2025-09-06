@@ -63,6 +63,7 @@ let workspace = NSWorkspace.shared
 let skipBundleIdentifier: Set<String> = [
     "com.apple.finder",
     "com.apple.systempreferences",
+    "com.microsoft.Outlook",
 ]
 
 func setWindowAX(_ win: AXUIElement, to frameAX: CGRect) {

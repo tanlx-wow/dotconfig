@@ -3,6 +3,3 @@ read app_name
 
 app_id=$(osascript -e "id of app \"$app_name\"")
 echo "$app_id"
-
-defaults write "$app_id" NSRequiresAquaSystemAppearance -bool Yes
-
