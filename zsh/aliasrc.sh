@@ -1,6 +1,5 @@
 # fastfetch 
 alias fs="fastfetch --logo nixos"
-fs
 
 # eza (better ls function)
 
