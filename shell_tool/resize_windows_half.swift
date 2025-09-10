@@ -64,6 +64,7 @@ let skipBundleIdentifier: Set<String> = [
     "com.apple.finder",
     "com.apple.systempreferences",
     "com.microsoft.Outlook",
+    "com.cisco.secureclient.gui",
 ]
 
 func setWindowAX(_ win: AXUIElement, to frameAX: CGRect) {
