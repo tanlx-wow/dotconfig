@@ -48,7 +48,9 @@ for app in workspace.runningApplications {
     let skipBundleIdentifier: Set<String> = [
         "com.apple.finder",
         "com.apple.systempreferences",
-        "com.cisco.secureclient.gui"
+        "com.cisco.secureclient.gui",
+
+"com.microsoft.teams2",
     ]
     guard let bundleID = app.bundleIdentifier, !skipBundleIdentifier.contains(bundleID) else { continue }
 
