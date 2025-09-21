@@ -44,3 +44,25 @@ export PATH="$HOME/.config/zsh/bin:$PATH"
 
 # app id script
 alias getappid="bash $HOME/.config/shell_tool/app_id.sh"
+
+# yazi function
+function y() {
+    # 1. Make a temporary file to hold the "current working directory" (cwd)
+    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+
+    # 2. Launch yazi, passing in all user arguments ($@),
+    #    and tell it to write the cwd into that tmp file when it exits
+    yazi "$@" --cwd-file="$tmp"
+
+    # 3. After yazi exits, read the cwd from that tmp file
+    if cwd="$(command cat -- "$tmp")" \
+       && [ "$cwd" != "" ] \
+       && [ "$cwd" != "$PWD" ]; then
+        # If the cwd is not empty and different from your current directory,
+        # then change the shell's directory to it
+        builtin cd -- "$cwd"
+    fi
+
+    # 4. Clean up the tmp file
+    rm -f -- "$tmp"
+}
