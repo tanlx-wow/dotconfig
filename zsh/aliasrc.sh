@@ -72,5 +72,5 @@ function y() {
 }
 
 # opencode setup
-alias opencode = "NODE_OPTIONS=--use-openssl-ca NODE_EXTRA_CA_CERTS=/opt/homebrew/etc/ca-certificates/cert.pem opencode"
+alias opencode = 'NODE_OPTIONS="--use-openssl-ca" NODE_EXTRA_CA_CERTS=/opt/homebrew/etc/ca-certificates/cert.pem opencode'
 
