@@ -36,6 +36,10 @@ pixi-trash() {
   pixi "$1" --manifest-path "$HOME"/MyDev/MyRepo/TrashScriptStorage/pyproject.toml "${@:2}"
 }
 
+pixi-ai() {
+  pixi "$1" --manifest-path "$HOME"/MyDev/MyRepo/TrashScriptStorage_AI/pyproject.toml "${@:2}"
+}
+
 # home-manager quick insatll
 alias home-switch="$HOME/MyDev/MyRepo/nix_env/home-switch.sh"
 
