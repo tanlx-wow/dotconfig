@@ -23,6 +23,7 @@ return {
 				sh = { "shellharden", "shfmt" },
 				nix = { "nixfmt" },
 				tmol = { "taplo" },
+				swift = { "swiftformat" },
 
 			},
 			format_on_save = {

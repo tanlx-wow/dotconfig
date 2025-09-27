@@ -36,7 +36,6 @@ return {
 				"harper_ls",
 				"marksman", -- markdown
 				"taplo", -- toml lsp
-				"sourcekit", -- swift lsp
 			},
 		})
 
@@ -51,6 +50,7 @@ return {
 				"shellharden", --shell formatter linter
 				"markdownlint", -- md formatter linter
 				"swiftlint", -- swift linter
+				"swiftformat", -- swift formatter
 
 			},
 		})
