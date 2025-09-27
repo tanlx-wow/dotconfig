@@ -1,28 +1,58 @@
-# Byte-compiled / optimized / DLL files
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editor temporary files
+*.tmp
+*.swp
+*.swo
+*~
+.vscode/
+*.sublime-*
+
+# Shell history files
+.zsh_history
+.bash_history
+.fish_history
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+log/
+logs/
+
+# Neovim specific
+lazy-lock.json
+.netrwhist
+
+# Tool-specific directories to ignore
+clash/
+docker/
+filezilla/
+gh/
+gtk-2.0/
+menus/
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Temporary directories
+tmp/
+temp/
+
+# Python (if any scripts exist)
 __pycache__/
 *.py[cod]
 *$py.class
-
-# Jupyter Notebook checkpoints
 .ipynb_checkpoints/
-
-# macOS
-.DS_Store
-
-clash/
-
-filezilla/
-
-
-
-gh/
-
-gtk-2.0/
-
-menus/
-
-*.log
-
-lazy-lock.json
-
-docker/
