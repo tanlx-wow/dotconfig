@@ -23,7 +23,7 @@ return {
 				sh = { "shellharden", "shfmt" },
 				nix = { "nixfmt" },
 				tmol = { "taplo" },
-				swift = { "swift-format" },
+
 			},
 			format_on_save = {
 				lsp_fallback = true,

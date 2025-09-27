@@ -51,7 +51,7 @@ return {
 				"shellharden", --shell formatter linter
 				"markdownlint", -- md formatter linter
 				"swiftlint", -- swift linter
-				"swift-format", -- swift formatter
+
 			},
 		})
 	end,
