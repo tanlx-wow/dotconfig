@@ -66,6 +66,7 @@ let skipBundleIdentifier: Set<String> = [
     "com.microsoft.Outlook",
     "com.cisco.secureclient.gui",
 "com.microsoft.teams2",
+"com.ThomsonResearchSoft.EndNote"
 ]
 
 func setWindowAX(_ win: AXUIElement, to frameAX: CGRect) {
