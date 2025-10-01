@@ -9,11 +9,11 @@
 PRESET=(
  "FezVrasta/emoji"
  "mblode/quick-event"
- "thomas/downloads-manager"
+ # "thomas/downloads-manager"
  "tonka3000/speedtest"
  "tholanda/script-commands"
  "aiotter/nixpkgs-search"
- "lex-unix/nix-flake-templates"
+# "lex-unix/nix-flake-templates"
 )
 
 open -ga "Raycast" || true
