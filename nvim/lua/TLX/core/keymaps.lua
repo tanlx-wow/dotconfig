@@ -33,10 +33,6 @@ keymap.set("n", "<leader>tf", "<cmd>tabnew %<CR>", { desc = "Open current buffer
 
 keymap.set("t", "<Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 keymap.set("t", "jk", "<C-\\><C-n>", { desc = "Exit terminal mode with jk" })
-keymap.set("t", "<C-h>", "<C-\\><C-n><C-w>h", { desc = "Navigate left from terminal" })
-keymap.set("t", "<C-j>", "<C-\\><C-n><C-w>j", { desc = "Navigate down from terminal" })
-keymap.set("t", "<C-k>", "<C-\\><C-n><C-w>k", { desc = "Navigate up from terminal" })
-keymap.set("t", "<C-l>", "<C-\\><C-n><C-w>l", { desc = "Navigate right from terminal" })
 
 -- keymap.set("n", "<leader>mh", function()
 -- 	require("origami").h()
