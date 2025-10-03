@@ -1,6 +1,6 @@
 # fastfetch 
 # alias fs="fastfetch --logo nixos"
-alias fs="fastfetch --logo ""$(pokeget gengar --hide-name) --logo-type data"
+alias fs="fastfetch --logo $(pokeget gengar --hide-name) --logo-type data"
 
 # eza (better ls function)
 
