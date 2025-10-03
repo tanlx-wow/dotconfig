@@ -85,6 +85,6 @@ export PATH="$HOME/.cargo/bin:$PATH"
 [[ -f $HOME/.config/zsh/aliasrc.sh ]] && source $HOME/.config/zsh/aliasrc.sh
 
 # fastfetch
-
-(sleep 0.1 && fs) &
+fs
+# (sleep 0.1 && fs) &
 
