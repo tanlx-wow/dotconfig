@@ -30,9 +30,20 @@ DOCKER
     case "$POVRAY_BUILD_MODE" in
       bypass) _build_image "--tls-verify=false" || { _err "Bypass build failed."; return 1; } ;;
       ca)
-        [[ -f "${POVRAY_CA_PEM:-}" ]] || { _err "POVRAY_CA_PEM not set or missing."; return 1; }
+        # Check for explicit CA certificate or fall back to Homebrew
+        if [[ -n "${POVRAY_CA_PEM:-}" && -f "$POVRAY_CA_PEM" ]]; then
+          # Use the explicitly set CA certificate
+          : # continue with existing POVRAY_CA_PEM
+        elif [[ -f "/opt/homebrew/opt/ca-certificates/share/ca-certificates/cacert.pem" ]]; then
+          # Fall back to Homebrew CA certificates
+          _say "Using Homebrew CA certificates"
+          POVRAY_CA_PEM="/opt/homebrew/opt/ca-certificates/share/ca-certificates/cacert.pem"
+        else
+          _err "No CA certificates found. Set POVRAY_CA_PEM or install ca-certificates via Homebrew."
+          return 1
+        fi
         _say "Installing CA into Podman VM…"
-        podman machine scp "$POVRAY_CA_PEM" podman-machine-default:/tmp/org-root.pem
+        cat "$POVRAY_CA_PEM" | podman machine ssh 'cat > /tmp/org-root.pem'
         podman machine ssh 'sudo mkdir -p /etc/pki/ca-trust/source/anchors &&
           sudo install -m 0644 /tmp/org-root.pem /etc/pki/ca-trust/source/anchors/org-root.pem &&
           sudo update-ca-trust &&
