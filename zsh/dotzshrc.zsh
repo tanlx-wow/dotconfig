@@ -86,3 +86,4 @@ export PATH="$HOME/.cargo/bin:$PATH"
 
 # fastfetch
 fs
+
