@@ -1,8 +1,3 @@
-# fastfetch 
-# alias fs="fastfetch --logo nixos"
-fs() {
-  fastfetch --logo "$(pokeget gengar --hide-name)" --logo-type data
-}
 
 # eza (better ls function)
 
@@ -74,4 +69,7 @@ function y() {
     rm -f -- "$tmp"
 }
 
-
+# fastfetch 
+fs() {
+  fastfetch --logo "$(pokeget gengar --hide-name)" --logo-type data
+}
