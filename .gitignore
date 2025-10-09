@@ -42,10 +42,6 @@ gh/
 gtk-2.0/
 menus/
 
-# Backup files
-*.bak
-*.backup
-*~
 
 # Temporary directories
 tmp/
