@@ -11,7 +11,7 @@ PRESET=(
  "mblode/quick-event"
  # "thomas/downloads-manager"
  "tonka3000/speedtest"
- "tholanda/script-commands"
+ # "tholanda/script-commands"
  "aiotter/nixpkgs-search"
 # "lex-unix/nix-flake-templates"
 )
