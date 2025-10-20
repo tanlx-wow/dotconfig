@@ -13,6 +13,7 @@ PRESET=(
  "tonka3000/speedtest"
  # "tholanda/script-commands"
  "aiotter/nixpkgs-search"
+"mackopes/quit-applications"
 # "lex-unix/nix-flake-templates"
 )
 
