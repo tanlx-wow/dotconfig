@@ -75,4 +75,4 @@ fs() {
 }
 
 # nb
-export NB_GUI_BROWSER="/Applications/Safari.app/Contents/MacOS/Safari"
+export NB_GUI_BROWSER="open -a Safari"
