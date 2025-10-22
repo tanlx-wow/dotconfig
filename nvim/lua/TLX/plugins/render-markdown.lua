@@ -2,6 +2,7 @@ return {
 	-- 1) render-markdown.nvim
 	{
 		"MeanderingProgrammer/render-markdown.nvim",
+		ft = "markdown",
 		dependencies = {
 			"nvim-treesitter/nvim-treesitter",
 			"echasnovski/mini.nvim",
