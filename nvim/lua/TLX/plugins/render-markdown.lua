@@ -67,10 +67,10 @@ return {
 					-- Turn on / off latex rendering.
 					enabled = true,
 					-- Additional modes to render latex.
-					render_modes = false,
+					render_modes = true,
 					-- Executable used to convert latex formula to rendered unicode.
 					-- If a list is provided the first command available on the system is used.
-					converter = { "utftex", "latex2text" },
+					converter = { "latex2text" },
 					-- Highlight for latex blocks.
 					highlight = "RenderMarkdownMath",
 					-- Determines where latex formula is rendered relative to block.
