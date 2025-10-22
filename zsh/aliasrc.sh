@@ -75,4 +75,6 @@ fs() {
 }
 
 # nb
-export NB_GUI_BROWSER="open -a Safari"
+#
+export NB_GUI_BROWSER="firefox-safari"
+alias firefox-safari="open -a Safari"
