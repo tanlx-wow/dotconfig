@@ -73,3 +73,6 @@ function y() {
 fs() {
   fastfetch --logo "$(pokeget gengar --hide-name)" --logo-type data
 }
+
+# nb
+export NB_BROWSER="/Applications/Safari.app/Contents/MacOS/Safari"
