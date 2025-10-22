@@ -74,7 +74,3 @@ fs() {
   fastfetch --logo "$(pokeget gengar --hide-name)" --logo-type data
 }
 
-# nb
-#
-export NB_GUI_BROWSER="firefox-safari"
-alias firefox-safari="open -a Safari"
