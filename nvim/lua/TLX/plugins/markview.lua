@@ -6,6 +6,9 @@ return {
 		local presets = require("markview.presets")
 
 		require("markview").setup({
+			preview = {
+				icon_provider = "internal",
+			},
 			markdown = {
 				headings = presets.headings.slanted,
 			},
