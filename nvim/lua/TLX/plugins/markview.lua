@@ -9,7 +9,7 @@ return {
 			preview = {
 				icon_provider = "internal",
 				makrdown = {
-					headings = presets.headings.marker,
+					headings = presets.headings.glow,
 				},
 			},
 		})
