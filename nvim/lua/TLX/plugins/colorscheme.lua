@@ -6,6 +6,7 @@ return {
 
 		config = function()
 			-- Configure Tokyonight with the "moon" style
+			local transparent = true
 			require("tokyonight").setup({
 				style = "moon", -- <-- pick the "moon" variant
 				transparent = true, -- set to true if you want transparent bg
