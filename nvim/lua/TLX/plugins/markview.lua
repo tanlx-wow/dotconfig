@@ -8,10 +8,14 @@ return {
 		require("markview").setup({
 			preview = {
 				icon_provider = "internal",
-				makrdown = {
-					headings = presets.headings.glow,
-				},
+			},
+			makrdown = {
+				headings = presets.headings.arrowed,
+				horizontal_rules = presets.thin,
+				tables = presets.single,
 			},
 		})
+		-- Load the extra module for heading manipulation
+		require("markview.extras.headings").setup()
 	end,
 }
