@@ -11,10 +11,6 @@ return {
 			},
 			markdown = {
 				headings = presets.headings.glow, -- classic preset shown in README
-				blockquotes = presets.blockquotes.box, -- subtle box style
-				checkbox = presets.checkbox.default, -- renders checkboxes like [x]
-				list_items = presets.list_items.default, -- bullet and numbering style
-				links = presets.links.underline, -- underlined links
 			},
 		})
 	end,
