@@ -7,7 +7,7 @@ return {
 
 		require("markview").setup({
 			preview = {
-				icon_provider = "internal",
+				icon_provider = "devicons",
 			},
 			markdown = {
 				headings = presets.headings.glow, -- classic preset shown in README
