@@ -78,5 +78,3 @@ fs() {
 nbb() {
   nb browse --daemon & open -a Safari http://localhost:6789
 }
-# nb css preview formmat
-export NB_CUSTOM_CSS_URL="file:$HOME/.config/nvim/lua/TLX/plugins/markdownpreview/github-markdown-dark.css"
