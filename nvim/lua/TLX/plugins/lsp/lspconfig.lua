@@ -8,7 +8,6 @@ return {
 	},
 	config = function()
 		-- import lspconfig plugin
-		local lspconfig = require("lspconfig")
 
 		-- import mason_lspconfig plugin
 		local mason_lspconfig = require("mason-lspconfig")
@@ -18,7 +17,7 @@ return {
 
 		local keymap = vim.keymap -- for conciseness
 
-		lspconfig.nixd.setup({})
+		vim.lsp.config.nixd = {}
 
 		vim.api.nvim_create_autocmd("LspAttach", {
 			group = vim.api.nvim_create_augroup("UserLspConfig", {}),
