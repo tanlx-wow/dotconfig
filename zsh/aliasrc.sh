@@ -76,7 +76,7 @@ fs() {
 
 # nb browse function
 nbb() {
-  nb browse --daemon & open -a Safari http://localhost:6789
+  nb b --gui
 }
 
 
