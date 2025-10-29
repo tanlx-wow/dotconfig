@@ -75,15 +75,9 @@ fs() {
 }
 
 # nb browse function
-# nbb() {
-#   nb browse --daemon & open -a Safari http://localhost:6789
-# }
-
 nbb() {
-  # Work around nb browse daemon bug by patching the script temporarily
-  sed '69s/set -o nounset/set +o nounset/' /Users/1gt/.nix-profile/bin/nb > /tmp/nb_patched && \
-  chmod +x /tmp/nb_patched && \
-  /tmp/nb_patched browse --daemon & \
-  sleep 2 && open -a Safari http://localhost:6789
+  nb browse --daemon & open -a Safari http://localhost:6789
 }
+
+
 
