@@ -67,7 +67,7 @@ return {
 					-- Turn on / off latex rendering.
 					enabled = true,
 					-- Additional modes to render latex.
-					render_modes = true,
+					render_modes = false,
 					-- Executable used to convert latex formula to rendered unicode.
 					-- If a list is provided the first command available on the system is used.
 					converter = "latex2text",
