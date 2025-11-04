@@ -1,4 +1,4 @@
 {
-  theme:tokyonight,
-  default_mode: plan
+  "theme": "tokyonight",
+  "default_mode": "plan"
 }
