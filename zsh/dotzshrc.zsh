@@ -84,6 +84,10 @@ export PATH="$HOME/.cargo/bin:$PATH"
 # source the alias setup
 [[ -f $HOME/.config/zsh/aliasrc.sh ]] && source $HOME/.config/zsh/aliasrc.sh
 
+
+# Load gromacs completions
+[[ -f $HOME/.nix-profile/bin/gmx-completion.bash ]] && source $HOME/.nix-profile/bin/gmx-completion.bash
+
 # fastfetch
 fs
 # (sleep 0.1 && fs) &
