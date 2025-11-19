@@ -1,6 +1,6 @@
 -- ~/.config/nvim/lua/TLX/plugins/minimap.lua
 return {
-	"wfxr/minimap.nvim",
+	"wfxr/minimap.vim",
 	lazy = false, -- load on startup
 	config = function()
 		-- Basic recommended settings
