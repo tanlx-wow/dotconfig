@@ -2,7 +2,7 @@
 return {
 	"wfxr/minimap.vim",
 	lazy = false, -- load on startup
-	config = function()
+	init = function()
 		-- Basic recommended settings
 		vim.g.minimap_width = 2
 		vim.g.minimap_auto_start = 0
