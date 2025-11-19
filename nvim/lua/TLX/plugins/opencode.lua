@@ -45,11 +45,11 @@ return {
 			require("opencode").command("session_new")
 		end, { desc = "New session" })
 
-		vim.keymap.set("n", "<S-C-u>", function()
+		vim.keymap.set("n", "<leader>ou", function()
 			require("opencode").command("messages_half_page_up")
 		end, { desc = "Messages half page up" })
 
-		vim.keymap.set("n", "<S-C-d>", function()
+		vim.keymap.set("n", "<leader>od", function()
 			require("opencode").command("messages_half_page_down")
 		end, { desc = "Messages half page down" })
 
