@@ -38,8 +38,8 @@ pixi-ai() {
   pixi "$1" --manifest-path "$HOME"/MyDev/MyRepo/TrashScriptStorage_AI/pyproject.toml "${@:2}"
 }
 
-# home-manager quick insatll
-alias home-switch="$HOME/MyDev/MyRepo/nix_env/home-switch.sh"
+# nix darwin rebuild quick insatll
+alias darb="$HOME/MyDev/MyRepo/nix_env/darwin-rebuild.sh"
 
 # put the container povray
 export PATH="$HOME/.config/zsh/bin:$PATH"
