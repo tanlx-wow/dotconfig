@@ -1,4 +1,11 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugin": {"opencode-gemini-auth": {"enabled": true},"opencode-openai-codex-auth@4.0.0":{"enabled":true}}
+  "plugin": {
+    "opencode-gemini-auth": {
+      "enabled": true
+    },
+    "opencode-openai-codex-auth@4.0.0": {
+      "enabled":true
+    }
+  }
 }
