@@ -1,4 +1,5 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "plugin": ["opencode-gemini-auth", "opencode-openai-codex-auth@4.0.0"],
+  "agent": "plan",
 }
