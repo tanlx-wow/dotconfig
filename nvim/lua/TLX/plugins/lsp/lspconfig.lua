@@ -7,17 +7,10 @@ return {
 		{ "folke/neodev.nvim", opts = {} },
 	},
 	config = function()
-		-- import lspconfig plugin
-
-		-- import mason_lspconfig plugin
-		local mason_lspconfig = require("mason-lspconfig")
-
-		-- import cmp-nvim-lsp plugin
+		local lspconfig = require("lspconfig")
 		local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
 		local keymap = vim.keymap -- for conciseness
-
-		vim.lsp.config.nixd = {}
 
 		vim.api.nvim_create_autocmd("LspAttach", {
 			group = vim.api.nvim_create_augroup("UserLspConfig", {}),
@@ -74,13 +67,28 @@ return {
 		vim.diagnostic.config({
 			signs = {
 				text = {
-					[vim.diagnostic.severity.ERROR] = " ",
-					[vim.diagnostic.severity.WARN] = " ",
+					[vim.diagnostic.severity.ERROR] = " ",
+					[vim.diagnostic.severity.WARN] = " ",
 					[vim.diagnostic.severity.INFO] = "󰠠 ",
-					[vim.diagnostic.severity.HINT] = " ",
+					[vim.diagnostic.severity.HINT] = " ",
 				},
 			},
 		})
-		-- load individual server configs
+
+		-- Setup LSP servers (installed via nix-darwin)
+		local servers = { "html", "lua_ls", "prismals", "pyright", "rust_analyzer", "bashls", "harper_ls", "marksman", "taplo", "nixd" }
+		for _, server in ipairs(servers) do
+			lspconfig[server].setup({ capabilities = capabilities })
+		end
+
+		-- lua_ls needs extra config for Neovim Lua
+		lspconfig.lua_ls.setup({
+			capabilities = capabilities,
+			settings = {
+				Lua = {
+					diagnostics = { globals = { "vim" } },
+				},
+			},
+		})
 	end,
 }
