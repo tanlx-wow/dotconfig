@@ -4,10 +4,9 @@ return {
 	dependencies = {
 		"hrsh7th/cmp-nvim-lsp",
 		{ "antosha417/nvim-lsp-file-operations", config = true },
-		{ "folke/neodev.nvim", opts = {} },
+		{ "folke/lazydev.nvim", ft = "lua", opts = {} },
 	},
 	config = function()
-		local lspconfig = require("lspconfig")
 		local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
 		local keymap = vim.keymap -- for conciseness
@@ -75,14 +74,26 @@ return {
 			},
 		})
 
-		-- Setup LSP servers (installed via nix-darwin)
-		local servers = { "html", "lua_ls", "prismals", "pyright", "rust_analyzer", "bashls", "harper_ls", "marksman", "taplo", "nixd" }
+		-- Setup LSP servers using vim.lsp.config and vim.lsp.enable (Neovim 0.11+)
+		local servers = {
+			"html",
+			"prismals",
+			"pyright",
+			"rust_analyzer",
+			"bashls",
+			"harper_ls",
+			"marksman",
+			"taplo",
+			"nixd",
+		}
+
 		for _, server in ipairs(servers) do
-			lspconfig[server].setup({ capabilities = capabilities })
+			vim.lsp.config(server, { capabilities = capabilities })
+			vim.lsp.enable(server)
 		end
 
-		-- lua_ls needs extra config for Neovim Lua
-		lspconfig.lua_ls.setup({
+		-- lua_ls needs extra config for Neovim Lua (lazydev.nvim handles vim global)
+		vim.lsp.config("lua_ls", {
 			capabilities = capabilities,
 			settings = {
 				Lua = {
@@ -90,5 +101,6 @@ return {
 				},
 			},
 		})
+		vim.lsp.enable("lua_ls")
 	end,
 }
