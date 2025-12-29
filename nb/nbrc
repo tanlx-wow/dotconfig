@@ -13,15 +13,11 @@
 # https://github.com/xwmx/nb
 ###############################################################################
 
-export EDITOR="nvim" # Set by `nb` • Mon Jun 16 19:46:16 EDT 2025
-
-
+export EDITOR="ekphos" # Set by `nb` • Mon Jun 16 19:46:16 EDT 2025
 
 export NB_DIR="${NB_DIR:-$HOME/TLXwork/nb}" # Set by `nb` • Tue Jun 17 21:21:34 EDT 2025
 
-
 export NB_SYNTAX_THEME="${NB_SYNTAX_THEME:-GitHub}" # Set by `nb` • Wed Oct 22 15:31:11 EDT 2025
-
 
 export NB_CUSTOM_CSS="file:$HOME/.config/nvim/lua/TLX/plugins/markdownpreview/github-markdown-dark.css"
 
