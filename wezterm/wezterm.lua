@@ -14,7 +14,6 @@ local config = wezterm.config_builder()
 
 local home = wezterm.home_dir
 
-config.allow_square_glyphs_to_overflow_width = "Always"
 config.color_scheme = "Tokyo Night Moon"
 -- coolnight colorscheme
 
