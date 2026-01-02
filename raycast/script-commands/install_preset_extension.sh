@@ -1,1 +1,0 @@
-../../shell_tool/install_preset_extension.sh

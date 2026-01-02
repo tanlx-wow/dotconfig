@@ -1,1 +1,0 @@
-../../shell_tool/resize_windows_max.swift
