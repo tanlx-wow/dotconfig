@@ -36,8 +36,14 @@ config.line_height = 1
 config.enable_tab_bar = false
 
 config.window_decorations = "RESIZE"
+config.window_frame = {
+	border_left_width = 0,
+	border_right_width = 0,
+	border_bottom_height = 0,
+	border_top_height = 0,
+}
 -- config.window_background_opacity = 0.95
-config.macos_window_background_blur = 1
+-- config.macos_window_background_blur = 1
 
 -- config.window_background_image = home .. "/.config/wezterm/assets/GL_even_8bit.png"
 -- config.window_background_image = constants.bg_img
