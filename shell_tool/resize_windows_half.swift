@@ -19,36 +19,23 @@ enum Side { case left, right }
 let defaultSide: Side = .left
 // ------------------------------------
 
-// Convert a Cocoa rect (bottom-left origin) to AX rect (top-left origin)
-func cocoaToAX(_ rect: CGRect, on screen: NSScreen) -> CGRect {
-    let screenH = screen.frame.height
-    let axY = screenH - rect.origin.y - rect.size.height
-    return CGRect(x: rect.origin.x, y: axY, width: rect.size.width, height: rect.size.height)
-}
-
-guard let screen = NSScreen.main else {
-    print("No screen available.")
+guard let primaryScreen = NSScreen.screens.first else {
+    print("No screens available")
     exit(1)
 }
+let primaryHeight = primaryScreen.frame.height
 
-// Use visibleFrame so we don't collide with dock/menu bar
-let v = screen.visibleFrame
+// Convert AX (top-left) to Cocoa (bottom-left) coordinates
+func axToCocoa(_ axFrame: CGRect) -> CGRect {
+    let y = primaryHeight - axFrame.origin.y - axFrame.size.height
+    return CGRect(x: axFrame.origin.x, y: y, width: axFrame.size.width, height: axFrame.size.height)
+}
 
-let totalGapX = margin * 3          // left outer + middle gap + right outer
-let colWidth  = (v.width - totalGapX) / 2.0
-let xLeft     = v.origin.x + margin
-let xRight    = v.origin.x + margin * 2 + colWidth
-
-// Ensure BOTH top & bottom margins in Cocoa coordinates
-let yCocoa    = v.origin.y + margin
-let colHeight = v.height - 2 * margin
-
-let frameLeftCocoa  = CGRect(x: xLeft,  y: yCocoa, width: colWidth, height: colHeight)
-let frameRightCocoa = CGRect(x: xRight, y: yCocoa, width: colWidth, height: colHeight)
-
-// Precompute AX-space frames (top-left origin)
-let frameLeftAX  = cocoaToAX(frameLeftCocoa,  on: screen)
-let frameRightAX = cocoaToAX(frameRightCocoa, on: screen)
+// Convert Cocoa (bottom-left) to AX (top-left) coordinates
+func cocoaToAX(_ cocoaFrame: CGRect) -> CGRect {
+    let y = primaryHeight - cocoaFrame.origin.y - cocoaFrame.size.height
+    return CGRect(x: cocoaFrame.origin.x, y: y, width: cocoaFrame.size.width, height: cocoaFrame.size.height)
+}
 
 // Ask for Accessibility (shows prompt if needed)
 let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as NSString: true]
@@ -65,8 +52,8 @@ let skipBundleIdentifier: Set<String> = [
     "com.apple.systempreferences",
     "com.microsoft.Outlook",
     "com.cisco.secureclient.gui",
-"com.microsoft.teams2",
-"com.ThomsonResearchSoft.EndNote"
+    "com.microsoft.teams2",
+    "com.ThomsonResearchSoft.EndNote"
 ]
 
 func setWindowAX(_ win: AXUIElement, to frameAX: CGRect) {
@@ -97,6 +84,52 @@ for app in workspace.runningApplications {
         var minimizedObj: AnyObject?
         if AXUIElementCopyAttributeValue(window, kAXMinimizedAttribute as CFString, &minimizedObj) == .success,
            let minimized = minimizedObj as? Bool, minimized { continue }
+
+        // Get current frame to find screen
+        var pos = CGPoint.zero
+        var size = CGSize.zero
+        var posValue: AnyObject?
+        var sizeValue: AnyObject?
+        
+        AXUIElementCopyAttributeValue(window, kAXPositionAttribute as CFString, &posValue)
+        AXUIElementCopyAttributeValue(window, kAXSizeAttribute as CFString, &sizeValue)
+        
+        if let p = posValue, AXValueGetType(p as! AXValue) == .cgPoint {
+            AXValueGetValue(p as! AXValue, .cgPoint, &pos)
+        }
+        if let s = sizeValue, AXValueGetType(s as! AXValue) == .cgSize {
+            AXValueGetValue(s as! AXValue, .cgSize, &size)
+        }
+        
+        let currentCocoaFrame = axToCocoa(CGRect(origin: pos, size: size))
+        
+        // Find which screen the window is mostly on
+        var targetScreen: NSScreen?
+        var maxIntersectionArea: CGFloat = 0
+        for screen in NSScreen.screens {
+            let intersection = currentCocoaFrame.intersection(screen.frame)
+            let area = intersection.width * intersection.height
+            if area > maxIntersectionArea {
+                maxIntersectionArea = area
+                targetScreen = screen
+            }
+        }
+        let screen = targetScreen ?? NSScreen.main!
+        
+        // Calculate frames for this screen
+        let v = screen.visibleFrame
+        let totalGapX = margin * 3
+        let colWidth  = (v.width - totalGapX) / 2.0
+        let xLeft     = v.origin.x + margin
+        let xRight    = v.origin.x + margin * 2 + colWidth
+        let yCocoa    = v.origin.y + margin
+        let colHeight = v.height - 2 * margin
+        
+        let frameLeftCocoa  = CGRect(x: xLeft,  y: yCocoa, width: colWidth, height: colHeight)
+        let frameRightCocoa = CGRect(x: xRight, y: yCocoa, width: colWidth, height: colHeight)
+        
+        let frameLeftAX  = cocoaToAX(frameLeftCocoa)
+        let frameRightAX = cocoaToAX(frameRightCocoa)
 
         let side: Side
         if alternateSides {
