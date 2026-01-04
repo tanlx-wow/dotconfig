@@ -44,8 +44,12 @@ bindkey '^[[B' history-search-forward
 
 
 # bindkey for jump to the begining and end of the line  
+# wezterm
 bindkey "^[[H" beginning-of-line
 bindkey "^[[F" end-of-line
+# tmux
+bindkey "^[[1~" beginning-of-line
+bindkey "^[[4~" end-of-line
 
 # ---- FZF -----
 
