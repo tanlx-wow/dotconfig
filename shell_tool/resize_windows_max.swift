@@ -1,16 +1,9 @@
 #!/usr/bin/swift
 
-// Required parameters:
-// @raycast.schemaVersion 1
-// @raycast.title maximize all windows
-// @raycast.mode silent
-
-// Optional parameters:
-// @raycast.icon 🤖
 
 // Documentation:
-// @raycast.description resize all windows based on display resolution
-// @raycast.author TLX
+// resize all windows based on display resolution
+// author TLX
 
 import Cocoa
 import ApplicationServices
@@ -21,17 +14,28 @@ guard let screen = NSScreen.main else {
     print("No screen available.")
     exit(1)
 }
-let fullFrame = screen.frame
-let visible = screen.visibleFrame
-let menuBarHeight = fullFrame.height - visible.height
 
-let newX = visible.origin.x + margin
-let newY = margin +  menuBarHeight
-let newWidth = visible.width - 2 * margin
-let newHeight = fullFrame.height - newY - margin
+// Convert Cocoa (bottom-left) to AX (top-left) coordinates
+func cocoaToAX(_ rect: CGRect, on screen: NSScreen) -> CGRect {
+    let screenH = screen.frame.height
+    let axY = screenH - rect.origin.y - rect.size.height
+    return CGRect(x: rect.origin.x, y: axY, width: rect.size.width, height: rect.size.height)
+}
 
-let newPosition = CGPoint(x: newX, y: newY)
-let newSize = CGSize(width: newWidth, height: newHeight)
+let v = screen.visibleFrame
+
+// Calculate Max Rect (Cocoa coordinates)
+// Apply margins within the visible frame
+let x = v.origin.x + margin
+let y = v.origin.y + margin
+let width = v.width - 2 * margin
+let height = v.height - 2 * margin
+
+let cocoaRect = CGRect(x: x, y: y, width: width, height: height)
+let axRect = cocoaToAX(cocoaRect, on: screen)
+
+let newPosition = axRect.origin
+let newSize = axRect.size
 
 let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as NSString: true]
 guard AXIsProcessTrustedWithOptions(options) else {
@@ -44,13 +48,12 @@ let workspace = NSWorkspace.shared
 for app in workspace.runningApplications {
     guard !app.isHidden, app.activationPolicy == .regular else { continue }
 
-    // Skip  windows
+    // Skip windows
     let skipBundleIdentifier: Set<String> = [
         "com.apple.finder",
         "com.apple.systempreferences",
         "com.cisco.secureclient.gui",
-
-"com.microsoft.teams2",
+        "com.microsoft.teams2",
     ]
     guard let bundleID = app.bundleIdentifier, !skipBundleIdentifier.contains(bundleID) else { continue }
 
@@ -71,4 +74,3 @@ for app in workspace.runningApplications {
         }
     }
 }
-
