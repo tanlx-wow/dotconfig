@@ -43,6 +43,10 @@ bindkey '^[[B' history-search-forward
 
 
 
+# bindkey for jump to the begining and end of the line  
+bindkey "^[[H" beginning-of-line
+bindkey "^[[F" end-of-line
+
 # ---- FZF -----
 
 # Set up fzf key bindings and fuzzy completion
