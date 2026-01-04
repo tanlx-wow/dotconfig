@@ -101,6 +101,12 @@ case "left", "right":
 case "maximize", "max":
     targetWidth = v.width - 2 * margin
     targetHeight = v.height - 2 * margin
+case "plus":
+    let scale: CGFloat = 1.2
+    let maxWidth = v.width - 2 * margin
+    let maxHeight = v.height - 2 * margin
+    targetWidth = min(currentSize.width * scale, maxWidth)
+    targetHeight = min(currentSize.height * scale, maxHeight)
 case "up", "top", "bottom", "down":
     targetWidth = v.width - 2 * margin
     targetHeight = (v.height - totalGapY) / 2
@@ -109,22 +115,7 @@ default: // "reset", "center", and any unknown arg
     targetHeight = v.height * 0.75
 }
 
-// 1. Set Size
-var newSize = CGSize(width: targetWidth, height: targetHeight)
-if let s = AXValueCreate(.cgSize, &newSize) {
-    AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, s)
-}
-
-// 2. Read Actual Size (in case it was constrained)
-var axSizeValue: AnyObject?
-var actualSize = newSize
-if AXUIElementCopyAttributeValue(window, kAXSizeAttribute as CFString, &axSizeValue) == .success,
-   let val = axSizeValue as! AXValue?,
-   AXValueGetType(val) == .cgSize {
-    AXValueGetValue(val, .cgSize, &actualSize)
-}
-
-// 3. Calculate Position based on Actual Size
+// 1. Calculate Target Position based on Target Size
 var x: CGFloat = 0
 var y: CGFloat = 0
 
@@ -133,27 +124,57 @@ case "left":
     x = v.minX + margin
     y = v.minY + margin
 case "right":
-    x = v.maxX - margin - actualSize.width
+    x = v.maxX - margin - targetWidth
     y = v.minY + margin
 case "maximize", "max":
     x = v.minX + margin
     y = v.minY + margin
 case "up", "top":
     x = v.minX + margin
-    y = v.maxY - margin - actualSize.height
+    y = v.maxY - margin - targetHeight
 case "bottom", "down":
     x = v.minX + margin
     y = v.minY + margin
 default: // reset
-    x = v.midX - actualSize.width / 2
-    y = v.midY - actualSize.height / 2
+    x = v.midX - targetWidth / 2
+    y = v.midY - targetHeight / 2
 }
 
-// 4. Set Position
-let newCocoaRect = CGRect(x: x, y: y, width: actualSize.width, height: actualSize.height)
+// 2. Set Position (First pass)
+// We set position first to ensure the window has room to grow into the target size
+let newCocoaRect = CGRect(x: x, y: y, width: targetWidth, height: targetHeight)
 let newAXRect = cocoaToAX(newCocoaRect)
 var newPos = newAXRect.origin
 
 if let p = AXValueCreate(.cgPoint, &newPos) {
     AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, p)
+}
+
+// 3. Set Size
+var newSize = CGSize(width: targetWidth, height: targetHeight)
+if let s = AXValueCreate(.cgSize, &newSize) {
+    AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, s)
+}
+
+// 4. (Optional) For "reset", re-center if actual size differs from target
+if direction == "reset" || direction == "center" {
+    var axSizeValue: AnyObject?
+    var actualSize = newSize
+    if AXUIElementCopyAttributeValue(window, kAXSizeAttribute as CFString, &axSizeValue) == .success,
+       let val = axSizeValue as! AXValue?,
+       AXValueGetType(val) == .cgSize {
+        AXValueGetValue(val, .cgSize, &actualSize)
+    }
+    
+    // Recalculate center with actual size
+    let centerX = v.midX - actualSize.width / 2
+    let centerY = v.midY - actualSize.height / 2
+    
+    let finalCocoaRect = CGRect(x: centerX, y: centerY, width: actualSize.width, height: actualSize.height)
+    let finalAXRect = cocoaToAX(finalCocoaRect)
+    var finalPos = finalAXRect.origin
+    
+    if let p = AXValueCreate(.cgPoint, &finalPos) {
+        AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, p)
+    }
 }
