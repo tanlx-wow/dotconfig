@@ -91,50 +91,69 @@ let v = screen.visibleFrame
 let totalGapX = margin * 3
 let totalGapY = margin * 3
 
+var targetWidth: CGFloat = 0
+var targetHeight: CGFloat = 0
+
+switch direction {
+case "left", "right":
+    targetWidth = (v.width - totalGapX) / 2
+    targetHeight = v.height - 2 * margin
+case "maximize", "max":
+    targetWidth = v.width - 2 * margin
+    targetHeight = v.height - 2 * margin
+case "up", "top", "bottom", "down":
+    targetWidth = v.width - 2 * margin
+    targetHeight = (v.height - totalGapY) / 2
+default: // "reset", "center", and any unknown arg
+    targetWidth = v.width * 0.75
+    targetHeight = v.height * 0.75
+}
+
+// 1. Set Size
+var newSize = CGSize(width: targetWidth, height: targetHeight)
+if let s = AXValueCreate(.cgSize, &newSize) {
+    AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, s)
+}
+
+// 2. Read Actual Size (in case it was constrained)
+var axSizeValue: AnyObject?
+var actualSize = newSize
+if AXUIElementCopyAttributeValue(window, kAXSizeAttribute as CFString, &axSizeValue) == .success,
+   let val = axSizeValue as! AXValue?,
+   AXValueGetType(val) == .cgSize {
+    AXValueGetValue(val, .cgSize, &actualSize)
+}
+
+// 3. Calculate Position based on Actual Size
 var x: CGFloat = 0
 var y: CGFloat = 0
-var width: CGFloat = 0
-var height: CGFloat = 0
 
 switch direction {
 case "left":
-    width = (v.width - totalGapX) / 2
-    height = v.height - 2 * margin
-    x = v.origin.x + margin
-    y = v.origin.y + margin
+    x = v.minX + margin
+    y = v.minY + margin
 case "right":
-    width = (v.width - totalGapX) / 2
-    height = v.height - 2 * margin
-    x = v.origin.x + (2 * margin) + width
-    y = v.origin.y + margin
+    x = v.maxX - margin - actualSize.width
+    y = v.minY + margin
 case "maximize", "max":
-    width = v.width - 2 * margin
-    height = v.height - 2 * margin
-    x = v.origin.x + margin
-    y = v.origin.y + margin
+    x = v.minX + margin
+    y = v.minY + margin
 case "up", "top":
-    width = v.width - 2 * margin
-    height = (v.height - totalGapY) / 2
-    x = v.origin.x + margin
-    y = v.origin.y + margin * 2 + height
+    x = v.minX + margin
+    y = v.maxY - margin - actualSize.height
 case "bottom", "down":
-    width = v.width - 2 * margin
-    height = (v.height - totalGapY) / 2
-    x = v.origin.x + margin
-    y = v.origin.y + margin
-default: // "reset", "center", and any unknown arg
-    width = v.width * 0.75
-    height = v.height * 0.75
-    x = v.origin.x + (v.width - width) / 2
-    y = v.origin.y + (v.height - height) / 2
+    x = v.minX + margin
+    y = v.minY + margin
+default: // reset
+    x = v.midX - actualSize.width / 2
+    y = v.midY - actualSize.height / 2
 }
 
-let newCocoaRect = CGRect(x: x, y: y, width: width, height: height)
+// 4. Set Position
+let newCocoaRect = CGRect(x: x, y: y, width: actualSize.width, height: actualSize.height)
 let newAXRect = cocoaToAX(newCocoaRect)
-
 var newPos = newAXRect.origin
-var newSize = newAXRect.size
-if let p = AXValueCreate(.cgPoint, &newPos), let s = AXValueCreate(.cgSize, &newSize) {
+
+if let p = AXValueCreate(.cgPoint, &newPos) {
     AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, p)
-    AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, s)
 }
