@@ -1,4 +1,3 @@
-
 # eza (better ls function)
 
 alias ls="eza --icons=always --git --color=always"
@@ -7,10 +6,9 @@ alias ll="ls -lh"
 
 alias vmd="csh /Applications/VMD\ 1.9.4a57-arm64-Rev12.app/Contents/MacOS/startup.command.csh"
 
-  [[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]] && . "/opt/homebrew/etc/profile.d/bash_completion.sh"
+[[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]] && . "/opt/homebrew/etc/profile.d/bash_completion.sh"
 
-
-# copy the current absoulte path 
+# copy the current absoulte path
 alias pwdcp="pwd | tr -d '\n' | pbcopy"
 
 # clear screen
@@ -23,7 +21,7 @@ alias lag="lazygit"
 # windows size
 alias winsize="swift $HOME/.config/shell_tool/resize_windows.swift"
 
-# micromamba 
+# micromamba
 # alias mamba="micromamba"
 
 # reload zshrc
@@ -46,27 +44,27 @@ alias getappid="bash $HOME/.config/shell_tool/app_id.sh"
 
 # yazi function
 function y() {
-    # 1. Make a temporary file to hold the "current working directory" (cwd)
-    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+  # 1. Make a temporary file to hold the "current working directory" (cwd)
+  local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
 
-    # 2. Launch yazi, passing in all user arguments ($@),
-    #    and tell it to write the cwd into that tmp file when it exits
-    yazi "$@" --cwd-file="$tmp"
+  # 2. Launch yazi, passing in all user arguments ($@),
+  #    and tell it to write the cwd into that tmp file when it exits
+  yazi "$@" --cwd-file="$tmp"
 
-    # 3. After yazi exits, read the cwd from that tmp file
-    if cwd="$(command cat -- "$tmp")" \
-       && [ "$cwd" != "" ] \
-       && [ "$cwd" != "$PWD" ]; then
-        # If the cwd is not empty and different from your current directory,
-        # then change the shell's directory to it
-        builtin cd -- "$cwd"
-    fi
+  # 3. After yazi exits, read the cwd from that tmp file
+  if cwd="$(command cat -- "$tmp")" &&
+    [ "$cwd" != "" ] &&
+    [ "$cwd" != "$PWD" ]; then
+    # If the cwd is not empty and different from your current directory,
+    # then change the shell's directory to it
+    builtin cd -- "$cwd"
+  fi
 
-    # 4. Clean up the tmp file
-    rm -f -- "$tmp"
+  # 4. Clean up the tmp file
+  rm -f -- "$tmp"
 }
 
-# fastfetch 
+# fastfetch
 fs() {
   fastfetch --logo "$(pokeget gengar --hide-name)" --logo-type data
 }
@@ -76,5 +74,14 @@ nbb() {
   nb b --gui
 }
 
+# nb edit and formmat
+nbe() {
+  # 1. Run the normal nb edit command, passing any arguments ($@)
+  nb edit "$@"
 
-
+  # 2. Run your follow-up command immediately after the editor closes
+  echo "Running follow-up command..."
+  prettier --write "$(nb ls --path "$@")"
+  # Or just a simple script:
+  # ./my-follow-up-script.sh
+}
