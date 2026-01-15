@@ -76,12 +76,18 @@ nbb() {
 
 # nb edit and formmat
 nbe() {
-  # 1. Run the normal nb edit command, passing any arguments ($@)
+  # 1. Open the file in the editor
   nb edit "$@"
 
-  # 2. Run your follow-up command immediately after the editor closes
-  echo "Running follow-up command..."
-  prettier --write "$(nb ls --path "$@")"
-  # Or just a simple script:
-  # ./my-follow-up-script.sh
+  # 2. Get the clean path for the item you just edited.
+  # 'nb show --path' returns the absolute path without the [9] index.
+  local filepath=$(nb show --path "$@")
+
+  # 3. Check if the file exists, then run Prettier
+  if [[ -f "$filepath" ]]; then
+    echo "Formatting: $filepath"
+    prettier --write "$filepath"
+  else
+    echo "Error: Could not find file path to format."
+  fi
 }
