@@ -76,18 +76,23 @@ nbb() {
 
 # nb edit and formmat
 nbe() {
-  # 1. Open the file in the editor
+  # 1. Open the file
   nb edit "$@"
 
-  # 2. Get the clean path for the item you just edited.
-  # 'nb show --path' returns the absolute path without the [9] index.
+  # 2. Get the path from nb
   local filepath=$(nb show --path "$@")
 
-  # 3. Check if the file exists, then run Prettier
+  # 3. Resolve path and format
   if [[ -f "$filepath" ]]; then
-    abs_path="{$filepath:A}"
+    # FIX 1: Move $ outside the braces to properly expand the variable
+    # :A automatically finds the "Real" path, so we don't need readlink anymore
+    local abs_path="${filepath:A}"
+
     echo "Formatting: $abs_path"
-    prettier --write "$(readlink "$abs_path")"
+
+    # FIX 2: Just use abs_path directly.
+    # (readlink is unnecessary because :A already did the work)
+    prettier --write "$abs_path"
   else
     echo "Error: Could not find file path to format."
   fi
