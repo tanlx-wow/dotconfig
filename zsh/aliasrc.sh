@@ -85,8 +85,9 @@ nbe() {
 
   # 3. Check if the file exists, then run Prettier
   if [[ -f "$filepath" ]]; then
-    echo "Formatting: $filepath"
-    prettier --write "$(readlink "$filepath")"
+    abs_path="{$filepath:A}"
+    echo "Formatting: $abs_path"
+    prettier --write "$(readlink "$abs_path")"
   else
     echo "Error: Could not find file path to format."
   fi
