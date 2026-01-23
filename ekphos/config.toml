@@ -1,0 +1,48 @@
+# Directory where notes are stored
+notes_dir = "$HOME/TLXwork/nb"
+
+# Show welcome dialog on startup
+welcome_shown = true
+
+# Theme name (without .toml extension)
+theme = "ekphos-dawn"
+
+# Show folders with no .md files
+show_empty_dir = true
+
+# Syntax highlighting theme for code blocks
+syntax_theme = "base16-ocean.dark"
+
+# Start with sidebar collapsed
+sidebar_collapsed = false
+
+# Start with outline collapsed
+outline_collapsed = false
+
+# Group folders at the top of sidebar (like Obsidian)
+folders_first = true
+
+# Hide frontmatter in content view (show only tag badges)
+frontmatter_hidden = true
+
+# Show tag badges when note has frontmatter tags
+show_tags = true
+
+# [editor]
+# Enable soft line wrapping
+line_wrap = true
+
+# Tab width in spaces
+tab_width = 4
+
+# Left padding (columns)
+left_padding = 0
+
+# Right padding (columns)
+right_padding = 1
+
+# Line number display mode
+line_numbers = "absolute"
+
+# Minimum lines to keep above/below cursor
+scrolloff = 8
