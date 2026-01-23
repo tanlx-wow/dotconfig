@@ -1,5 +1,5 @@
 # Directory where notes are stored
-notes_dir = "$HOME/TLXwork/nb"
+notes_dir = "~/TLXwork/nb"
 
 # Show welcome dialog on startup
 welcome_shown = true
