@@ -1,7 +1,6 @@
 #!/usr/bin/swift
 
 // Required parameters:
-// @raycast.schemaVersion 1
 // @raycast.title Resize Front Window Left
 // @raycast.mode silent
 
