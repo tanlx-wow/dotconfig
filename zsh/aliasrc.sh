@@ -40,7 +40,7 @@ pixi-ai() {
 export PATH="$HOME/.config/zsh/bin:$PATH"
 
 # app id script
-alias getappid="bash $HOME/.config/shell_tool/app_id.sh"
+alias getappid="$HOME/.config/shell_tool/app_id.sh"
 
 # yazi function
 function y() {
