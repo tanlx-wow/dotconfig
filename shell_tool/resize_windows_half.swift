@@ -53,7 +53,8 @@ let skipBundleIdentifier: Set<String> = [
     "com.microsoft.Outlook",
     "com.cisco.secureclient.gui",
     "com.microsoft.teams2",
-    "com.ThomsonResearchSoft.EndNote"
+    "com.ThomsonResearchSoft.EndNote",
+    "com.teamviewer.TeamViewer",
 ]
 
 func setWindowAX(_ win: AXUIElement, to frameAX: CGRect) {
