@@ -1,9 +1,8 @@
-
 # if no argument provided, prompt user
 if [ "$1" = "" ]; then
-  echo "please input the name of application you want darkmode off"
+  echo "please input the name of application you want for appe id"
   read app_name
-else 
+else
   app_name="$1"
 fi
 
