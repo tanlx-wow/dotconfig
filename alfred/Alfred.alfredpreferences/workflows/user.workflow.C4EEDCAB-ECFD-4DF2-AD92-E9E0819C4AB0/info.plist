@@ -190,7 +190,7 @@
 				<key>escaping</key>
 				<integer>0</integer>
 				<key>script</key>
-				<string>swift tilt_window_arg.swift left</string>
+				<string>swift ~/.config/shell_tool/tilt_window_arg.swift left</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -244,7 +244,7 @@
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>script</key>
-				<string>swift resize_windows_max.swift "$1"</string>
+				<string>swift ~/.config/shell_tool/resize_windows_max.swift "$1"</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -267,7 +267,7 @@
 				<key>escaping</key>
 				<integer>0</integer>
 				<key>script</key>
-				<string>swift tilt_window_arg.swift right</string>
+				<string>swift ~/.config/shell_tool/tilt_window_arg.swift right</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -352,7 +352,7 @@
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>script</key>
-				<string>swift resize_windows_half.swift "$1"</string>
+				<string>swift ~/.config/shell_tool/resize_windows_half.swift "$1"</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -375,7 +375,7 @@
 				<key>escaping</key>
 				<integer>0</integer>
 				<key>script</key>
-				<string>swift tilt_window_arg.swift up</string>
+				<string>swift ~/.config/shell_tool/tilt_window_arg.swift up</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -429,7 +429,7 @@
 				<key>escaping</key>
 				<integer>0</integer>
 				<key>script</key>
-				<string>swift hide_window_expt_front.swift "$1"</string>
+				<string>swift ~/.config/shell_tool/hide_window_expt_front.swift "$1"</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -483,7 +483,7 @@
 				<key>escaping</key>
 				<integer>0</integer>
 				<key>script</key>
-				<string>swift tilt_window_arg.swift bottom</string>
+				<string>swift ~/.config/shell_tool/tilt_window_arg.swift bottom</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -537,7 +537,7 @@
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>script</key>
-				<string>swift tilt_window_arg.swift max</string>
+				<string>swift ~/.config/shell_tool/tilt_window_arg.swift max</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -622,7 +622,7 @@
 				<key>escaping</key>
 				<integer>0</integer>
 				<key>script</key>
-				<string>swift tilt_window_arg.swift reset</string>
+				<string>swift ~/.config/shell_tool/tilt_window_arg.swift reset</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -676,7 +676,7 @@
 				<key>escaping</key>
 				<integer>0</integer>
 				<key>script</key>
-				<string>swift tilt_window_arg.swift plus</string>
+				<string>swift ~/.config/shell_tool/tilt_window_arg.swift plus</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>

@@ -45,6 +45,7 @@ for app in workspace.runningApplications {
         "com.apple.systempreferences",
         "com.cisco.secureclient.gui",
         "com.microsoft.teams2",
+        "com.teamviewer.TeamViewer",
     ]
     guard let bundleID = app.bundleIdentifier, !skipBundleIdentifier.contains(bundleID) else { continue }
 
