@@ -81,8 +81,17 @@ for screen in NSScreen.screens {
 }
 let screen = targetScreen ?? NSScreen.main!
 
-let v = screen.visibleFrame
-// Maximize logic: Full visible frame width and height minus margin
+var v = screen.visibleFrame
+
+if let primary = NSScreen.screens.first {
+    let primaryTopInset = primary.frame.maxY - primary.visibleFrame.maxY
+    let currentTopInset = screen.frame.maxY - v.maxY
+    if currentTopInset < (primaryTopInset - 5) {
+        let missingHeight = primaryTopInset - currentTopInset
+        v.size.height -= missingHeight
+    }
+}
+
 let width = v.width - 2 * margin
 let height = v.height - 2 * margin
 let x = v.origin.x + margin

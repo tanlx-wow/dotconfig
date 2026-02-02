@@ -118,7 +118,17 @@ for app in workspace.runningApplications {
         let screen = targetScreen ?? NSScreen.main!
         
         // Calculate frames for this screen
-        let v = screen.visibleFrame
+        var v = screen.visibleFrame
+
+        if let primary = NSScreen.screens.first {
+            let primaryTopInset = primary.frame.maxY - primary.visibleFrame.maxY
+            let currentTopInset = screen.frame.maxY - v.maxY
+            if currentTopInset < (primaryTopInset - 5) {
+                let missingHeight = primaryTopInset - currentTopInset
+                v.size.height -= missingHeight
+            }
+        }
+        
         let totalGapX = margin * 3
         let colWidth  = (v.width - totalGapX) / 2.0
         let xLeft     = v.origin.x + margin

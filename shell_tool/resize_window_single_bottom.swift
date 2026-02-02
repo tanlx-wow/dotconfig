@@ -99,7 +99,16 @@ for screen in NSScreen.screens {
 let screen = targetScreen ?? NSScreen.main!
 
 // 5. Calculate New Frame
-let v = screen.visibleFrame
+var v = screen.visibleFrame
+
+if let primary = NSScreen.screens.first {
+    let primaryTopInset = primary.frame.maxY - primary.visibleFrame.maxY
+    let currentTopInset = screen.frame.maxY - v.maxY
+    if currentTopInset < (primaryTopInset - 5) {
+        let missingHeight = primaryTopInset - currentTopInset
+        v.size.height -= missingHeight
+    }
+}
 
 // Logic: Bottom Half
 let totalGapY = margin * 3

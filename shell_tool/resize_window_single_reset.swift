@@ -79,7 +79,16 @@ for screen in NSScreen.screens {
 }
 let screen = targetScreen ?? NSScreen.main!
 
-let v = screen.visibleFrame
+var v = screen.visibleFrame
+
+if let primary = NSScreen.screens.first {
+    let primaryTopInset = primary.frame.maxY - primary.visibleFrame.maxY
+    let currentTopInset = screen.frame.maxY - v.maxY
+    if currentTopInset < (primaryTopInset - 5) {
+        let missingHeight = primaryTopInset - currentTopInset
+        v.size.height -= missingHeight
+    }
+}
 
 // Calculate "Reasonable" Size (e.g., 75% of screen width/height, centered)
 let width = v.width * 0.75
