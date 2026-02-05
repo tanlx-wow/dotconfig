@@ -184,10 +184,17 @@ def parse_cal(query)
     list = query.split(" on ")
   
     # If month is defined
-    if (list[1].index("\/"))
-      list_d = list[1].split("\/")
-      $day = list_d[1]
+    date_str = list[1]
+    if (date_str.index(" at "))
+      at_idx = date_str.index(" at ")
+      list[0] = list[0] + date_str[at_idx..-1]
+      date_str = date_str[0...at_idx]
+    end
+
+    if (date_str.index("\/"))
+      list_d = date_str.split("\/")
       $month = list_d[0]
+      $day = list_d[1]
     
       if (list_d.size > 2)
         $year = list_d[2]
@@ -197,7 +204,7 @@ def parse_cal(query)
         end
       end
     else
-      c_day = strip_or_self(list[1])
+      c_day = strip_or_self(date_str)
       c_day = c_day.downcase
       if (!$weeks[c_day].nil?)
         c_week = $today.wday

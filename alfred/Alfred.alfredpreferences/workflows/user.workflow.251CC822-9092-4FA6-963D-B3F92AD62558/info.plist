@@ -34,7 +34,7 @@
 		</array>
 	</dict>
 	<key>createdby</key>
-	<string>TLX & opencode</string>
+	<string></string>
 	<key>description</key>
 	<string>cal [event] [at [time][am|pm]] [on [date]] [every [date]] in [location] @[calendar name] alarm [X min|hour|day|month|year] ...</string>
 	<key>disabled</key>
@@ -150,13 +150,6 @@ IE.: cal meeting at 10:23 pm today alarm 1 min 30 minutes 2 hours
 It sets 3 alarms - 1 minute before the event, 30 minutes before and 2 hours before.
 
 
-Thank you.
-Modified by TLX & opencode from the original author Toshiro Sugii
-I hope it helps you in some way.
-A huge hug.
-
-https://github.com/rtoshiro/alfred-workflows-addcalendarevent
-
 CHANGELOG
 
 1.2.3:
@@ -220,32 +213,30 @@ cal event at 11 every monday
 		<key>56D8FF3F-183A-496A-8338-79769ED3D74C</key>
 		<dict>
 			<key>xpos</key>
-			<real>510</real>
+			<integer>510</integer>
 			<key>ypos</key>
-			<real>200</real>
+			<integer>200</integer>
 		</dict>
 		<key>606403E8-91C9-4966-92FF-80D901B897E8</key>
 		<dict>
 			<key>xpos</key>
-			<real>310</real>
+			<integer>310</integer>
 			<key>ypos</key>
-			<real>200</real>
+			<integer>200</integer>
 		</dict>
 		<key>81CE903D-58B3-40A8-AAB1-48891E062E2D</key>
 		<dict>
 			<key>xpos</key>
-			<real>100</real>
+			<integer>100</integer>
 			<key>ypos</key>
-			<real>200</real>
+			<integer>200</integer>
 		</dict>
 	</dict>
-	<key>userconfigurationconfig</key>
-	<array/>
 	<key>variablesdontexport</key>
 	<array/>
 	<key>version</key>
 	<string>1.2.4</string>
 	<key>webaddress</key>
-	<string>https://github.com/rtoshiro/alfred-workflows-addcalendarevent</string>
+	<string></string>
 </dict>
 </plist>
