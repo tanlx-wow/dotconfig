@@ -75,8 +75,9 @@ nbb() {
 }
 
 # nb edit and formmat
+# nb edit and format
 nbe() {
-  # 1. Open the file
+  # 1. Open the file for editing
   nb edit "$@"
 
   # 2. Get the path from nb
@@ -84,14 +85,16 @@ nbe() {
 
   # 3. Resolve path and format
   if [[ -f "$filepath" ]]; then
-    # FIX 1: Move $ outside the braces to properly expand the variable
-    # :A automatically finds the "Real" path, so we don't need readlink anymore
+    # :A resolves the absolute path (handling symlinks automatically)
     local abs_path="${filepath:A}"
 
-    echo "Formatting: $abs_path"
+    # --- Spelling Check ---
+    # We use --dont-backup to avoid cluttering your nb directory with .bak files
+    echo "Checking spelling: $abs_path"
+    aspell check --dont-backup --mode=markdown "$abs_path"
 
-    # FIX 2: Just use abs_path directly.
-    # (readlink is unnecessary because :A already did the work)
+    # --- Formatting ---
+    echo "Formatting: $abs_path"
     prettier --write "$abs_path"
   else
     echo "Error: Could not find file path to format."
