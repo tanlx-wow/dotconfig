@@ -21,7 +21,7 @@ export NB_SYNTAX_THEME="${NB_SYNTAX_THEME:-GitHub}" # Set by `nb` • Wed Oct 22
 
 export NB_CUSTOM_CSS="file:$HOME/.config/nvim/lua/TLX/plugins/markdownpreview/github-markdown-dark.css"
 
-export NB_AUTO_SYNC="${NB_AUTO_SYNC:1}" # Set by `nb` • Wed Oct 29 11:54:51 EDT 2025
+export NB_AUTO_SYNC="${NB_AUTO_SYNC:-1}" # Set by `nb` • Wed Oct 29 11:54:51 EDT 2025
 
 export NB_MATHJAX_ENABLED=1
 
