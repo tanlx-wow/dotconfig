@@ -105,37 +105,41 @@ ep() {
   # 1. Dynamically get the home directory
   local epkhos_home=$(ekphos -d)
 
-  # 2. Construct the file path using the first argument ($1)
-  local filepath="$epkhos_home/$1"
+  # 2. Create a temporary reference file right BEFORE editing
+  # This file's creation time serves as our timestamp snapshot
+  local ref_file=$(mktemp)
 
-  # 3. Capture the modification time BEFORE editing
-  local mtime_before=0
-  if [[ -f "$filepath" ]]; then
-    mtime_before=$(stat -c %Y "$filepath")
-  fi
-
-  # 4. Open the file in the editor (passing all arguments)
+  # 3. Open the editor
   ekphos "$@"
 
-  # 5. Check the modification time AFTER editing
-  if [[ -f "$filepath" ]]; then
-    local mtime_after=$(stat -c %Y "$filepath")
+  # 4. Find all markdown files modified AFTER the reference file was created
+  # -L: Tells 'find' to follow symlinks into folders
+  # -type f: Only look for actual files, not directories
+  # -name "*.md": Only check markdown files (adjust if you use .txt)
+  # -newer "$ref_file": The magic flag that compares timestamps
+  local modified_files=()
+  while IFS= read -r -d $'\0' file; do
+    modified_files+=("$file")
+  done < <(find -L "$epkhos_home" -type f -name "*.md" -newer "$ref_file" -print0)
 
-    # 6. Compare timestamps to see if you actually saved changes
-    if [[ "$mtime_after" -gt "$mtime_before" ]]; then
-      local abs_path="${filepath:A}"
+  # 5. Clean up the invisible temporary file
+  rm -f "$ref_file"
 
-      echo "Changes detected in: $abs_path"
+  # 6. Loop through whatever was modified and format it
+  if [[ ${#modified_files[@]} -gt 0 ]]; then
+    for file in "${modified_files[@]}"; do
+      # :A resolves absolute paths in Zsh
+      local abs_path="${file:A}"
+
+      echo "--- Changes detected in: $abs_path ---"
 
       echo "Checking spelling..."
       aspell check --dont-backup --mode=markdown "$abs_path"
 
       echo "Formatting..."
       prettier --write "$abs_path"
-    else
-      echo "No changes made to '$1'. Skipping spellcheck and formatting."
-    fi
+    done
   else
-    echo "Error: Could not find file at '$filepath'."
+    echo "No markdown files were modified. Skipping formatting."
   fi
 }
