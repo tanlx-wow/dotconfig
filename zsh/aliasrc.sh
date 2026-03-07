@@ -100,3 +100,42 @@ nbe() {
     echo "Error: Could not find file path to format."
   fi
 }
+
+ep() {
+  # 1. Dynamically get the home directory
+  local epkhos_home=$(ekphos -d)
+
+  # 2. Construct the file path using the first argument ($1)
+  local filepath="$epkhos_home/$1"
+
+  # 3. Capture the modification time BEFORE editing
+  local mtime_before=0
+  if [[ -f "$filepath" ]]; then
+    mtime_before=$(stat -c %Y "$filepath")
+  fi
+
+  # 4. Open the file in the editor (passing all arguments)
+  ekphos "$@"
+
+  # 5. Check the modification time AFTER editing
+  if [[ -f "$filepath" ]]; then
+    local mtime_after=$(stat -c %Y "$filepath")
+
+    # 6. Compare timestamps to see if you actually saved changes
+    if [[ "$mtime_after" -gt "$mtime_before" ]]; then
+      local abs_path="${filepath:A}"
+
+      echo "Changes detected in: $abs_path"
+
+      echo "Checking spelling..."
+      aspell check --dont-backup --mode=markdown "$abs_path"
+
+      echo "Formatting..."
+      prettier --write "$abs_path"
+    else
+      echo "No changes made to '$1'. Skipping spellcheck and formatting."
+    fi
+  else
+    echo "Error: Could not find file at '$filepath'."
+  fi
+}
