@@ -76,8 +76,6 @@ _fzf_compgen_dir() {
 }
 
 
-# thefuck alias
-eval $(thefuck --alias fk)
 
 
 
