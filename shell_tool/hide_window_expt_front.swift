@@ -60,6 +60,8 @@ guard let infoList = CGWindowListCopyWindowInfo(options, kCGNullWindowID) as? [[
     exit(1)
 }
 
+var frontWindowBounds: CGRect?
+
 // 4. Iterate windows from front to back
 for entry in infoList {
     // Only consider standard windows (Layer 0)
@@ -71,6 +73,20 @@ for entry in infoList {
     // Get Bounds
     guard let boundsDict = entry[kCGWindowBounds as String] as? [String: Any],
           let bounds = CGRect(dictionaryRepresentation: boundsDict as CFDictionary) else { continue }
+    
+    var isStacked = false
+    if let fBounds = frontWindowBounds {
+        let intersection = bounds.intersection(fBounds)
+        if !intersection.isNull {
+            let intersectionArea = intersection.width * intersection.height
+            let frontArea = fBounds.width * fBounds.height
+            if intersectionArea > 0.5 * frontArea {
+                isStacked = true
+            }
+        }
+    } else {
+        frontWindowBounds = bounds
+    }
     
     // Check which sample points this window covers
     var hits = false
@@ -85,8 +101,9 @@ for entry in infoList {
         return true // Keep in set
     }
     
-    // If this window covered any points that weren't covered by previous windows, keep the app
-    if hits {
+    // If this window covered any points that weren't covered by previous windows, 
+    // and it is not stacked directly behind the frontmost window, keep the app
+    if hits && !isStacked {
         keepPIDs.insert(pid)
     }
     
