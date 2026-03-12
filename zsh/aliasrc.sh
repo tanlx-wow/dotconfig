@@ -101,54 +101,54 @@ nbe() {
   fi
 }
 
-ep() {
-  # 1. Dynamically get the home directory
-  local ekphos_home=$(ekphos -d)
-
-  # 2. Create a temporary reference file right BEFORE editing
-  # This file's creation time serves as our timestamp snapshot
-  local ref_file=$(mktemp)
-
-  # Check if no arguments were passed to the function
-  if [[ $# -eq 0 ]]; then
-    # Use the dynamically grabbed base directory to build the path
-    set -- "$ekphos_home"
-  fi
-
-  # 3. Open the editor
-  ekphos "$@"
-
-  # 4. Find all markdown files modified AFTER the reference file was created
-  # -L: Tells 'find' to follow symlinks into folders
-  # -type f: Only look for actual files, not directories
-  # -name "*.md": Only check markdown files (adjust if you use .txt)
-  # -newer "$ref_file": The magic flag that compares timestamps
-  local modified_files=()
-  while IFS= read -r -d $'\0' file; do
-    modified_files+=("$file")
-  done < <(find -L "$ekphos_home" -type f -name "*.md" -newer "$ref_file" -print0)
-
-  # 5. Clean up the invisible temporary file
-  rm -f "$ref_file"
-
-  # 6. Loop through whatever was modified and format it
-  if [[ ${#modified_files[@]} -gt 0 ]]; then
-    for file in "${modified_files[@]}"; do
-      # :A resolves absolute paths in Zsh
-      local abs_path="${file:A}"
-
-      echo "--- Changes detected in: $abs_path ---"
-
-      echo "Checking spelling..."
-      aspell check --dont-backup --mode=markdown "$abs_path"
-
-      echo "Formatting..."
-      prettier --write "$abs_path"
-    done
-  else
-    echo "No markdown files were modified. Skipping formatting."
-  fi
-}
+# ep() {
+#   # 1. Dynamically get the home directory
+#   local ekphos_home=$(ekphos -d)
+#
+#   # 2. Create a temporary reference file right BEFORE editing
+#   # This file's creation time serves as our timestamp snapshot
+#   local ref_file=$(mktemp)
+#
+#   # Check if no arguments were passed to the function
+#   if [[ $# -eq 0 ]]; then
+#     # Use the dynamically grabbed base directory to build the path
+#     set -- "$ekphos_home"
+#   fi
+#
+#   # 3. Open the editor
+#   ekphos "$@"
+#
+#   # 4. Find all markdown files modified AFTER the reference file was created
+#   # -L: Tells 'find' to follow symlinks into folders
+#   # -type f: Only look for actual files, not directories
+#   # -name "*.md": Only check markdown files (adjust if you use .txt)
+#   # -newer "$ref_file": The magic flag that compares timestamps
+#   local modified_files=()
+#   while IFS= read -r -d $'\0' file; do
+#     modified_files+=("$file")
+#   done < <(find -L "$ekphos_home" -type f -name "*.md" -newer "$ref_file" -print0)
+#
+#   # 5. Clean up the invisible temporary file
+#   rm -f "$ref_file"
+#
+#   # 6. Loop through whatever was modified and format it
+#   if [[ ${#modified_files[@]} -gt 0 ]]; then
+#     for file in "${modified_files[@]}"; do
+#       # :A resolves absolute paths in Zsh
+#       local abs_path="${file:A}"
+#
+#       echo "--- Changes detected in: $abs_path ---"
+#
+#       echo "Checking spelling..."
+#       aspell check --dont-backup --mode=markdown "$abs_path"
+#
+#       echo "Formatting..."
+#       prettier --write "$abs_path"
+#     done
+#   else
+#     echo "No markdown files were modified. Skipping formatting."
+#   fi
+# }
 # ep() {
 #   # 1. Dynamically get the home directory
 #   local ekphos_home=$(ekphos -d)
@@ -202,3 +202,50 @@ ep() {
 #     echo "No markdown files were modified. Skipping formatting."
 #   fi
 # }
+ep() {
+  # 1. Dynamically get the home directory
+  local ekphos_home=$(ekphos -d)
+
+  # 2. Create a temporary reference file right BEFORE editing
+  local ref_file=$(mktemp)
+
+  # Check if no arguments were passed to the function
+  if [[ $# -eq 0 ]]; then
+    # Quietly ensure the relative symlink exists at the root
+    # -r: relative, -s: symbolic, -f: force (overwrites if broken)
+    ln -rsf "$ekphos_home/home/Home.md" "$ekphos_home/Home.md"
+
+    # Anchor the editor to the root directory, then open the specific file
+    set -- "$ekphos_home" "+edit $ekphos_home/home/Home.md"
+  fi
+
+  # 3. Open the editor
+  ekphos "$@"
+
+  # 4. Find all markdown files modified AFTER the reference file was created
+  local modified_files=()
+  while IFS= read -r -d $'\0' file; do
+    modified_files+=("$file")
+  done < <(find -L "$ekphos_home" -type f -name "*.md" -newer "$ref_file" -print0)
+
+  # 5. Clean up the invisible temporary file
+  rm -f "$ref_file"
+
+  # 6. Loop through whatever was modified and format it
+  if [[ ${#modified_files[@]} -gt 0 ]]; then
+    for file in "${modified_files[@]}"; do
+      # :A resolves absolute paths in Zsh
+      local abs_path="${file:A}"
+
+      echo "--- Changes detected in: $abs_path ---"
+
+      echo "Checking spelling..."
+      aspell check --dont-backup --mode=markdown "$abs_path"
+
+      echo "Formatting..."
+      prettier --write "$abs_path"
+    done
+  else
+    echo "No markdown files were modified. Skipping formatting."
+  fi
+}
