@@ -112,7 +112,7 @@ ep() {
   # Check if no arguments were passed to the function
   if [[ $# -eq 0 ]]; then
     # Use the dynamically grabbed base directory to build the path
-    set -- "$ekphos_home/Home.md"
+    set -- "$ekphos_home"
   fi
 
   # 3. Open the editor
