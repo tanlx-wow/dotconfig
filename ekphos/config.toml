@@ -1,5 +1,5 @@
 # Directory where notes are stored
-notes_dir = "~/.nb/home"
+notes_dir = "~/.nb"
 
 # Show welcome dialog on startup
 welcome_shown = false

@@ -103,11 +103,17 @@ nbe() {
 
 ep() {
   # 1. Dynamically get the home directory
-  local epkhos_home=$(ekphos -d)
+  local ekphos_home=$(ekphos -d)
 
   # 2. Create a temporary reference file right BEFORE editing
   # This file's creation time serves as our timestamp snapshot
   local ref_file=$(mktemp)
+
+  # Check if no arguments were passed to the function
+  if [[ $# -eq 0 ]]; then
+    # Use the dynamically grabbed base directory to build the path
+    set -- "$ekphos_home/home/Home.md"
+  fi
 
   # 3. Open the editor
   ekphos "$@"
@@ -120,7 +126,7 @@ ep() {
   local modified_files=()
   while IFS= read -r -d $'\0' file; do
     modified_files+=("$file")
-  done < <(find -L "$epkhos_home" -type f -name "*.md" -newer "$ref_file" -print0)
+  done < <(find -L "$ekphos_home" -type f -name "*.md" -newer "$ref_file" -print0)
 
   # 5. Clean up the invisible temporary file
   rm -f "$ref_file"
