@@ -112,7 +112,7 @@ nbe() {
 #   # Check if no arguments were passed to the function
 #   if [[ $# -eq 0 ]]; then
 #     # Use the dynamically grabbed base directory to build the path
-#     set -- "$ekphos_home/home/Home.md"
+#     set -- "$ekphos_home/Home.md"
 #   fi
 #
 #   # 3. Open the editor
@@ -156,31 +156,29 @@ ep() {
   # 2. Create a temporary reference file right BEFORE editing
   local ref_file=$(mktemp)
 
-  # 3. Change directory to the root FIRST so the editor sees everything
-  pushd "$ekphos_home" >/dev/null || return
-
   # Check if no arguments were passed to the function
   if [[ $# -eq 0 ]]; then
-    # 4. Use a RELATIVE path so the editor anchors to ~/.nb, not the home/ subfolder
-    set -- "home/Home.md"
+    # Ensure the relative symlink exists at the root, pointing to the actual Home.md
+    # -r: relative, -s: symbolic, -f: force (overwrites if a broken link exists)
+    ln -rsf "$ekphos_home/home/Home.md" "$ekphos_home/Home.md"
+
+    # Point to the symlink at the root of the directory
+    set -- "$ekphos_home/Home.md"
   fi
 
-  # 5. Open the editor
+  # 3. Open the editor
   ekphos "$@"
 
-  # 6. Return to your original directory seamlessly after closing the editor
-  popd >/dev/null
-
-  # 7. Find all markdown files modified AFTER the reference file was created
+  # 4. Find all markdown files modified AFTER the reference file was created
   local modified_files=()
   while IFS= read -r -d $'\0' file; do
     modified_files+=("$file")
   done < <(find -L "$ekphos_home" -type f -name "*.md" -newer "$ref_file" -print0)
 
-  # 8. Clean up the invisible temporary file
+  # 5. Clean up the invisible temporary file
   rm -f "$ref_file"
 
-  # 9. Loop through whatever was modified and format it
+  # 6. Loop through whatever was modified and format it
   if [[ ${#modified_files[@]} -gt 0 ]]; then
     for file in "${modified_files[@]}"; do
       # :A resolves absolute paths in Zsh
