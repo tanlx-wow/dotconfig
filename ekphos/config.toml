@@ -2,7 +2,7 @@
 notes_dir = "~/.nb"
 
 # Show welcome dialog on startup
-welcome_shown = true
+welcome_shown = false
 
 # Theme name (without .toml extension)
 theme = "ekphos-dawn"
