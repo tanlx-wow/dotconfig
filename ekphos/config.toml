@@ -7,6 +7,9 @@ welcome_shown = false
 # Theme name (without .toml extension)
 theme = "ekphos-dawn"
 
+# transparent backgroud
+transparent_bg = true
+
 # Show folders with no .md files
 show_empty_dir = true
 
