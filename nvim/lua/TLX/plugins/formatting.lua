@@ -20,7 +20,7 @@ return {
 				graphql = { "prettier" },
 				rust = { "rustfmt" },
 				lua = { "stylua" },
-				python = { "isort", "black" },
+				python = { "ruff_format", "ruff_organize_imports" },
 				sh = { "shellharden", "shfmt" },
 				nix = { "nixfmt" },
 				tmol = { "taplo" },

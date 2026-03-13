@@ -85,6 +85,7 @@ return {
 			"marksman",
 			"taplo",
 			"nixd",
+			"ruff",
 		}
 
 		for _, server in ipairs(servers) do
