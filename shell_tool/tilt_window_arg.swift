@@ -120,8 +120,8 @@ case "up", "top", "bottom", "down":
     targetWidth = v.width - 2 * margin
     targetHeight = (v.height - totalGapY) / 2
 default: // "reset", "center", and any unknown arg
-    targetWidth = v.width * 0.75
-    targetHeight = v.height * 0.75
+    targetWidth = v.width * 0.4
+    targetHeight = v.height * 0.4
 }
 
 // 1. Calculate Target Position based on Target Size
@@ -145,8 +145,8 @@ case "bottom", "down":
     x = v.minX + margin
     y = v.minY + margin
 default: // reset
-    x = v.midX - targetWidth / 1.2
-    y = v.midY - targetHeight / 1.2
+    x = v.midX - targetWidth / 2
+    y = v.midY - targetHeight / 2
 }
 
 // 2. Set Position (First pass)
