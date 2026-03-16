@@ -145,8 +145,8 @@ case "bottom", "down":
     x = v.minX + margin
     y = v.minY + margin
 default: // reset
-    x = v.midX - targetWidth / 2
-    y = v.midY - targetHeight / 2
+    x = v.midX - targetWidth / 1.2
+    y = v.midY - targetHeight / 1.2
 }
 
 // 2. Set Position (First pass)
