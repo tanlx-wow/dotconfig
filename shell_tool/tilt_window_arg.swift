@@ -121,7 +121,7 @@ case "up", "top", "bottom", "down":
     targetHeight = (v.height - totalGapY) / 2
 default: // "reset", "center", and any unknown arg
     targetWidth = v.width * 0.4
-    targetHeight = v.height * 0.4
+    targetHeight = v.height * 0.5
 }
 
 // 1. Calculate Target Position based on Target Size
