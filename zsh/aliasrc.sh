@@ -69,38 +69,7 @@ fs() {
   fastfetch --logo "$(pokeget gengar --hide-name)" --logo-type data
 }
 
-# nb browse function
-nbb() {
-  nb b --gui
-}
-
-# nb edit and formmat
-# nb edit and format
-nbe() {
-  # 1. Open the file for editing
-  nb edit "$@"
-
-  # 2. Get the path from nb
-  local filepath=$(nb show --path "$@")
-
-  # 3. Resolve path and format
-  if [[ -f "$filepath" ]]; then
-    # :A resolves the absolute path (handling symlinks automatically)
-    local abs_path="${filepath:A}"
-
-    # --- Spelling Check ---
-    # We use --dont-backup to avoid cluttering your nb directory with .bak files
-    echo "Checking spelling: $abs_path"
-    aspell check --dont-backup --mode=markdown "$abs_path"
-
-    # --- Formatting ---
-    echo "Formatting: $abs_path"
-    prettier --write "$abs_path"
-  else
-    echo "Error: Could not find file path to format."
-  fi
-}
-
+# ekphos
 ep() {
   # 1. Dynamically get the home directory
   local ekphos_home=$(ekphos -d)
