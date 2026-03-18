@@ -153,28 +153,34 @@ ep() {
   # 1. Dynamically get the home directory
   local ekphos_home=$(ekphos -d)
 
-  # 2. Create a temporary reference file right BEFORE editing
+  # 2. Auto-pull latest changes BEFORE editing (Like 'nb sync')
+  # It checks if the folder is a git repository first to avoid errors.
+  if [[ -d "$ekphos_home/.git" ]]; then
+    echo "Pulling latest updates..."
+    git -C "$ekphos_home" pull -q
+  fi
+
+  # 3. Create a temporary reference file right BEFORE editing
   local ref_file=$(mktemp)
 
-  # 3. Check if no arguments were passed to the function
+  # 4. Check if no arguments were passed to the function
   if [[ $# -eq 0 ]]; then
-    # Simply set the default argument to the home.md file
     set -- "$ekphos_home/home/home.md"
   fi
 
-  # 4. Open the editor
+  # 5. Open the editor
   ekphos "$@"
 
-  # 5. Find all markdown files modified AFTER the reference file was created
+  # 6. Find all markdown files modified AFTER the reference file was created
   local modified_files=()
   while IFS= read -r -d $'\0' file; do
     modified_files+=("$file")
   done < <(find -L "$ekphos_home" -type f -name "*.md" -newer "$ref_file" -print0)
 
-  # 6. Clean up the invisible temporary file
+  # 7. Clean up the invisible temporary file
   rm -f "$ref_file"
 
-  # 7. Loop through whatever was modified and format it
+  # 8. Loop through whatever was modified, format, and then AUTO-SYNC
   if [[ ${#modified_files[@]} -gt 0 ]]; then
     for file in "${modified_files[@]}"; do
       # :A resolves absolute paths in Zsh
@@ -188,7 +194,18 @@ ep() {
       echo "Formatting..."
       prettier --write "$abs_path"
     done
+
+    # 9. Auto-commit and push the changes (The 'nb' magic)
+    if [[ -d "$ekphos_home/.git" ]]; then
+      echo "--- Syncing changes to remote ---"
+      git -C "$ekphos_home" add .
+      # Generates a quiet, automated commit message
+      git -C "$ekphos_home" commit -q -m "Auto-update: Modified notes via ep"
+      git -C "$ekphos_home" push -q
+      echo "Update complete!"
+    fi
+
   else
-    echo "No markdown files were modified. Skipping formatting."
+    echo "No markdown files were modified. Skipping formatting and sync."
   fi
 }
