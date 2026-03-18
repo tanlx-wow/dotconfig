@@ -101,60 +101,11 @@ nbe() {
   fi
 }
 
-# ep() {
-#   # 1. Dynamically get the home directory
-#   local ekphos_home=$(ekphos -d)
-#
-#   # 2. Create a temporary reference file right BEFORE editing
-#   local ref_file=$(mktemp)
-#
-#   # Check if no arguments were passed to the function
-#   if [[ $# -eq 0 ]]; then
-#     # Quietly ensure the relative symlink exists at the root
-#     # -r: relative, -s: symbolic, -f: force (overwrites if broken)
-#     ln -rsf "$ekphos_home/home/Home.md" "$ekphos_home/Home.md"
-#
-#     # Anchor the editor to the root directory, then open the specific file
-#     set -- "$ekphos_home" "+edit $ekphos_home/home/Home.md"
-#   fi
-#
-#   # 3. Open the editor
-#   ekphos "$@"
-#
-#   # 4. Find all markdown files modified AFTER the reference file was created
-#   local modified_files=()
-#   while IFS= read -r -d $'\0' file; do
-#     modified_files+=("$file")
-#   done < <(find -L "$ekphos_home" -type f -name "*.md" -newer "$ref_file" -print0)
-#
-#   # 5. Clean up the invisible temporary file
-#   rm -f "$ref_file"
-#
-#   # 6. Loop through whatever was modified and format it
-#   if [[ ${#modified_files[@]} -gt 0 ]]; then
-#     for file in "${modified_files[@]}"; do
-#       # :A resolves absolute paths in Zsh
-#       local abs_path="${file:A}"
-#
-#       echo "--- Changes detected in: $abs_path ---"
-#
-#       echo "Checking spelling..."
-#       aspell check --dont-backup --mode=markdown "$abs_path"
-#
-#       echo "Formatting..."
-#       prettier --write "$abs_path"
-#     done
-#   else
-#     echo "No markdown files were modified. Skipping formatting."
-#   fi
-# }
-
 ep() {
   # 1. Dynamically get the home directory
   local ekphos_home=$(ekphos -d)
 
   # 2. Safely check connection to GitHub BEFORE pulling
-  # Using curl with a 2-second timeout prevents the script from hanging
   if [[ -d "$ekphos_home/.git" ]]; then
     if curl -sI --connect-timeout 2 https://github.com >/dev/null; then
       echo "Pulling latest updates..."
@@ -184,7 +135,9 @@ ep() {
   # 7. Clean up the invisible temporary file
   rm -f "$ref_file"
 
-  # 8. Loop through whatever was modified, format, and then AUTO-SYNC
+  # 8. THE COMMIT PHASE: Only runs if you actually changed files today
+  local needs_push=false
+
   if [[ ${#modified_files[@]} -gt 0 ]]; then
     for file in "${modified_files[@]}"; do
       local abs_path="${file:A}"
@@ -197,29 +150,39 @@ ep() {
       prettier --write "$abs_path"
     done
 
-    # 9. Auto-commit (Works Offline!) and conditional Push
     if [[ -d "$ekphos_home/.git" ]]; then
       echo "--- Saving changes locally ---"
       git -C "$ekphos_home" add .
       git -C "$ekphos_home" commit -q -m "Auto-update: Modified notes via ep"
+      needs_push=true
+    fi
+  else
+    echo "No files modified this session."
+  fi
 
-      # 10. Check internet again BEFORE pushing
+  # 9. THE PUSH PHASE: Runs if we just committed OR if we have old offline commits
+  if [[ -d "$ekphos_home/.git" ]]; then
+    # Check if Git says we are "ahead" of the remote repository (unpushed commits exist)
+    if git -C "$ekphos_home" status -sb 2>/dev/null | grep -q 'ahead'; then
+      needs_push=true
+    fi
+
+    if [[ "$needs_push" = true ]]; then
+      # Check internet again BEFORE pushing
       if curl -sI --connect-timeout 2 https://github.com >/dev/null; then
-        echo "Syncing changes to remote..."
+        echo "Syncing pending changes to remote..."
 
-        # 11. ONLY say complete if the push actually succeeds
         if git -C "$ekphos_home" push -q; then
           echo "Update complete!"
         else
-          echo "Warning: Push failed. Changes are safely saved locally."
+          echo "Warning: Push failed. Changes remain safely saved locally."
         fi
 
       else
-        echo "Offline mode: Changes saved locally. They will sync next time you are online."
+        echo "Offline mode: You have unpushed changes saved locally. They will sync next time you are online."
       fi
+    else
+      echo "Everything is up to date!"
     fi
-
-  else
-    echo "No markdown files were modified. Skipping formatting and sync."
   fi
 }
