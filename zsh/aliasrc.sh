@@ -153,11 +153,15 @@ ep() {
   # 1. Dynamically get the home directory
   local ekphos_home=$(ekphos -d)
 
-  # 2. Auto-pull latest changes BEFORE editing (Like 'nb sync')
-  # It checks if the folder is a git repository first to avoid errors.
+  # 2. Safely check connection to GitHub BEFORE pulling
+  # Using curl with a 2-second timeout prevents the script from hanging
   if [[ -d "$ekphos_home/.git" ]]; then
-    echo "Pulling latest updates..."
-    git -C "$ekphos_home" pull -q
+    if curl -sI --connect-timeout 2 https://github.com >/dev/null; then
+      echo "Pulling latest updates..."
+      git -C "$ekphos_home" pull -q
+    else
+      echo "Offline mode: Skipping pull."
+    fi
   fi
 
   # 3. Create a temporary reference file right BEFORE editing
@@ -183,9 +187,7 @@ ep() {
   # 8. Loop through whatever was modified, format, and then AUTO-SYNC
   if [[ ${#modified_files[@]} -gt 0 ]]; then
     for file in "${modified_files[@]}"; do
-      # :A resolves absolute paths in Zsh
       local abs_path="${file:A}"
-
       echo "--- Changes detected in: $abs_path ---"
 
       echo "Checking spelling..."
@@ -195,14 +197,26 @@ ep() {
       prettier --write "$abs_path"
     done
 
-    # 9. Auto-commit and push the changes (The 'nb' magic)
+    # 9. Auto-commit (Works Offline!) and conditional Push
     if [[ -d "$ekphos_home/.git" ]]; then
-      echo "--- Syncing changes to remote ---"
+      echo "--- Saving changes locally ---"
       git -C "$ekphos_home" add .
-      # Generates a quiet, automated commit message
       git -C "$ekphos_home" commit -q -m "Auto-update: Modified notes via ep"
-      git -C "$ekphos_home" push -q
-      echo "Update complete!"
+
+      # 10. Check internet again BEFORE pushing
+      if curl -sI --connect-timeout 2 https://github.com >/dev/null; then
+        echo "Syncing changes to remote..."
+
+        # 11. ONLY say complete if the push actually succeeds
+        if git -C "$ekphos_home" push -q; then
+          echo "Update complete!"
+        else
+          echo "Warning: Push failed. Changes are safely saved locally."
+        fi
+
+      else
+        echo "Offline mode: Changes saved locally. They will sync next time you are online."
+      fi
     fi
 
   else
