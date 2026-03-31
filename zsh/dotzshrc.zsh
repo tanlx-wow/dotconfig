@@ -87,6 +87,11 @@ _fzf_compgen_dir() {
 # cargo bin 
 export PATH="$HOME/.cargo/bin:$PATH"
 
+
+# user local bin
+export PATH="$HOME/.local/bin:$PATH"
+
+
 # source the alias setup
 [[ -f $HOME/.config/zsh/aliasrc.sh ]] && source $HOME/.config/zsh/aliasrc.sh
 
