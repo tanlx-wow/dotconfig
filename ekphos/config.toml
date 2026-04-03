@@ -49,3 +49,7 @@ line_numbers = "absolute"
 
 # Minimum lines to keep above/below cursor
 scrolloff = 8
+
+
+[keymap]
+normal = { "Ctrl+p" = "Ctrl+k" }
