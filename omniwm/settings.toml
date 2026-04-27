@@ -34,9 +34,9 @@ moveMouseToFocusedWindow = false
 size = 8.0
 
 [gaps.outer]
-bottom = 42
-left = 4
-right = 4
+bottom = 42.0
+left = 4.0
+right = 4.0
 top = 4.0
 
 [general]
@@ -103,7 +103,7 @@ position = "overlappingMenuBar"
 reserveLayoutSpace = false
 showFloatingWindows = true
 showLabels = false
-windowLevel = "status"
+windowLevel = "floating"
 xOffset = 0.0
 yOffset = -4000.0
 
