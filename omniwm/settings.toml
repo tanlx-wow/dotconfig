@@ -9,7 +9,7 @@ mode = "dark"
 
 [borders]
 enabled = true
-width = 5.0
+width = 3.0
 
 [borders.color]
 alpha = 1.0
@@ -31,13 +31,13 @@ followsWindowToMonitor = false
 moveMouseToFocusedWindow = false
 
 [gaps]
-size = 10.0
+size = 8.0
 
 [gaps.outer]
-bottom = 42.0
-left = 16.0
-right = 16.0
-top = 8.0
+bottom = 42
+left = 4
+right = 4
+top = 4.0
 
 [general]
 animationsEnabled = true
@@ -61,10 +61,6 @@ margin = 1
 [[mouseWarp.monitorOrder]]
 displayId = 1
 name = "Built-in Retina Display"
-
-[[mouseWarp.monitorOrder]]
-displayId = 2
-name = "HP 727pk"
 
 [niri]
 alwaysCenterSingleColumn = true
@@ -97,17 +93,17 @@ useWorkspaceId = false
 
 [workspaceBar]
 backgroundOpacity = 0.1
-deduplicateAppIcons = false
+deduplicateAppIcons = true
 enabled = true
-height = 36.0
-hideEmptyWorkspaces = false
-labelFontSize = 12.0
+height = 20.0
+hideEmptyWorkspaces = true
+labelFontSize = 10.0
 notchAware = true
 position = "overlappingMenuBar"
 reserveLayoutSpace = false
-showFloatingWindows = false
+showFloatingWindows = true
 showLabels = false
-windowLevel = "popup"
+windowLevel = "status"
 xOffset = 0.0
 yOffset = -4000.0
 
@@ -122,11 +118,6 @@ alpha = 1.0
 blue = -1.0
 green = -1.0
 red = -1.0
-
-
-[[appRules]]
-bundleId = "com.apple.finder"
-layout = "floating"
 
 [[appRules]]
 bundleId = "com.openai.codex"
@@ -553,7 +544,7 @@ binding = "Unassigned"
 id = "preselectClear"
 
 [[hotkeys]]
-binding = "Control+Option+Shift+Command+Space"
+binding = "Control+Option+Space"
 id = "openCommandPalette"
 
 [[hotkeys]]
