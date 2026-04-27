@@ -123,6 +123,11 @@ blue = -1.0
 green = -1.0
 red = -1.0
 
+
+[[appRules]]
+bundleId = "com.apple.finder"
+layout = "floating"
+
 [[appRules]]
 bundleId = "com.openai.codex"
 id = "6A31F08A-4051-4354-B439-42F4C71894A3"
