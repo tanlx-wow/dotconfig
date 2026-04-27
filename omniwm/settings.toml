@@ -206,6 +206,16 @@ id = "552FB77D-BF0E-4737-90A6-B5BC6986C579"
 minHeight = 320.0
 minWidth = 660.0
 
+[[appRules]]
+bundleId = "com.apple.finder"
+id = "CEEA8CEF-3ED9-4EEE-98DF-A84435B91486"
+layout = "float"
+
+[[appRules]]
+bundleId = "com.adobe.illustrator"
+id = "9484C084-7BC8-42E0-8F8D-1CB9BF930B1F"
+layout = "float"
+
 [[hotkeys]]
 binding = "Option+1"
 id = "switchWorkspace.0"
