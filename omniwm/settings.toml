@@ -31,7 +31,7 @@ followsWindowToMonitor = false
 moveMouseToFocusedWindow = false
 
 [gaps]
-size = 4
+size = 8.0
 
 [gaps.outer]
 bottom = 42
