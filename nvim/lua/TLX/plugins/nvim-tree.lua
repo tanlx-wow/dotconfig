@@ -15,7 +15,10 @@ return {
 		-- configure nvim-tree
 		nvimtree.setup({
 			view = {
-				width = 35,
+				width = function()
+					local w = math.floor(vim.o.columns * 0.25)
+					return math.max(30, math.min(50, w))
+				end,
 				relativenumber = true,
 				side = "right",
 			},

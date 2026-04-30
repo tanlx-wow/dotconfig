@@ -82,7 +82,6 @@ return {
 			"rust_analyzer",
 			"bashls",
 			"harper_ls",
-			"marksman",
 			"taplo",
 			"nixd",
 			"ruff",
