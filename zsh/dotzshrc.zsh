@@ -102,4 +102,3 @@ export PATH="$HOME/.local/bin:$PATH"
 # fastfetch
 fs
 # (sleep 0.1 && fs) &
-

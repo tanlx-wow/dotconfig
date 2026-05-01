@@ -8,6 +8,7 @@ return {
 	},
 	config = function()
 		local cmp_nvim_lsp = require("cmp_nvim_lsp")
+		local marksman_config = require("TLX.lsp.marksman_config")
 
 		local keymap = vim.keymap -- for conciseness
 
@@ -81,7 +82,7 @@ return {
 			"pyright",
 			"rust_analyzer",
 			"bashls",
-			"harper_ls",
+			-- "harper_ls",
 			"taplo",
 			"nixd",
 			"ruff",
@@ -91,6 +92,8 @@ return {
 			vim.lsp.config(server, { capabilities = capabilities })
 			vim.lsp.enable(server)
 		end
+
+		marksman_config.setup(capabilities)
 
 		-- lua_ls needs extra config for Neovim Lua (lazydev.nvim handles vim global)
 		vim.lsp.config("lua_ls", {

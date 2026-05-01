@@ -5,6 +5,7 @@ local constants = require("constants")
 -- local tmux_keys = require("tmux_func")
 -- This will hold the configuration.
 local config = wezterm.config_builder()
+-- config.term = "xterm-kitty"
 
 -- Load tmux-style leader and keys
 -- config.leader = tmux_keys.leader

@@ -12,6 +12,9 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({ { import = "TLX.plugins" }, {import = "TLX.plugins.lsp"} }, {
+	rocks = {
+		enabled = false,
+	},
 	install = {
 		colorscheme = { "nightfly" },
 	},

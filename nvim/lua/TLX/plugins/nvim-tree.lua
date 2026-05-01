@@ -16,8 +16,7 @@ return {
 		nvimtree.setup({
 			view = {
 				width = function()
-					local w = math.floor(vim.o.columns * 0.25)
-					return math.max(30, math.min(50, w))
+					return math.floor(vim.go.columns * 0.15)
 				end,
 				relativenumber = true,
 				side = "right",
@@ -52,6 +51,17 @@ return {
 			git = {
 				ignore = false,
 			},
+		})
+
+		vim.api.nvim_create_autocmd({ "VimResized" }, {
+			group = vim.api.nvim_create_augroup("NvimTreeResize", { clear = true }),
+			desc = "Resize nvim-tree if nvim window got resized",
+			callback = function()
+				local percentage = 15
+				local ratio = percentage / 100
+				local width = math.floor(vim.go.columns * ratio)
+				vim.cmd("tabdo NvimTreeResize " .. width)
+			end,
 		})
 
 		-- set keymaps
