@@ -21,6 +21,12 @@ return {
 					},
 				},
 			},
+			pickers = {
+				find_files = {
+					follow = true,
+					find_command = { "rg", "--ignore", "-L", "--hidden", "--files" },
+				},
+			},
 		})
 
 		telescope.load_extension("fzf")
