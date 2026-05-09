@@ -66,5 +66,10 @@ fs() {
   fastfetch --logo "$(pokeget gengar --hide-name)" --logo-type data
 }
 
+n() {
+  cd "$HOME"/MyNote
+  nvim "$HOME"/MyNote/home/Home.md
+}
+
 # symlink_sum alias
 [[ -f "$HOME/.config/shell_tool/symlink_sum.sh" ]] && alias symlink_sum="$HOME/.config/shell_tool/symlink_sum.sh"

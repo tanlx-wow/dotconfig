@@ -52,7 +52,7 @@ fingerCount = 4
 invertDirection = true
 scrollEnabled = true
 scrollModifierKey = "optionShift"
-scrollSensitivity = 5.0
+scrollSensitivity = 1.0
 
 [mouseWarp]
 axis = "horizontal"
@@ -62,6 +62,14 @@ margin = 1
 displayId = 1
 name = "Built-in Retina Display"
 
+[[mouseWarp.monitorOrder]]
+displayId = 3
+name = "HP 727pk"
+
+[[mouseWarp.monitorOrder]]
+displayId = 7
+name = ""
+
 [niri]
 alwaysCenterSingleColumn = true
 centerFocusedColumn = "never"
@@ -69,7 +77,7 @@ columnWidthPresets = [0.3333333333333333, 0.5, 0.66]
 infiniteLoop = false
 maxVisibleColumns = 1
 maxWindowsPerColumn = 3
-singleWindowAspectRatio = "4:3"
+singleWindowAspectRatio = "none"
 
 [quakeTerminal]
 animationDuration = 0.2

@@ -86,6 +86,8 @@ return {
 			"taplo",
 			"nixd",
 			"ruff",
+			"ltex-ls-plus",
+			"typos-lsp",
 		}
 
 		for _, server in ipairs(servers) do
