@@ -2,7 +2,6 @@ monitorBarOverrides = []
 monitorDwindleOverrides = []
 monitorNiriOverrides = []
 monitorOrientationOverrides = []
-version = 5
 
 [appearance]
 mode = "dark"
@@ -27,7 +26,7 @@ useGlobalGaps = true
 
 [focus]
 followsMouse = false
-followsWindowToMonitor = false
+followsWindowToMonitor = true
 moveMouseToFocusedWindow = false
 
 [gaps]
@@ -43,7 +42,7 @@ top = 4.0
 animationsEnabled = true
 defaultLayoutType = "niri"
 hotkeysEnabled = true
-ipcEnabled = false
+ipcEnabled = true
 preventSleepEnabled = false
 updateChecksEnabled = true
 
@@ -59,15 +58,12 @@ axis = "horizontal"
 margin = 1
 
 [[mouseWarp.monitorOrder]]
-displayId = 1
 name = "Built-in Retina Display"
 
 [[mouseWarp.monitorOrder]]
-displayId = 3
 name = "HP 727pk"
 
 [[mouseWarp.monitorOrder]]
-displayId = 7
 name = ""
 
 [niri]
@@ -110,7 +106,7 @@ notchAware = true
 position = "overlappingMenuBar"
 reserveLayoutSpace = false
 showFloatingWindows = true
-showLabels = false
+showLabels = true
 windowLevel = "floating"
 xOffset = 0.0
 yOffset = -4000.0
@@ -613,7 +609,7 @@ layoutType = "niri"
 name = "2"
 
 [workspaces.monitorAssignment]
-type = "main"
+type = "secondary"
 
 [[workspaces]]
 id = "BEB842B5-E894-4791-9FD1-397C3CDD3538"
