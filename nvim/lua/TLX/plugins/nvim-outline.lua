@@ -17,5 +17,15 @@ return {
 				vim.cmd("OutlineOpen")
 			end,
 		})
+
+		vim.api.nvim_create_autocmd("QuitPre", {
+			callback = function()
+				if vim.bo.filetype == "Outline" then
+					return
+				end
+
+				pcall(vim.cmd, "OutlineClose")
+			end,
+		})
 	end,
 }
