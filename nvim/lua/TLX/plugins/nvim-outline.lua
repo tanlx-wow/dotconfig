@@ -5,7 +5,10 @@ return {
 		vim.keymap.set("n", "<leader>o", "<cmd>Outline<CR>", { desc = "Toggle Outline" })
 
 		require("outline").setup({
-			-- setup opts here (leave empty to use defaults)
+			outline_window = {
+				width = 20,
+				relative_width = true,
+			},
 		})
 
 		-- NEW: Automatically open the outline for Markdown files
