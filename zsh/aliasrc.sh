@@ -73,3 +73,6 @@ n() {
 
 # symlink_sum alias
 [[ -f "$HOME/.config/shell_tool/symlink_sum.sh" ]] && alias symlink_sum="$HOME/.config/shell_tool/symlink_sum.sh"
+
+# watch note symlinks in the background
+[[ -f "$HOME/.config/shell_tool/fswatch_note.sh" ]] && alias watchnote="$HOME/.config/shell_tool/fswatch_note.sh"

@@ -13,21 +13,39 @@ sync_projects() {
   # Modified: Appends "_note" to the destination folder name
   local hub_base="$HUB_ROOT/${folder_name}_note"
   local total_links=0
+  local created_links=0
+  local skipped_links=0
 
   # Ensure the base hub directory exists
   mkdir -p "$hub_base"
 
   # Find all .md files (handles any depth)
   while IFS= read -r -d $'\0' file; do
-    relative_path="${file#$src_dir/}"
-    dest_dir="$hub_base/$(dirname "$relative_path")"
+    local relative_path="${file#$src_dir/}"
+    local dest_path="$hub_base/$relative_path"
+    local dest_dir
+
+    dest_dir=$(dirname "$dest_path")
 
     mkdir -p "$dest_dir"
-    ln -srf "$file" "$dest_dir/"
+
+    if [[ -L "$dest_path" && "$(readlink "$dest_path")" == "$file" ]]; then
+      ((skipped_links++))
+      continue
+    fi
+
+    if [[ -e "$dest_path" && ! -L "$dest_path" ]]; then
+      echo "Warning: $dest_path exists and is not a symlink. Skipping." >&2
+      ((skipped_links++))
+      continue
+    fi
+
+    ln -sf "$file" "$dest_path"
+    ((created_links++))
     ((total_links++))
   done < <(find "$src_dir" -type f -name "*.md" -print0 2>/dev/null)
 
-  echo "$total_links"
+  echo "$created_links $skipped_links"
 }
 
 echo "--- Starting Sync ---"
@@ -37,15 +55,18 @@ find "$HUB_ROOT" -xtype l -delete 2>/dev/null
 
 # 2. Loop through every argument passed to the script
 grand_total=0
+grand_skipped=0
 for dir in "$@"; do
   if [[ -d "$dir" ]]; then
     echo "Processing: $dir"
-    count=$(sync_projects "$dir")
+    read -r count skipped < <(sync_projects "$dir")
     grand_total=$((grand_total + count))
+    grand_skipped=$((grand_skipped + skipped))
   else
     echo "Warning: $dir is not a valid directory. Skipping."
   fi
 done
 
 echo "--- Summary ---"
-echo "Successfully mirrored $grand_total files into $HUB_ROOT"
+echo "Created or updated $grand_total links into $HUB_ROOT"
+echo "Skipped $grand_skipped existing links"
