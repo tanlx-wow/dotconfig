@@ -6,7 +6,7 @@ update-code-cli() {
   fi
 
   echo "Checking for VS Code CLI updates..."
-  local url='https://code.visualstudio.com/sha/download?build=stable&os=cli-linux-x64'
+  local url='https://code.visualstudio.com/sha/download?build=stable&os=cli-alpine-x64'
   local tmp_file="/tmp/vscode_cli.tar.gz"
 
   echo "Downloading the latest version..."
