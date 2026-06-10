@@ -3,6 +3,38 @@
 # The base of your Hub - every linked folder will be recreated inside here
 HUB_ROOT="$HOME/MyNote/home"
 
+relative_path() {
+  local target="$1"
+  local base_dir="$2"
+  local target_abs
+  local base_abs
+  local relative=""
+  local i=0
+
+  target_abs="$(cd "$(dirname "$target")" && pwd -P)/$(basename "$target")"
+  base_abs="$(cd "$base_dir" && pwd -P)"
+
+  local IFS=/
+  local target_parts=(${target_abs#/})
+  local base_parts=(${base_abs#/})
+
+  while [[ $i -lt ${#target_parts[@]} && $i -lt ${#base_parts[@]} && "${target_parts[$i]}" == "${base_parts[$i]}" ]]; do
+    ((i++))
+  done
+
+  local j
+  for ((j = i; j < ${#base_parts[@]}; j++)); do
+    relative+="../"
+  done
+
+  for ((j = i; j < ${#target_parts[@]}; j++)); do
+    relative+="${target_parts[$j]}"
+    [[ $j -lt $((${#target_parts[@]} - 1)) ]] && relative+="/"
+  done
+
+  echo "${relative:-.}"
+}
+
 # Function to process and link files
 sync_projects() {
   local src_dir="$1"
@@ -24,12 +56,15 @@ sync_projects() {
     local relative_path="${file#$src_dir/}"
     local dest_path="$hub_base/$relative_path"
     local dest_dir
+    local link_target
 
     dest_dir=$(dirname "$dest_path")
 
     mkdir -p "$dest_dir"
 
-    if [[ -L "$dest_path" && "$(readlink "$dest_path")" == "$file" ]]; then
+    link_target=$(relative_path "$file" "$dest_dir")
+
+    if [[ -L "$dest_path" && "$(readlink "$dest_path")" == "$link_target" ]]; then
       ((skipped_links++))
       continue
     fi
@@ -40,7 +75,7 @@ sync_projects() {
       continue
     fi
 
-    ln -sf "$file" "$dest_path"
+    ln -sfn "$link_target" "$dest_path"
     ((created_links++))
     ((total_links++))
   done < <(find "$src_dir" -type f -name "*.md" -print0 2>/dev/null)

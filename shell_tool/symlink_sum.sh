@@ -11,8 +11,8 @@ usage() {
   echo "Usage: $0 [OPTIONS] -t <target_destination_directory>"
   echo ""
   echo "This script scans a source directory for symlinks, records their"
-  echo "absolute targets, and safely reconstructs them as accurately calculated"
-  echo "relative links inside a new destination directory."
+  echo "original targets, and safely reconstructs them inside a new"
+  echo "destination directory without converting relative links to absolute links."
   echo ""
   echo "Options:"
   echo "  -t, --target <dir> REQUIRED: Specify the target destination directory."
@@ -87,7 +87,7 @@ fi
 # 5. Generate the symlink record file
 echo "Scanning '$SRC_DIR' for symlinks..."
 find "$SRC_DIR" -type l | while read -r link; do
-  echo "$link -> $(realpath "$link")"
+  echo "$link -> $(readlink "$link")"
 done >"$RECORD_FILE"
 
 # 6. Announce the current mode
@@ -117,11 +117,11 @@ while read -r line; do
 
   if [ "$DRY_RUN" = true ]; then
     echo "Would run: mkdir -p \"$new_link_dir\""
-    echo "Would run: ln -srf \"$target\" \"$new_link_path\""
+    echo "Would run: ln -snf \"$target\" \"$new_link_path\""
     echo ""
   else
     mkdir -p "$new_link_dir"
-    ln -srf "$target" "$new_link_path"
+    ln -snf "$target" "$new_link_path"
     echo "Created: $new_link_path"
   fi
 
