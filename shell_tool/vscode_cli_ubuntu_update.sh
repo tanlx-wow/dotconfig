@@ -1,6 +1,5 @@
 update-code-cli() {
-  # 1. Ask for sudo upfront and cache the password
-  echo "Please authenticate to start the update process:"
+  # 1. Ask for sudo upfront (will be silent if you authenticated recently)
   if ! sudo -v; then
     echo "Authentication failed. Exiting."
     return 1
@@ -12,14 +11,22 @@ update-code-cli() {
 
   echo "Downloading the latest version..."
 
-  # 2. Download to a temporary file
-  if curl -Lk "$url" -o "$tmp_file"; then
-    echo "Download complete. Extracting to /usr/local/bin/..."
+  # Added -f (fail on server error) and -# (show progress bar)
+  if curl -fLk -# "$url" -o "$tmp_file"; then
 
-    # 3. Extract using the already-cached sudo permissions
+    # SANITY CHECK: Verify the downloaded file is a valid gzip archive
+    if ! tar -tzf "$tmp_file" >/dev/null 2>&1; then
+      echo "Error: Downloaded file is invalid. Microsoft's server might have sent an error page."
+      rm -f "$tmp_file"
+      return 1
+    fi
+
+    echo "Download verified. Extracting to /usr/local/bin/..."
+
+    # Extract using the cached sudo permissions
     if sudo tar -xzf "$tmp_file" -C /usr/local/bin/; then
       echo "Success! VS Code CLI has been updated."
-      rm "$tmp_file"
+      rm -f "$tmp_file"
 
       echo -n "New version: "
       code --version | head -n 1
@@ -29,7 +36,7 @@ update-code-cli() {
       return 1
     fi
   else
-    echo "Error: Download failed. Check your internet connection."
+    echo "Error: Download failed entirely. Check your internet or the URL."
     return 1
   fi
 }
