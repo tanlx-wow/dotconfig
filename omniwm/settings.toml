@@ -3,7 +3,6 @@ monitorDwindleOverrides = []
 monitorGapOverrides = []
 monitorNiriOverrides = []
 monitorOrientationOverrides = []
-monitorRoutingOverrides = []
 
 [appearance]
 mode = "dark"
@@ -36,7 +35,7 @@ useGlobalGaps = true
 crossesMonitorAtEdge = false
 followsMouse = false
 followsWindowToMonitor = true
-moveCrossesMonitorAtEdge = false
+moveCrossesMonitorAtEdge = true
 moveMouseToFocusedWindow = false
 
 [gaps]
@@ -57,7 +56,7 @@ hyperTrigger = "Left Option"
 ipcEnabled = true
 preventSleepEnabled = false
 spacesTrackingEnabled = true
-systemHyperTrigger = "None"
+systemHyperTrigger = "Caps Lock"
 updateChecksEnabled = true
 
 [gestures]
@@ -75,9 +74,9 @@ margin = 1
 
 [niri]
 alwaysCenterSingleColumn = false
-centerFocusedColumn = "never"
+centerFocusedColumn = "onOverflow"
 columnWidthPresets = [0.3333333333333333, 0.5, 0.6666666666666666]
-defaultColumnWidth = 1.0
+defaultColumnWidth = 0.5
 infiniteLoop = false
 maxVisibleColumns = 1
 singleWindowAspectRatio = "fill"
@@ -85,7 +84,7 @@ singleWindowAspectRatio = "fill"
 [quakeTerminal]
 animationDuration = 0.2
 autoHide = false
-enabled = true
+enabled = false
 heightPercent = 50.0
 monitorMode = "focusedWindow"
 opacity = 1.0
@@ -185,8 +184,8 @@ minWidth = 90.0
 [[appRules]]
 bundleId = "com.microsoft.Outlook"
 id = "8ECAB78B-BCDD-4245-BC25-1609A49B1C86"
-minHeight = 650.0
-minWidth = 1080.0
+minHeight = 1080.0
+minWidth = 1784.0
 
 [[appRules]]
 bundleId = "com.apple.MobileSMS"
@@ -208,6 +207,12 @@ layout = "float"
 appNameSubstring = "vmd_MACOSXARM64"
 bundleId = ""
 id = "1EE5120D-8BC5-446E-B9B2-8C879DE66892"
+
+[[appRules]]
+bundleId = "org.zotero.zotero"
+id = "D78E75C9-7367-4742-9C59-24DA2A28FA5D"
+minHeight = 1080.0
+minWidth = 1784.0
 
 [[hotkeys]]
 binding = "Option+1"
@@ -784,6 +789,12 @@ id = "toggleWorkspaceLayout"
 [[hotkeys]]
 binding = "Option+Shift+O"
 id = "toggleOverview"
+
+[[monitorRoutingOverrides]]
+gridColumn = 0
+gridRow = 0
+monitorDisplayId = 1
+monitorName = "Built-in Retina Display"
 
 [[workspaces]]
 id = "AD36F001-C57E-41A5-AC1D-DF5249D007F0"
