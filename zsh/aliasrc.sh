@@ -4,8 +4,6 @@ alias ls="eza --icons=always --git --color=always"
 # list all function
 alias ll="ls -lh"
 
-alias vmd="csh /Applications/VMD\ 1.9.4a57-arm64-Rev12.app/Contents/MacOS/startup.command.csh"
-
 [[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]] && . "/opt/homebrew/etc/profile.d/bash_completion.sh"
 
 # copy the current absoulte path
