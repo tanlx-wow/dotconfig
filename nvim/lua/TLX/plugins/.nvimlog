@@ -1,0 +1,11 @@
+WRN 2026-06-26T11:10:30.039 c/nvim.33713.0 server_start:199: Failed to start server: operation not permitted: /var/folders/dp/6120s7n10rvfyzrlkg5pglvr0000gp/T/nvim.1gt/q48spo/nvim.42573.0
+WRN 2026-06-26T11:10:36.615 c/nvim.33713.0 server_start:199: Failed to start server: operation not permitted: /var/folders/dp/6120s7n10rvfyzrlkg5pglvr0000gp/T/nvim.1gt/LY763c/nvim.43004.0
+WRN 2026-06-26T11:11:56.185 c/nvim.33713.0 server_start:199: Failed to start server: operation not permitted: /var/folders/dp/6120s7n10rvfyzrlkg5pglvr0000gp/T/nvim.1gt/MLD4ev/nvim.47944.0
+WRN 2026-06-26T11:12:28.363 c/nvim.33713.0 server_start:199: Failed to start server: operation not permitted: /var/folders/dp/6120s7n10rvfyzrlkg5pglvr0000gp/T/nvim.1gt/sTVaFB/nvim.49249.0
+WRN 2026-06-26T11:13:02.834 c/nvim.33713.0 server_start:199: Failed to start server: operation not permitted: /var/folders/dp/6120s7n10rvfyzrlkg5pglvr0000gp/T/nvim.1gt/GdHHWT/nvim.50806.0
+WRN 2026-06-26T11:15:01.336 c/nvim.33713.0 server_start:199: Failed to start server: operation not permitted: /var/folders/dp/6120s7n10rvfyzrlkg5pglvr0000gp/T/nvim.1gt/lFzSdA/nvim.55519.0
+WRN 2026-06-26T11:15:31.859 c/nvim.33713.0 server_start:199: Failed to start server: operation not permitted: /var/folders/dp/6120s7n10rvfyzrlkg5pglvr0000gp/T/nvim.1gt/KVJsoR/nvim.56810.0
+WRN 2026-06-26T11:21:22.378 c/nvim.64603.0 server_start:199: Failed to start server: operation not permitted: /var/folders/dp/6120s7n10rvfyzrlkg5pglvr0000gp/T/nvim.1gt/hfD51N/nvim.73492.0
+WRN 2026-06-26T11:21:26.918 c/nvim.64603.0 server_start:199: Failed to start server: operation not permitted: /var/folders/dp/6120s7n10rvfyzrlkg5pglvr0000gp/T/nvim.1gt/o8ffyM/nvim.73839.0
+WRN 2026-06-26T11:25:32.001 c/nvim.64603.0 server_start:199: Failed to start server: operation not permitted: /var/folders/dp/6120s7n10rvfyzrlkg5pglvr0000gp/T/nvim.1gt/OqidOl/nvim.84090.0
+WRN 2026-06-26T11:25:32.002 c/nvim.64603.0 server_start:199: Failed to start server: operation not permitted: /var/folders/dp/6120s7n10rvfyzrlkg5pglvr0000gp/T/nvim.1gt/SiNCZf/nvim.84091.0

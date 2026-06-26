@@ -3,6 +3,12 @@ return {
 	dependencies = { "nvim-tree/nvim-web-devicons" },
 	config = function()
 		local nvimtree = require("nvim-tree")
+		local nvim_tree_width_percentage = 15
+		local nvim_tree_max_width = 30
+
+		local function nvim_tree_width()
+			return math.min(math.floor(vim.go.columns * (nvim_tree_width_percentage / 100)), nvim_tree_max_width)
+		end
 
 		-- recommended settings from nvim-tree documentation
 		vim.g.loaded_netrw = 1
@@ -15,11 +21,9 @@ return {
 		-- configure nvim-tree
 		nvimtree.setup({
 			view = {
-				width = function()
-					return math.floor(vim.go.columns * 0.15)
-				end,
+				width = nvim_tree_width,
 				relativenumber = true,
-				side = "right",
+				side = "left",
 			},
 			-- change folder arrow icons
 			renderer = {
@@ -57,10 +61,7 @@ return {
 			group = vim.api.nvim_create_augroup("NvimTreeResize", { clear = true }),
 			desc = "Resize nvim-tree if nvim window got resized",
 			callback = function()
-				local percentage = 15
-				local ratio = percentage / 100
-				local width = math.floor(vim.go.columns * ratio)
-				vim.cmd("tabdo NvimTreeResize " .. width)
+				vim.cmd("tabdo NvimTreeResize " .. nvim_tree_width())
 			end,
 		})
 
