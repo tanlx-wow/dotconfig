@@ -58,6 +58,16 @@ return {
 			end
 		end
 
+		local function refresh_outline()
+			local ok, outline = pcall(require, "outline")
+			if not ok or not outline.is_open() then
+				return
+			end
+
+			pcall(vim.cmd, "OutlineRefresh")
+			resize_outline()
+		end
+
 		require("outline").setup({
 			outline_window = {
 				position = "left",
@@ -117,6 +127,34 @@ return {
 						move_nvim_tree_leftmost()
 					end)
 				end)
+			end,
+		})
+
+		vim.api.nvim_create_autocmd("LspAttach", {
+			group = vim.api.nvim_create_augroup("OutlineLspRefresh", { clear = true }),
+			desc = "Refresh outline after LSP attaches to the current buffer",
+			callback = function(event)
+				vim.schedule(function()
+					if event.buf ~= vim.api.nvim_get_current_buf() then
+						return
+					end
+
+					refresh_outline()
+					vim.defer_fn(refresh_outline, 25)
+				end)
+			end,
+		})
+
+		vim.api.nvim_create_autocmd("LspProgress", {
+			group = vim.api.nvim_create_augroup("OutlineLspProgressRefresh", { clear = true }),
+			desc = "Refresh outline when LSP progress completes",
+			callback = function(event)
+				local value = event.data and event.data.params and event.data.params.value
+				if not value or value.kind ~= "end" then
+					return
+				end
+
+				vim.schedule(refresh_outline)
 			end,
 		})
 
