@@ -57,6 +57,14 @@ return {
       sections = {
         lualine_x = {
           {
+            function()
+              return require("codex").status()
+            end,
+            cond = function()
+              return package.loaded["codex"] ~= nil
+            end,
+          },
+          {
             lazy_status.updates,
             cond = lazy_status.has_updates,
             color = { fg = "#ff9e64" },

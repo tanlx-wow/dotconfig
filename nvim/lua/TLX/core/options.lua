@@ -41,6 +41,17 @@ opt.splitbelow = true -- split horizontal window to the bottom
 -- turn off swapfile
 opt.swapfile = false
 
+-- reload files changed outside of Neovim, such as edits made by opencode
+opt.autoread = true
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI", "TermClose", "TermLeave" }, {
+  group = vim.api.nvim_create_augroup("AutoReadExternalChanges", { clear = true }),
+  callback = function()
+    if vim.fn.mode() ~= "c" then
+      vim.cmd("checktime")
+    end
+  end,
+})
+
 -- Solid block in normal/visual/cmd, bar in insert, NO blinking anywhere
 vim.opt.guicursor = table.concat({
 	"n-v-c-sm:block",
