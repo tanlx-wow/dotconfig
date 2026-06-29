@@ -51,8 +51,6 @@ top = 4.0
 animationsEnabled = true
 defaultLayoutType = "niri"
 hotkeysEnabled = true
-hyperKeyHoldThresholdMilliseconds = 150
-hyperTrigger = "Left Option"
 ipcEnabled = true
 preventSleepEnabled = false
 spacesTrackingEnabled = true
@@ -793,7 +791,6 @@ id = "toggleOverview"
 [[monitorRoutingOverrides]]
 gridColumn = 0
 gridRow = 0
-monitorDisplayId = 1
 monitorName = "Built-in Retina Display"
 
 [[workspaces]]
