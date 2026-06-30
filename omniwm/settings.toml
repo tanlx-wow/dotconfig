@@ -35,6 +35,7 @@ useGlobalGaps = true
 crossesMonitorAtEdge = false
 followsMouse = false
 followsWindowToMonitor = true
+lockModifier = "off"
 moveCrossesMonitorAtEdge = true
 moveMouseToFocusedWindow = false
 
@@ -722,6 +723,14 @@ id = "resizeShrink.down"
 
 [[hotkeys]]
 binding = "Unassigned"
+id = "resizeFocusedWindow.grow"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "resizeFocusedWindow.shrink"
+
+[[hotkeys]]
+binding = "Unassigned"
 id = "preselect.left"
 
 [[hotkeys]]
@@ -741,7 +750,7 @@ binding = "Unassigned"
 id = "preselectClear"
 
 [[hotkeys]]
-binding = "Control+Option+Space"
+binding = "Hyper+Space"
 id = "openCommandPalette"
 
 [[hotkeys]]
