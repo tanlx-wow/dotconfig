@@ -105,7 +105,6 @@ enabled = true
 height = 36.0
 hideEmptyWorkspaces = true
 labelFontSize = 12.0
-notchAware = true
 position = "overlappingMenuBar"
 reserveLayoutSpace = false
 showFloatingWindows = true
