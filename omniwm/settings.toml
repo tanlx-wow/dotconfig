@@ -43,10 +43,10 @@ moveMouseToFocusedWindow = false
 size = 4.0
 
 [gaps.outer]
-bottom = 42.0
-left = 4.0
-right = 4.0
-top = 4.0
+bottom = 36.0
+left = 1.0
+right = 1.0
+top = 1.0
 
 [general]
 animationsEnabled = true
@@ -54,7 +54,6 @@ defaultLayoutType = "niri"
 hotkeysEnabled = true
 ipcEnabled = true
 preventSleepEnabled = false
-spacesTrackingEnabled = true
 systemHyperTrigger = "Caps Lock"
 updateChecksEnabled = true
 
@@ -66,8 +65,17 @@ scrollEnabled = true
 scrollModifierKey = "optionShift"
 scrollSensitivity = 5.0
 trackpadScrollStyle = "snap"
+workspaceSwipeAxis = "vertical"
+workspaceSwipeEnabled = true
+workspaceSwipeFingerCount = 4
+
+[hiddenBar]
+enabled = true
+hiddenBundleIDs = []
+rehideIntervalSeconds = 5.0
 
 [mouseWarp]
+constrainToArrangement = false
 enabled = true
 margin = 1
 
@@ -79,6 +87,35 @@ defaultColumnWidth = 0.5
 infiniteLoop = false
 maxVisibleColumns = 1
 singleWindowAspectRatio = "fill"
+
+[overview]
+zoom = 1.0
+
+[overview.backdrop]
+alpha = 1.0
+blue = 0.08
+green = 0.05
+red = 0.05
+
+[overview.windowBorders]
+
+[overview.windowBorders.hovered]
+alpha = 1.0
+blue = 1.0
+green = 0.6
+red = 0.4
+
+[overview.windowBorders.normal]
+alpha = 0.5
+blue = 0.35
+green = 0.3
+red = 0.3
+
+[overview.windowBorders.selected]
+alpha = 1.0
+blue = 0.4
+green = 0.8
+red = 0.3
 
 [quakeTerminal]
 animationDuration = 0.2
@@ -102,13 +139,18 @@ useWorkspaceId = false
 backgroundOpacity = 0.1
 deduplicateAppIcons = true
 enabled = true
+excludedBundleIDs = []
 height = 36.0
 hideEmptyWorkspaces = true
-labelFontSize = 12.0
+notchActiveZoneWidth = 180.0
+notchMode = "moveBelowMenuBar"
 position = "overlappingMenuBar"
 reserveLayoutSpace = false
+revealHoldMilliseconds = 200.0
+revealModifier = "off"
 showFloatingWindows = true
 showLabels = true
+systemStatsButton = false
 windowLevel = "floating"
 xOffset = 0.0
 yOffset = -4000.0
@@ -211,6 +253,19 @@ bundleId = "org.zotero.zotero"
 id = "D78E75C9-7367-4742-9C59-24DA2A28FA5D"
 minHeight = 1080.0
 minWidth = 1784.0
+
+[[appRules]]
+bundleId = "com.apple.mail"
+id = "613FF8FC-9864-44BD-B89D-386B71094B45"
+minHeight = 970.0
+minWidth = 1664.0
+
+[[appRules]]
+bundleId = "com.tencent.xinWeChat"
+id = "BD533654-E2DE-4062-8CAD-905851C1C90A"
+layout = "float"
+minHeight = 500.0
+minWidth = 833.0
 
 [[hotkeys]]
 binding = "Option+1"
@@ -483,6 +538,14 @@ id = "moveColumn.left"
 [[hotkeys]]
 binding = "Control+Option+Shift+Right Arrow"
 id = "moveColumn.right"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "moveColumn.up"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "moveColumn.down"
 
 [[hotkeys]]
 binding = "Control+Option+Home"
@@ -782,7 +845,7 @@ id = "toggleWorkspaceBarVisibility"
 
 [[hotkeys]]
 binding = "Unassigned"
-id = "toggleHiddenBar"
+id = "toggleHiddenBarPanel"
 
 [[hotkeys]]
 binding = "Option+Grave"
@@ -796,9 +859,14 @@ id = "toggleWorkspaceLayout"
 binding = "Option+Shift+O"
 id = "toggleOverview"
 
+[[hotkeys]]
+binding = "Unassigned"
+id = "toggleSystemStats"
+
 [[monitorRoutingOverrides]]
 gridColumn = 0
 gridRow = 0
+monitorDisplayId = 1
 monitorName = "Built-in Retina Display"
 
 [[workspaces]]
