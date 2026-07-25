@@ -44,8 +44,8 @@ size = 4.0
 
 [gaps.outer]
 bottom = 36.0
-left = 1.0
-right = 1.0
+left = 6.0
+right = 6.0
 top = 1.0
 
 [general]
@@ -86,7 +86,7 @@ columnWidthPresets = [0.3333333333333333, 0.5, 0.6666666666666666]
 defaultColumnWidth = 0.5
 infiniteLoop = false
 maxVisibleColumns = 1
-singleWindowAspectRatio = "fill"
+singleWindowAspectRatio = "1920x1080"
 
 [overview]
 zoom = 1.0
@@ -266,6 +266,13 @@ id = "BD533654-E2DE-4062-8CAD-905851C1C90A"
 layout = "float"
 minHeight = 500.0
 minWidth = 833.0
+
+[[appRules]]
+bundleId = "com.cisco.secureclient.gui"
+id = "7583E24E-771A-4FA5-A37E-A5644746B13A"
+layout = "float"
+minHeight = 300.0
+minWidth = 400.0
 
 [[hotkeys]]
 binding = "Option+1"
