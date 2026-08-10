@@ -20,7 +20,7 @@ if args.count > 1 {
     direction = args[1].lowercased()
 }
 
-let margin: CGFloat = 16
+let margin: CGFloat = 0
 
 guard let primaryScreen = NSScreen.screens.first else {
     print("No screens available")
