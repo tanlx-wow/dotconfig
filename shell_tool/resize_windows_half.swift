@@ -13,7 +13,7 @@ import Cocoa
 import ApplicationServices
 
 // ---------- layout settings ----------
-let margin: CGFloat = 0           // outer margin & middle gap
+let margin: CGFloat = 16          // outer margin & middle gap
 let alternateSides = false         // true → distribute L/R; false → all to left
 enum Side { case left, right }
 let defaultSide: Side = .left

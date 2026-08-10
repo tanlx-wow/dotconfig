@@ -3,9 +3,9 @@
 
 menu_bar_height=$(swift -e 'import Cocoa; if let s = NSScreen.main { print(Int(s.frame.height - s.visibleFrame.height)) }')
 osascript <<EOF
--- Raycast-style Almost Maximize with 32px margin, including under menu bar
+-- Raycast-style Almost Maximize with 16px margin, including under menu bar
 
-set margin to 32
+set margin to 16
 
 set menuBarHeight to $menu_bar_height -- typical macOS menu bar height
 
@@ -37,4 +37,3 @@ tell application "System Events"
     end repeat
 end tell
 EOF
-
