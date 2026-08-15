@@ -1,5 +1,9 @@
 # Update Log
 
+## 2026-08-15
+
+- Added the PowerKit `netspeed` module to the tmux status bar.
+
 ## 2026-06-26
 
 - Created `nvim/lua/TLX/plugins/codex-nvim.lua` for Codex Neovim integration.
