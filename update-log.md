@@ -6,6 +6,7 @@
 
 ## 2026-06-26
 
+- Refresh `outline.nvim` when LSP clients attach and when LSP progress completes so code symbols appear without waiting for an edit.
 - Created `nvim/lua/TLX/plugins/codex-nvim.lua` for Codex Neovim integration.
 - Kept `nvim-tree` on the far-left side when both `nvim-tree` and `outline.nvim` are open.
 - Added max width caps for sidebar windows:
