@@ -7,6 +7,7 @@
 - Make WezTerm resets use its native `ResetFontAndWindowSize` action before recentering the window.
 - Added a `Ctrl + Option + R` WezTerm reset shortcut for `tilt_window_arg.swift`.
 - Updated `tilt_window_arg.swift` metadata for its Alfred workflow.
+- Removed the Ghostty and OmniWM configurations.
 
 ## 2026-08-15
 
