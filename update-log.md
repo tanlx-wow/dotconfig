@@ -1,5 +1,13 @@
 # Update Log
 
+## 2026-10-10
+
+- Set WezTerm's initial size to 120 columns by 42 rows.
+- Center the initial WezTerm window on the primary display via `gui_startup.lua`.
+- Make WezTerm resets use its native `ResetFontAndWindowSize` action before recentering the window.
+- Added a `Ctrl + Option + R` WezTerm reset shortcut for `tilt_window_arg.swift`.
+- Updated `tilt_window_arg.swift` metadata for its Alfred workflow.
+
 ## 2026-08-15
 
 - Added the PowerKit `netspeed` module to the tmux status bar.

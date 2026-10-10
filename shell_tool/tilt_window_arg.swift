@@ -1,15 +1,16 @@
 #!/usr/bin/swift
 
 // Required parameters:
-// @raycast.title Resize Front Window Left
-// @raycast.mode silent
+// @alfred.schemaVersion 1
+// @alfred.title Resize Front Window
+// @alfred.mode silent
 
 // Optional parameters:
-// @raycast.icon ⬅️
+// @alfred.icon ⬅️
 
 // Documentation:
-// @raycast.description Resize the frontmost window to the left half of the current screen
-// @raycast.author TLX & Opencode
+// @alfred.description Resize or position the frontmost window according to the supplied direction
+// @alfred.author TLX & Opencode
 
 import Cocoa
 import ApplicationServices
@@ -47,6 +48,21 @@ guard AXIsProcessTrustedWithOptions(options) else {
 guard let frontApp = NSWorkspace.shared.frontmostApplication else {
     print("No frontmost application found")
     exit(0)
+}
+
+let isWeztermReset = direction == "reset" && frontApp.bundleIdentifier == "com.github.wez.wezterm"
+if isWeztermReset {
+    frontApp.activate()
+    Thread.sleep(forTimeInterval: 0.1)
+
+    let flags: CGEventFlags = [.maskControl, .maskAlternate]
+    for keyDown in [true, false] {
+        if let event = CGEvent(keyboardEventSource: nil, virtualKey: 15, keyDown: keyDown) {
+            event.flags = flags
+            event.post(tap: .cghidEventTap)
+        }
+    }
+    Thread.sleep(forTimeInterval: 0.2)
 }
 
 let appElement = AXUIElementCreateApplication(frontApp.processIdentifier)
@@ -119,6 +135,9 @@ case "plus":
 case "up", "top", "bottom", "down":
     targetWidth = v.width - 2 * margin
     targetHeight = (v.height - totalGapY) / 2
+case "reset" where isWeztermReset:
+    targetWidth = currentSize.width
+    targetHeight = currentSize.height
 default: // "reset", "center", and any unknown arg
     targetWidth = v.width * 0.4
     targetHeight = v.height * 0.5
@@ -161,7 +180,7 @@ if let p = AXValueCreate(.cgPoint, &newPos) {
 
 // 3. Set Size
 var newSize = CGSize(width: targetWidth, height: targetHeight)
-if let s = AXValueCreate(.cgSize, &newSize) {
+if !isWeztermReset, let s = AXValueCreate(.cgSize, &newSize) {
     AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, s)
 }
 

@@ -2,6 +2,7 @@
 -- Pull in the wezterm API
 local wezterm = require("wezterm")
 local constants = require("constants")
+require("gui_startup")
 -- local tmux_keys = require("tmux_func")
 -- This will hold the configuration.
 local config = wezterm.config_builder()
@@ -56,9 +57,17 @@ config.max_fps = 120
 
 config.prefer_egl = true
 
+config.keys = {
+	{
+		key = "r",
+		mods = "CTRL|ALT",
+		action = wezterm.action.ResetFontAndWindowSize,
+	},
+}
+
 -- adjust the columns and row width
-config.initial_cols = 90
-config.initial_rows = 30
+config.initial_cols = 120
+config.initial_rows = 42
 
 -- and finally, return the configuration to wezterm
 return config

@@ -33,3 +33,7 @@ This is a personal dotfiles repository containing configuration files for variou
 - Follow each tool's native format (TOML, YAML, JSON, etc.)
 - Maintain consistent indentation within each file
 - Use descriptive comments where supported
+
+## Update Log
+- Record completed user-facing configuration changes in `update-log.md` under the current date.
+- Do not log exploratory edits or unchanged behavior.
