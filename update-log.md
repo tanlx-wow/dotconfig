@@ -1,5 +1,9 @@
 # Update Log
 
+## 2026-10-20
+
+- Enabled the `jsonls` Neovim LSP, using the installed `vscode-json-language-server` executable.
+
 ## 2026-10-10
 
 - Set WezTerm's initial size to 120 columns by 42 rows.

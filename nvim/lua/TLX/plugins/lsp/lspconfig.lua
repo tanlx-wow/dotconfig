@@ -77,6 +77,7 @@ return {
 		-- Setup LSP servers using vim.lsp.config and vim.lsp.enable (Neovim 0.11+)
 		local servers = {
 			"html",
+			"jsonls",
 			"prismals",
 			"pyright",
 			"rust_analyzer",
