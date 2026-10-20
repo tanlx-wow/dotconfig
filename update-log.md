@@ -3,6 +3,7 @@
 ## 2026-10-20
 
 - Enabled the `jsonls` Neovim LSP, using the installed `vscode-json-language-server` executable.
+- Updated OpenCode plugin, provider timeout, and tool-permission settings.
 
 ## 2026-10-10
 
