@@ -1,5 +1,9 @@
 # Update Log
 
+## 2026-10-28
+
+- Migrated OpenCode plugin, provider options, and permissions to the current configuration format.
+
 ## 2026-10-20
 
 - Enabled the `jsonls` Neovim LSP, using the installed `vscode-json-language-server` executable.

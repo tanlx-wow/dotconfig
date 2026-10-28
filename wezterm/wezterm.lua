@@ -69,5 +69,8 @@ config.keys = {
 config.initial_cols = 120
 config.initial_rows = 42
 
+-- Modify ApplePressAndHoldEnabled
+-- config.use_ime = false
+
 -- and finally, return the configuration to wezterm
 return config
