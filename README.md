@@ -101,10 +101,14 @@ This configuration uses a consistent **Tokyo Night** theme across:
 
 ## 🪟 Window Management
 
-Custom Swift scripts for macOS window tiling:
-- `resize_windows_half.swift` - Tile windows to left half
-- `resize_windows_max.swift` - Maximize windows
-- Raycast integration for quick access
+Use `swift ~/.config/shell_tool/tilt_window_arg.swift <command>` for macOS window management:
+- `left`, `right`, `up`, `bottom` - Tile the front window to a screen half
+- `max`, `plus`, `reset`, `center` - Resize or center the front window (default: `reset`)
+- `all-half` - Tile eligible windows to the left half of their current screens
+- `all-max` - Maximize eligible windows on their current screens
+- `hide-others` - Hide other apps using visibility and stacking detection
+- `--help` - Show all commands and aliases
+- Alfred integration for quick access
 
 ## 📝 Notes
 

@@ -2,24 +2,53 @@
 
 // Required parameters:
 // @alfred.schemaVersion 1
-// @alfred.title Resize Front Window
+// @alfred.title Window Tools
 // @alfred.mode silent
 
 // Optional parameters:
 // @alfred.icon ⬅️
 
 // Documentation:
-// @alfred.description Resize or position the frontmost window according to the supplied direction
+// @alfred.description Resize the front window, arrange all windows, or hide other apps
 // @alfred.author TLX & Opencode
 
 import Cocoa
 import ApplicationServices
 
 let args = CommandLine.arguments
-var direction = "reset"
-if args.count > 1 {
-    direction = args[1].lowercased()
+let command = args.count > 1 ? args[1].lowercased() : "reset"
+let usage = """
+Usage: swift tilt_window_arg.swift [command]
+
+Front window (animated):
+  left, right          Tile to the left or right half
+  up, top             Tile to the top half
+  bottom, down        Tile to the bottom half
+  max, maximize       Maximize with margins
+  plus                Grow by 20%, capped to the screen
+  reset, center       Resize and center (default: reset)
+                      WezTerm reset uses its native window size
+
+All visible apps (on each window's current screen):
+  all-half            Tile eligible windows to the left half
+  all-max             Maximize eligible windows
+  hide-others         Hide other apps using visibility/stacking detection
+
+  -h, --help          Show this help
+"""
+if ["-h", "--help", "help"].contains(command), args.count == 2 {
+    print(usage)
+    exit(0)
 }
+let validCommands: Set<String> = [
+    "left", "right", "up", "top", "bottom", "down", "max", "maximize",
+    "plus", "reset", "center", "all-half", "all-max", "hide-others",
+]
+guard args.count <= 2, validCommands.contains(command) else {
+    print("Invalid arguments.\n\n\(usage)")
+    exit(1)
+}
+let direction = command
 
 let margin: CGFloat = 16
 let animationDuration: TimeInterval = 0.32
@@ -73,10 +102,158 @@ func cocoaToAX(_ cocoaFrame: CGRect) -> CGRect {
     return CGRect(x: cocoaFrame.origin.x, y: y, width: cocoaFrame.size.width, height: cocoaFrame.size.height)
 }
 
+func visibleFrame(for frame: CGRect) -> CGRect {
+    var targetScreen = NSScreen.main ?? primaryScreen
+    var maxIntersectionArea: CGFloat = 0
+    for screen in NSScreen.screens {
+        let intersection = frame.intersection(screen.frame)
+        let area = intersection.isNull ? 0 : intersection.width * intersection.height
+        if area > maxIntersectionArea {
+            maxIntersectionArea = area
+            targetScreen = screen
+        }
+    }
+    var visible = targetScreen.visibleFrame
+    let primaryTopInset = primaryScreen.frame.maxY - primaryScreen.visibleFrame.maxY
+    let currentTopInset = targetScreen.frame.maxY - visible.maxY
+    if currentTopInset < primaryTopInset - 5 {
+        visible.size.height -= primaryTopInset - currentTopInset
+    }
+    return visible
+}
+
+func windowFrame(_ window: AXUIElement) -> CGRect? {
+    var posValue: AnyObject?
+    var sizeValue: AnyObject?
+    guard AXUIElementCopyAttributeValue(window, kAXPositionAttribute as CFString, &posValue) == .success,
+          AXUIElementCopyAttributeValue(window, kAXSizeAttribute as CFString, &sizeValue) == .success,
+          let posValue = posValue, CFGetTypeID(posValue) == AXValueGetTypeID(),
+          let sizeValue = sizeValue, CFGetTypeID(sizeValue) == AXValueGetTypeID() else { return nil }
+    var position = CGPoint.zero
+    var size = CGSize.zero
+    guard AXValueGetValue(posValue as! AXValue, .cgPoint, &position),
+          AXValueGetValue(sizeValue as! AXValue, .cgSize, &size) else { return nil }
+    return CGRect(origin: position, size: size)
+}
+
+func setWindowFrame(_ window: AXUIElement, to frame: CGRect) {
+    var position = frame.origin
+    var size = frame.size
+    if let value = AXValueCreate(.cgPoint, &position) {
+        AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, value)
+    }
+    if let value = AXValueCreate(.cgSize, &size) {
+        AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, value)
+    }
+}
+
+func resizeAllWindows(half: Bool) {
+    var skippedBundles: Set<String> = [
+        "com.apple.finder", "com.apple.systempreferences", "com.cisco.secureclient.gui",
+        "com.microsoft.teams2", "com.teamviewer.TeamViewer",
+    ]
+    if half {
+        skippedBundles.formUnion(["com.microsoft.Outlook", "com.ThomsonResearchSoft.EndNote"])
+    }
+    for app in NSWorkspace.shared.runningApplications {
+        guard !app.isHidden, app.activationPolicy == .regular,
+              let bundleID = app.bundleIdentifier, !skippedBundles.contains(bundleID) else { continue }
+        let appElement = AXUIElementCreateApplication(app.processIdentifier)
+        var value: AnyObject?
+        guard AXUIElementCopyAttributeValue(appElement, kAXWindowsAttribute as CFString, &value) == .success,
+              let windows = value as? [AXUIElement] else { continue }
+        for window in windows {
+            if half {
+                var minimized: AnyObject?
+                if AXUIElementCopyAttributeValue(window, kAXMinimizedAttribute as CFString, &minimized) == .success,
+                   minimized as? Bool == true { continue }
+            }
+            guard let frame = windowFrame(window) else { continue }
+            let visible = visibleFrame(for: axToCocoa(frame))
+            let width = half ? (visible.width - 3 * margin) / 2 : visible.width - 2 * margin
+            let target = CGRect(x: visible.minX + margin, y: visible.minY + margin,
+                                width: width, height: visible.height - 2 * margin)
+            setWindowFrame(window, to: cocoaToAX(target))
+        }
+    }
+}
+
+func hideOtherApps() {
+    guard let frontApp = NSWorkspace.shared.frontmostApplication else {
+        print("No frontmost application found")
+        return
+    }
+    var keepPIDs = Set<pid_t>([frontApp.processIdentifier])
+    struct Point: Hashable {
+        let x: Int
+        let y: Int
+    }
+    var samplePoints = Set<Point>()
+    let step: CGFloat = 50
+    for screen in NSScreen.screens {
+        let frame = cocoaToAX(screen.frame)
+        var y = frame.minY + step / 2
+        while y < frame.maxY {
+            var x = frame.minX + step / 2
+            while x < frame.maxX {
+                samplePoints.insert(Point(x: Int(x), y: Int(y)))
+                x += step
+            }
+            y += step
+        }
+    }
+    let options: CGWindowListOption = [.optionOnScreenOnly, .excludeDesktopElements]
+    guard let windows = CGWindowListCopyWindowInfo(options, kCGNullWindowID) as? [[String: Any]] else {
+        print("Unable to get window list")
+        exit(1)
+    }
+    var frontWindowBounds: CGRect?
+    for entry in windows {
+        guard let layer = entry[kCGWindowLayer as String] as? Int, layer == 0,
+              let pid = entry[kCGWindowOwnerPID as String] as? pid_t,
+              let boundsDict = entry[kCGWindowBounds as String] as? [String: Any],
+              let bounds = CGRect(dictionaryRepresentation: boundsDict as CFDictionary) else { continue }
+        var isStacked = false
+        if let frontBounds = frontWindowBounds {
+            let intersection = bounds.intersection(frontBounds)
+            if !intersection.isNull {
+                isStacked = intersection.width * intersection.height > 0.5 * frontBounds.width * frontBounds.height
+            }
+        } else {
+            frontWindowBounds = bounds
+        }
+        var hits = false
+        samplePoints = samplePoints.filter { point in
+            if bounds.contains(CGPoint(x: Double(point.x), y: Double(point.y))) {
+                hits = true
+                return false
+            }
+            return true
+        }
+        if hits && !isStacked { keepPIDs.insert(pid) }
+        if samplePoints.isEmpty { break }
+    }
+    for app in NSWorkspace.shared.runningApplications {
+        guard app.activationPolicy == .regular else { continue }
+        if !keepPIDs.contains(app.processIdentifier) { app.hide() }
+    }
+}
+
+// Hiding apps does not require Accessibility permission.
+if command == "hide-others" {
+    hideOtherApps()
+    exit(0)
+}
+
 let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as NSString: true]
 guard AXIsProcessTrustedWithOptions(options) else {
     print("Grant Accessibility permissions in System Settings → Privacy & Security → Accessibility.")
     exit(1)
+}
+
+if command == "all-half" || command == "all-max" {
+    resizeAllWindows(half: command == "all-half")
+    exit(0)
 }
 
 guard let frontApp = NSWorkspace.shared.frontmostApplication else {
@@ -108,44 +285,13 @@ guard result == .success else {
 }
 
 let window = value as! AXUIElement
-var posValue: AnyObject?
-var sizeValue: AnyObject?
-AXUIElementCopyAttributeValue(window, kAXPositionAttribute as CFString, &posValue)
-AXUIElementCopyAttributeValue(window, kAXSizeAttribute as CFString, &sizeValue)
-
-var currentPos = CGPoint.zero
-var currentSize = CGSize.zero
-if let posValue = posValue, AXValueGetType(posValue as! AXValue) == .cgPoint {
-    AXValueGetValue(posValue as! AXValue, .cgPoint, &currentPos)
+guard let currentFrame = windowFrame(window) else {
+    print("Unable to get focused window frame")
+    exit(1)
 }
-if let sizeValue = sizeValue, AXValueGetType(sizeValue as! AXValue) == .cgSize {
-    AXValueGetValue(sizeValue as! AXValue, .cgSize, &currentSize)
-}
-
-let currentCocoaFrame = axToCocoa(CGRect(origin: currentPos, size: currentSize))
-
-var targetScreen: NSScreen?
-var maxIntersectionArea: CGFloat = 0
-for screen in NSScreen.screens {
-    let intersection = currentCocoaFrame.intersection(screen.frame)
-    let area = intersection.width * intersection.height
-    if area > maxIntersectionArea {
-        maxIntersectionArea = area
-        targetScreen = screen
-    }
-}
-let screen = targetScreen ?? NSScreen.main!
-
-var v = screen.visibleFrame
-
-if let primary = NSScreen.screens.first {
-    let primaryTopInset = primary.frame.maxY - primary.visibleFrame.maxY
-    let currentTopInset = screen.frame.maxY - v.maxY
-    if currentTopInset < (primaryTopInset - 5) {
-        let missingHeight = primaryTopInset - currentTopInset
-        v.size.height -= missingHeight
-    }
-}
+let currentPos = currentFrame.origin
+let currentSize = currentFrame.size
+let v = visibleFrame(for: axToCocoa(currentFrame))
 
 let totalGapX = margin * 3
 let totalGapY = margin * 3
@@ -172,7 +318,7 @@ case "up", "top", "bottom", "down":
 case "reset" where isWeztermReset:
     targetWidth = currentSize.width
     targetHeight = currentSize.height
-default: // "reset", "center", and any unknown arg
+default: // "reset" and "center"
     targetWidth = v.width * 0.4
     targetHeight = v.height * 0.5
 }

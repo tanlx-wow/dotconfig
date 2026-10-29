@@ -244,7 +244,7 @@
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>script</key>
-				<string>swift ~/.config/shell_tool/resize_windows_max.swift "$1"</string>
+				<string>swift ~/.config/shell_tool/tilt_window_arg.swift all-max</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -352,7 +352,7 @@
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>script</key>
-				<string>swift ~/.config/shell_tool/resize_windows_half.swift "$1"</string>
+				<string>swift ~/.config/shell_tool/tilt_window_arg.swift all-half</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -429,7 +429,7 @@
 				<key>escaping</key>
 				<integer>0</integer>
 				<key>script</key>
-				<string>swift ~/.config/shell_tool/hide_window_expt_front.swift "$1"</string>
+				<string>swift ~/.config/shell_tool/tilt_window_arg.swift hide-others</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
