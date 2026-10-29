@@ -2,6 +2,7 @@
 
 ## 2026-10-29
 
+- Added shared 0.32-second animations for `all-max` and `all-half`, moving eligible windows together with the same easing and Reduce Motion support as front-window commands.
 - Added `shell_tool/README.md` documenting window-management commands, examples, permissions, layout behavior, and Alfred integration.
 - Merged the half-screen, maximize-all, and hide-other-app scripts into `shell_tool/tilt_window_arg.swift` with `all-half`, `all-max`, and `hide-others` commands, shared window helpers, command-line help, and updated Alfred actions.
 - Added smooth 0.32-second move/resize animations to the standalone and Alfred `tilt_window_arg.swift` scripts, with gentle starts/stops, a 120 Hz update target, and support for macOS Reduce Motion.

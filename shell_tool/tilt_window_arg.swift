@@ -30,8 +30,8 @@ Front window (animated):
                       WezTerm reset uses its native window size
 
 All visible apps (on each window's current screen):
-  all-half            Tile eligible windows to the left half
-  all-max             Maximize eligible windows
+  all-half            Animate eligible windows together to the left half
+  all-max             Animate eligible windows together to maximize
   hide-others         Hide other apps using visibility/stacking detection
 
   -h, --help          Show this help
@@ -53,8 +53,16 @@ let direction = command
 let margin: CGFloat = 16
 let animationDuration: TimeInterval = 0.32
 
-func animateWindow(_ window: AXUIElement, from start: CGRect, to target: CGRect, resize: Bool) {
-    guard !NSWorkspace.shared.accessibilityDisplayShouldReduceMotion, animationDuration > 0 else { return }
+struct WindowAnimation {
+    let window: AXUIElement
+    let start: CGRect
+    let target: CGRect
+    let resize: Bool
+}
+
+func animateWindows(_ animations: [WindowAnimation]) {
+    guard !animations.isEmpty,
+          !NSWorkspace.shared.accessibilityDisplayShouldReduceMotion, animationDuration > 0 else { return }
 
     let startTime = ProcessInfo.processInfo.systemUptime
     let frameInterval: TimeInterval = 1.0 / 120.0
@@ -63,19 +71,23 @@ func animateWindow(_ window: AXUIElement, from start: CGRect, to target: CGRect,
         let progress = min((frameTime - startTime) / animationDuration, 1)
         // Smootherstep has zero velocity and acceleration at both endpoints.
         let eased = CGFloat(progress * progress * progress * (progress * (progress * 6 - 15) + 10))
-        var position = CGPoint(
-            x: start.minX + (target.minX - start.minX) * eased,
-            y: start.minY + (target.minY - start.minY) * eased
-        )
-        var size = CGSize(
-            width: start.width + (target.width - start.width) * eased,
-            height: start.height + (target.height - start.height) * eased
-        )
-        if let value = AXValueCreate(.cgPoint, &position) {
-            AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, value)
-        }
-        if resize, let value = AXValueCreate(.cgSize, &size) {
-            AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, value)
+        for animation in animations {
+            let start = animation.start
+            let target = animation.target
+            var position = CGPoint(
+                x: start.minX + (target.minX - start.minX) * eased,
+                y: start.minY + (target.minY - start.minY) * eased
+            )
+            var size = CGSize(
+                width: start.width + (target.width - start.width) * eased,
+                height: start.height + (target.height - start.height) * eased
+            )
+            if let value = AXValueCreate(.cgPoint, &position) {
+                AXUIElementSetAttributeValue(animation.window, kAXPositionAttribute as CFString, value)
+            }
+            if animation.resize, let value = AXValueCreate(.cgSize, &size) {
+                AXUIElementSetAttributeValue(animation.window, kAXSizeAttribute as CFString, value)
+            }
         }
         if progress >= 1 { break }
         // Include Accessibility call time in the frame budget rather than adding it.
@@ -84,6 +96,10 @@ func animateWindow(_ window: AXUIElement, from start: CGRect, to target: CGRect,
             Thread.sleep(forTimeInterval: remaining)
         }
     }
+}
+
+func animateWindow(_ window: AXUIElement, from start: CGRect, to target: CGRect, resize: Bool) {
+    animateWindows([WindowAnimation(window: window, start: start, target: target, resize: resize)])
 }
 
 guard let primaryScreen = NSScreen.screens.first else {
@@ -148,6 +164,7 @@ func setWindowFrame(_ window: AXUIElement, to frame: CGRect) {
 }
 
 func resizeAllWindows(half: Bool) {
+    var animations: [WindowAnimation] = []
     var skippedBundles: Set<String> = [
         "com.apple.finder", "com.apple.systempreferences", "com.cisco.secureclient.gui",
         "com.microsoft.teams2", "com.teamviewer.TeamViewer",
@@ -173,8 +190,15 @@ func resizeAllWindows(half: Bool) {
             let width = half ? (visible.width - 3 * margin) / 2 : visible.width - 2 * margin
             let target = CGRect(x: visible.minX + margin, y: visible.minY + margin,
                                 width: width, height: visible.height - 2 * margin)
-            setWindowFrame(window, to: cocoaToAX(target))
+            animations.append(WindowAnimation(window: window, start: frame,
+                                              target: cocoaToAX(target), resize: true))
         }
+    }
+    // All windows share one clock, so duration does not grow by one animation per window.
+    animateWindows(animations)
+    // Apply exact targets after animation, or immediately when Reduce Motion is enabled.
+    for animation in animations {
+        setWindowFrame(animation.window, to: animation.target)
     }
 }
 

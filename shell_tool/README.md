@@ -80,7 +80,7 @@ swift tilt_window_arg.swift all-half
 swift tilt_window_arg.swift all-max
 ```
 
-These commands apply immediately, without animation. They target windows belonging to non-hidden, regular applications with a bundle identifier.
+These commands animate all eligible windows together on a shared 0.32-second timeline, using the same easing as front-window commands. With macOS **Reduce Motion** enabled, changes apply immediately. Accessibility calls still update each window in turn within each frame, so many windows or slow applications can reduce smoothness and extend the total time. They target windows belonging to non-hidden, regular applications with a bundle identifier.
 
 Both commands skip these applications:
 
