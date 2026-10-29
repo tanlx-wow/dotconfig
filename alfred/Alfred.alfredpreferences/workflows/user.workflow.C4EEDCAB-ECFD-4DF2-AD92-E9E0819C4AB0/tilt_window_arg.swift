@@ -22,6 +22,40 @@ if args.count > 1 {
 }
 
 let margin: CGFloat = 16
+let animationDuration: TimeInterval = 0.32
+
+func animateWindow(_ window: AXUIElement, from start: CGRect, to target: CGRect, resize: Bool) {
+    guard !NSWorkspace.shared.accessibilityDisplayShouldReduceMotion, animationDuration > 0 else { return }
+
+    let startTime = ProcessInfo.processInfo.systemUptime
+    let frameInterval: TimeInterval = 1.0 / 120.0
+    while true {
+        let frameTime = ProcessInfo.processInfo.systemUptime
+        let progress = min((frameTime - startTime) / animationDuration, 1)
+        // Smootherstep has zero velocity and acceleration at both endpoints.
+        let eased = CGFloat(progress * progress * progress * (progress * (progress * 6 - 15) + 10))
+        var position = CGPoint(
+            x: start.minX + (target.minX - start.minX) * eased,
+            y: start.minY + (target.minY - start.minY) * eased
+        )
+        var size = CGSize(
+            width: start.width + (target.width - start.width) * eased,
+            height: start.height + (target.height - start.height) * eased
+        )
+        if let value = AXValueCreate(.cgPoint, &position) {
+            AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, value)
+        }
+        if resize, let value = AXValueCreate(.cgSize, &size) {
+            AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, value)
+        }
+        if progress >= 1 { break }
+        // Include Accessibility call time in the frame budget rather than adding it.
+        let remaining = frameInterval - (ProcessInfo.processInfo.systemUptime - frameTime)
+        if remaining > 0 {
+            Thread.sleep(forTimeInterval: remaining)
+        }
+    }
+}
 
 guard let primaryScreen = NSScreen.screens.first else {
     print("No screens available")
@@ -144,6 +178,8 @@ default: // reset
 // We set position first to ensure the window has room to grow into the target size
 let newCocoaRect = CGRect(x: x, y: y, width: targetWidth, height: targetHeight)
 let newAXRect = cocoaToAX(newCocoaRect)
+animateWindow(window, from: CGRect(origin: currentPos, size: currentSize), to: newAXRect, resize: true)
+// Apply the exact final frame after animation (or immediately with Reduce Motion).
 var newPos = newAXRect.origin
 
 if let p = AXValueCreate(.cgPoint, &newPos) {

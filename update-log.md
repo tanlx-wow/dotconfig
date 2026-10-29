@@ -1,5 +1,9 @@
 # Update Log
 
+## 2026-10-29
+
+- Added smooth 0.32-second move/resize animations to the standalone and Alfred `tilt_window_arg.swift` scripts, with gentle starts/stops, a 120 Hz update target, and support for macOS Reduce Motion.
+
 ## 2026-10-28
 
 - Migrated OpenCode plugin, provider options, and permissions to the current configuration format.
