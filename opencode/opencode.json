@@ -1,38 +1,27 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugin": ["@slkiser/opencode-quota"],
-  "provider": {
+  "plugins": ["@slkiser/opencode-quota"],
+  "providers": {
     "openai": {
-      "options": {
+      "settings": {
         "headerTimeout": 60000,
         "timeout": 600000,
         "chunkTimeout": 60000
       }
     }
   },
-  "permission": {
-    "bash": {
-      "*": "ask",
-      "git status": "allow",
-      "git status *": "allow",
-      "git diff": "allow",
-      "git diff *": "allow",
-      "rm": "deny",
-      "rm *": "deny",
-      "rmdir": "deny",
-      "rmdir *": "deny",
-      "unlink": "deny",
-      "unlink *": "deny",
-      "sudo": "deny",
-      "sudo *": "deny",
-      "git clean": "deny",
-      "git clean *": "deny",
-      "git reset --hard": "deny",
-      "git reset --hard *": "deny",
-      "git push": "deny",
-      "git push *": "deny"
-    },
-    "edit": "ask",
-    "external_directory": "deny"
-  }
+  "permissions": [
+    { "action": "shell", "resource": "*", "effect": "ask" },
+    { "action": "shell", "resource": "git status *", "effect": "allow" },
+    { "action": "shell", "resource": "git diff *", "effect": "allow" },
+    { "action": "shell", "resource": "rm *", "effect": "deny" },
+    { "action": "shell", "resource": "rmdir *", "effect": "deny" },
+    { "action": "shell", "resource": "unlink *", "effect": "deny" },
+    { "action": "shell", "resource": "sudo *", "effect": "deny" },
+    { "action": "shell", "resource": "git clean *", "effect": "deny" },
+    { "action": "shell", "resource": "git reset --hard *", "effect": "deny" },
+    { "action": "shell", "resource": "git push *", "effect": "deny" },
+    { "action": "edit", "resource": "*", "effect": "ask" },
+    { "action": "external_directory", "resource": "*", "effect": "deny" }
+  ]
 }

@@ -1,0 +1,11 @@
+{
+  "toast": {
+    "show": true
+  },
+  "sidebar": {
+    "show": true
+  },
+  "statusLine": {
+    "show": false
+  }
+}

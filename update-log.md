@@ -1,5 +1,10 @@
 # Update Log
 
+## 2026-11-01
+
+- Migrated OpenCode configuration to v2 `plugins`, `providers.settings`, and ordered `permissions` rules, preserving provider timeouts and command restrictions.
+- Removed the redundant quota TUI registration and migrated quota display preferences to `opencode-quota/settings.jsonc` for OpenCode Quota v6.
+
 ## 2026-10-29
 
 - Added shared 0.32-second animations for `all-max` and `all-half`, moving eligible windows together with the same easing and Reduce Motion support as front-window commands.
