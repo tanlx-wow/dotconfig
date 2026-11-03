@@ -1,5 +1,14 @@
 # Update Log
 
+## 2026-11-03
+
+- Combined Homebrew formula and cask counts into a single Fastfetch package total.
+- Added Nerd Font icons to Fastfetch system labels and adjusted key spacing to keep values aligned.
+- Widened all Fastfetch section borders by approximately 30%, keeping headings centered.
+- Buffered the `fs` Fastfetch wrapper so the complete colored layout appears only after scanning finishes, and forwarded command-line options.
+- Split Fastfetch package counts into two compact lines for Nix totals and Homebrew formulae/casks to fit the Software section.
+- Restyled Fastfetch to match the reference screenshot with an OS-specific ASCII logo and colored Hardware/Software/Uptime sections, without OS age or the bottom color bar.
+
 ## 2026-11-01
 
 - Migrated OpenCode configuration to v2 `plugins`, `providers.settings`, and ordered `permissions` rules, preserving provider timeouts and command restrictions.
