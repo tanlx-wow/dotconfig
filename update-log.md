@@ -2,6 +2,9 @@
 
 ## 2026-11-03
 
+- Matched Fastfetch section titles and borders to their table label colors: green Hardware, yellow Software, and magenta Uptime.
+- Added a colored Pac-Man-and-ghosts footer and current-user login time to Fastfetch's Uptime section.
+- Combined Fastfetch Nix and Homebrew package totals onto one line.
 - Combined Homebrew formula and cask counts into a single Fastfetch package total.
 - Added Nerd Font icons to Fastfetch system labels and adjusted key spacing to keep values aligned.
 - Widened all Fastfetch section borders by approximately 30%, keeping headings centered.

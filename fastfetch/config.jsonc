@@ -17,7 +17,7 @@
   "modules": [
     {
       "type": "custom",
-      "format": "┌──────────────────── Hardware ────────────────────┐"
+      "format": "{#green}┌──────────────────── Hardware ────────────────────┐{#}"
     },
     {
       "type": "cpu",
@@ -44,12 +44,12 @@
     },
     {
       "type": "custom",
-      "format": "└─────────────────────────────────────────────────┘"
+      "format": "{#green}└─────────────────────────────────────────────────┘{#}"
     },
     "break",
     {
       "type": "custom",
-      "format": "┌──────────────────── Software ────────────────────┐"
+      "format": "{#yellow}┌──────────────────── Software ────────────────────┐{#}"
     },
     {
       "type": "os",
@@ -65,13 +65,7 @@
       "type": "packages",
       "key": "│ 󰏖 PKGs",
       "keyColor": "yellow",
-      "format": "{nix-all} (nix)"
-    },
-    {
-      "type": "packages",
-      "key": "│",
-      "keyColor": "yellow",
-      "format": "{brew-all} (brew)"
+      "format": "{nix-all} (nix), {brew-all} (brew)"
     },
     {
       "type": "shell",
@@ -85,12 +79,12 @@
     },
     {
       "type": "custom",
-      "format": "└─────────────────────────────────────────────────┘"
+      "format": "{#yellow}└─────────────────────────────────────────────────┘{#}"
     },
     "break",
     {
       "type": "custom",
-      "format": "┌───────────────────── Uptime ─────────────────────┐"
+      "format": "{#magenta}┌───────────────────── Uptime ─────────────────────┐{#}"
     },
     {
       "type": "uptime",
@@ -98,8 +92,19 @@
       "keyColor": "magenta"
     },
     {
+      "type": "users",
+      "key": "│  Login",
+      "keyColor": "magenta",
+      "myselfOnly": true,
+      "format": "{name} - {login-time}"
+    },
+    {
       "type": "custom",
-      "format": "└─────────────────────────────────────────────────┘"
+      "format": "{#magenta}└─────────────────────────────────────────────────┘{#}"
+    },
+    {
+      "type": "custom",
+      "format": "        {#yellow}󰮯 {#red}• {#green}• {#yellow}• {#blue}• {#magenta}• {#cyan}• 󰊠 {#magenta}󰊠 {#blue}󰊠 {#yellow}󰊠 {#green}󰊠 {#red}󰊠{#}"
     }
   ]
 }
