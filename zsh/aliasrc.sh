@@ -61,7 +61,10 @@ function y() {
 
 # fastfetch
 fs() {
-  fastfetch --logo "$(pokeget gengar --hide-name)" --logo-type data
+  local output
+  # Collect the complete layout before printing, preserving terminal colors.
+  output="$(fastfetch --pipe false --logo "$(pokeget gengar --hide-name)" --logo-type data "$@")" || return $?
+  printf '%s\n' "$output"
 }
 
 n() {
