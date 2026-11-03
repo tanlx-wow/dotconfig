@@ -2,6 +2,7 @@
 
 ## 2026-11-03
 
+- Aligned Fastfetch bottom borders with the 52-column section title borders.
 - Matched Fastfetch section titles and borders to their table label colors: green Hardware, yellow Software, and magenta Uptime.
 - Added a colored Pac-Man-and-ghosts footer and current-user login time to Fastfetch's Uptime section.
 - Combined Fastfetch Nix and Homebrew package totals onto one line.
