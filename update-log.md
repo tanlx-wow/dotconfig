@@ -5,15 +5,17 @@
 - Added the left-Option device flag (`0x20`) to Swift's generated WezTerm reset shortcut because WezTerm requires it alongside the generic Option flag to recognize Alt.
 - Changed Swift's generated WezTerm reset shortcut and the matching WezTerm binding to Cmd+Ctrl+Option+R; Alfred's trigger remains Option+R.
 - Removed the direct WezTerm Option+R binding; Alfred handles Option+R, and Swift waits for hotkey release before sending the internal reset shortcut directly to WezTerm using an isolated event source.
+- Changed Zsh's fzf directory-search shortcut from Alt+C to Alt+F, replacing Alt+F's default forward-word binding.
 - Changed window-tool's `center` argument to center the focused window on its current screen without resizing it; `reset` retains its size-reset behavior.
 - Added WezTerm reset error notifications and debug logging, capturing helper failures instead of silently discarding them.
 - Made WezTerm reset animate resizing and centering together using its configured 120×42 grid and current cell measurements, preserving font size instead of triggering a native font/window reset.
 - Removed the fixed 0.2-second delay between WezTerm's native window reset and centering.
 - Shortened window-tool animations from 0.32 to 0.15 seconds for front-window and all-window commands.
-- Moved the window tool into `shell_tool/window/` and added an optimized build used directly by Alfred.
+- Organized shell tools into purpose-based subfolders, updated aliases and documentation, and added a local optimized window-tool build used directly by Alfred instead of launching Swift source on every trigger.
 
 ## 2026-11-03
 
+- Migrated Neovim's scrollbar to the v2 `refactor/v2` branch and provider options, replacing the removed hlslens search bridge with native search marks while preserving hlslens and search keymaps.
 - Aligned Fastfetch bottom borders with the 52-column section title borders.
 - Matched Fastfetch section titles and borders to their table label colors: green Hardware, yellow Software, and magenta Uptime.
 - Added a colored Pac-Man-and-ghosts footer and current-user login time to Fastfetch's Uptime section.

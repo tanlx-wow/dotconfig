@@ -55,6 +55,9 @@ bindkey "^[[4~" end-of-line
 
 # Set up fzf key bindings and fuzzy completion
 eval "$(fzf --zsh)"
+# Use Alt+F instead of Alt+C for fzf directory search.
+bindkey -r '\ec'
+bindkey '\ef' fzf-cd-widget
 
 
 # -- Use fd instead of fzf --

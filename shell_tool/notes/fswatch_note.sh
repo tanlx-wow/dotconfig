@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SYNC_SCRIPT="$HOME/.config/shell_tool/symlink_note_update.sh"
+SYNC_SCRIPT="$HOME/.config/shell_tool/notes/symlink_note_update.sh"
 PID_FILE="${XDG_RUNTIME_DIR:-/tmp}/watchnote.pid"
 LOG_FILE="$HOME/.config/shell_tool/watchnote.log"
 

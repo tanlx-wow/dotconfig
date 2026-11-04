@@ -35,7 +35,7 @@ pixi-ai() {
 export PATH="$HOME/.config/zsh/bin:$PATH"
 
 # app id script
-[[ -f "$HOME/.config/shell_tool/app_id.sh" ]] && alias getappid="$HOME/.config/shell_tool/app_id.sh"
+[[ -f "$HOME/.config/shell_tool/macos/app_id.sh" ]] && alias getappid="$HOME/.config/shell_tool/macos/app_id.sh"
 
 # yazi function
 function y() {
@@ -73,7 +73,7 @@ n() {
 }
 
 # symlink_sum alias
-[[ -f "$HOME/.config/shell_tool/symlink_sum.sh" ]] && alias symlink_sum="$HOME/.config/shell_tool/symlink_sum.sh"
+[[ -f "$HOME/.config/shell_tool/filesystem/symlink_sum.sh" ]] && alias symlink_sum="$HOME/.config/shell_tool/filesystem/symlink_sum.sh"
 
 # watch note symlinks in the background
-[[ -f "$HOME/.config/shell_tool/fswatch_note.sh" ]] && alias watchnote="$HOME/.config/shell_tool/fswatch_note.sh"
+[[ -f "$HOME/.config/shell_tool/notes/fswatch_note.sh" ]] && alias watchnote="$HOME/.config/shell_tool/notes/fswatch_note.sh"

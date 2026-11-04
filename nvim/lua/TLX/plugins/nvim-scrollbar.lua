@@ -1,57 +1,32 @@
--- return {
--- 	"petertriho/nvim-scrollbar",
--- 	event = { "BufReadPre", "BufNewFile" },
--- 	config = function()
--- 		require("scrollbar").setup({
--- 			show = true,
--- 			show_in_active_only = false,
--- 			set_highlights = true,
--- 			handlers = {
--- 				cursor = true,
--- 				diagnostic = true, -- Shows your LSP errors/warnings on the scrollbar!
--- 				gitsigns = false, -- Set to true if you use gitsigns plugin
--- 				handle = true,
--- 				search = true, -- Shows your search results on the scrollbar
--- 				ale = false,
--- 			},
--- 		})
--- 	end,
--- }
-
 return {
 	"petertriho/nvim-scrollbar",
+	-- v2 moves to main on 2026-11-16; remove this branch after updating then.
+	branch = "refactor/v2",
 	event = { "BufReadPre", "BufNewFile" },
 	dependencies = {
 		"kevinhwang91/nvim-hlslens",
 	},
 	config = function()
-		-- 1. Initialize hlslens
-		require("hlslens").setup({
-			build_position_cb = function(plist, _, _, _)
-				-- This ensures the scrollbar updates immediately when searching
-				require("scrollbar.handlers.search").handler.show(plist.start_pos)
-			end,
-		})
+		-- hlslens displays match counts; v2 collects scrollbar search marks natively.
+		require("hlslens").setup({})
 
-		-- 2. Initialize your scrollbar
 		require("scrollbar").setup({
-			show = true,
-			show_in_active_only = false,
 			set_highlights = true,
-			handlers = {
+			providers = {
 				cursor = true,
 				diagnostic = true,
 				gitsigns = false,
-				handle = true,
 				search = true,
+				marks = false,
 				ale = false,
+			},
+			scrollbar = {
+				show = true,
+				visibility = "all",
 			},
 		})
 
-		-- 3. CRITICAL: Hook the scrollbar up to hlslens
-		require("scrollbar.handlers.search").setup()
-
-		-- 4. Set up the keymaps to trigger the lens and scrollbar marks
+		-- Keep the search keymaps that trigger hlslens.
 		local kopts = { noremap = true, silent = true }
 
 		vim.api.nvim_set_keymap(
