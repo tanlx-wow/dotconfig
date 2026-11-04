@@ -58,11 +58,41 @@ config.max_fps = 120
 config.prefer_egl = true
 
 config.keys = {
-	{
-		key = "r",
-		mods = "CTRL|ALT",
-		action = wezterm.action.ResetFontAndWindowSize,
-	},
+  {
+    key = "r",
+    mods = "CMD|CTRL|ALT",
+    action = wezterm.action_callback(function(window)
+      local ok, message = pcall(function()
+        local dimensions = window:get_dimensions()
+        local grid = window:active_tab():get_size()
+        local cell_width = grid.pixel_width / grid.cols
+        local cell_height = grid.pixel_height / grid.rows
+        local effective_config = window:effective_config()
+        -- Keep padding and unused edge pixels, replacing only the tab's grid.
+        local target_width = dimensions.pixel_width - grid.pixel_width
+          + effective_config.initial_cols * cell_width
+        local target_height = dimensions.pixel_height - grid.pixel_height
+          + effective_config.initial_rows * cell_height
+        -- Capture failures instead of silently losing the helper's output.
+        -- This API awaits asynchronously, allowing the GUI to service AX requests.
+        local success, stdout, stderr = wezterm.run_child_process({
+          wezterm.home_dir .. "/.config/shell_tool/bin/window-tool",
+          "wezterm-grid",
+          tostring(dimensions.pixel_width),
+          tostring(dimensions.pixel_height),
+          tostring(target_width),
+          tostring(target_height),
+        })
+        if not success then
+          error(tostring(stdout) .. tostring(stderr))
+        end
+      end)
+      if not ok then
+        wezterm.log_error("Window reset failed: " .. tostring(message))
+        window:toast_notification("Window reset failed", tostring(message), nil, 10000)
+      end
+    end),
+  },
 }
 
 -- adjust the columns and row width

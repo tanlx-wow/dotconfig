@@ -1,5 +1,17 @@
 # Update Log
 
+## 2026-11-04
+
+- Added the left-Option device flag (`0x20`) to Swift's generated WezTerm reset shortcut because WezTerm requires it alongside the generic Option flag to recognize Alt.
+- Changed Swift's generated WezTerm reset shortcut and the matching WezTerm binding to Cmd+Ctrl+Option+R; Alfred's trigger remains Option+R.
+- Removed the direct WezTerm Option+R binding; Alfred handles Option+R, and Swift waits for hotkey release before sending the internal reset shortcut directly to WezTerm using an isolated event source.
+- Changed window-tool's `center` argument to center the focused window on its current screen without resizing it; `reset` retains its size-reset behavior.
+- Added WezTerm reset error notifications and debug logging, capturing helper failures instead of silently discarding them.
+- Made WezTerm reset animate resizing and centering together using its configured 120×42 grid and current cell measurements, preserving font size instead of triggering a native font/window reset.
+- Removed the fixed 0.2-second delay between WezTerm's native window reset and centering.
+- Shortened window-tool animations from 0.32 to 0.15 seconds for front-window and all-window commands.
+- Moved the window tool into `shell_tool/window/` and added an optimized build used directly by Alfred.
+
 ## 2026-11-03
 
 - Aligned Fastfetch bottom borders with the 52-column section title borders.

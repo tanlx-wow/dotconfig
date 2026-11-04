@@ -18,7 +18,7 @@ import ApplicationServices
 let args = CommandLine.arguments
 let command = args.count > 1 ? args[1].lowercased() : "reset"
 let usage = """
-Usage: swift tilt_window_arg.swift [command]
+Usage: window-tool [command]
 
 Front window (animated):
   left, right          Tile to the left or right half
@@ -26,8 +26,9 @@ Front window (animated):
   bottom, down        Tile to the bottom half
   max, maximize       Maximize with margins
   plus                Grow by 20%, capped to the screen
-  reset, center       Resize and center (default: reset)
-                      WezTerm reset uses its native window size
+  reset               Resize and center (default command)
+                      WezTerm reset restores its grid, preserving the font
+  center              Center without changing the window size
 
 All visible apps (on each window's current screen):
   all-half            Animate eligible windows together to the left half
@@ -44,14 +45,19 @@ let validCommands: Set<String> = [
     "left", "right", "up", "top", "bottom", "down", "max", "maximize",
     "plus", "reset", "center", "all-half", "all-max", "hide-others",
 ]
-guard args.count <= 2, validCommands.contains(command) else {
+// Internal callback from WezTerm: current and target window dimensions in pixels.
+let gridMetrics = command == "wezterm-grid" ? args.dropFirst(2).compactMap(Double.init) : []
+let isGridReset = command == "wezterm-grid" && args.count == 6 && gridMetrics.count == 4
+    && gridMetrics.allSatisfy { $0.isFinite && $0 > 0 }
+guard isGridReset || (args.count <= 2 && validCommands.contains(command)) else {
     print("Invalid arguments.\n\n\(usage)")
     exit(1)
 }
 let direction = command
+let shouldResize = direction != "center"
 
 let margin: CGFloat = 16
-let animationDuration: TimeInterval = 0.32
+let animationDuration: TimeInterval = 0.15
 
 struct WindowAnimation {
     let window: AXUIElement
@@ -287,17 +293,45 @@ guard let frontApp = NSWorkspace.shared.frontmostApplication else {
 
 let isWeztermReset = direction == "reset" && frontApp.bundleIdentifier == "com.github.wez.wezterm"
 if isWeztermReset {
-    frontApp.activate()
-    Thread.sleep(forTimeInterval: 0.1)
-
-    let flags: CGEventFlags = [.maskControl, .maskAlternate]
-    for keyDown in [true, false] {
-        if let event = CGEvent(keyboardEventSource: nil, virtualKey: 15, keyDown: keyDown) {
-            event.flags = flags
-            event.post(tap: .cghidEventTap)
+    // WezTerm supplies live grid metrics, then calls back to animate one frame target.
+    // Let Alfred's original hotkey finish before sending a separate shortcut.
+    let shortcutModifiers: CGEventFlags = [.maskControl, .maskAlternate, .maskShift, .maskCommand]
+    let releaseDeadline = ProcessInfo.processInfo.systemUptime + 2
+    while !CGEventSource.flagsState(.combinedSessionState).intersection(shortcutModifiers).isEmpty
+        || CGEventSource.keyState(.combinedSessionState, key: 15) {
+        guard ProcessInfo.processInfo.systemUptime < releaseDeadline else {
+            print("Release the reset hotkey and try again.")
+            exit(1)
         }
+        Thread.sleep(forTimeInterval: 0.01)
     }
-    Thread.sleep(forTimeInterval: 0.2)
+    guard NSWorkspace.shared.frontmostApplication?.processIdentifier == frontApp.processIdentifier else {
+        print("WezTerm is no longer frontmost")
+        exit(1)
+    }
+    guard let source = CGEventSource(stateID: .privateState),
+          let keyDown = CGEvent(keyboardEventSource: source, virtualKey: 15, keyDown: true),
+          let keyUp = CGEvent(keyboardEventSource: source, virtualKey: 15, keyDown: false) else {
+        print("Unable to create the WezTerm reset shortcut")
+        exit(1)
+    }
+    // Target WezTerm instead of routing the shortcut through global hotkey taps.
+    source.localEventsSuppressionInterval = 0
+    // WezTerm's macOS key_modifiers requires a side-specific Option bit as well
+    // as maskAlternate; without it, the generated shortcut loses ALT.
+    // NX_DEVICELALTKEYMASK = 0x20 (left Option).
+    let leftOption = CGEventFlags(rawValue: 0x20)
+    let flags: CGEventFlags = [.maskCommand, .maskControl, .maskAlternate, leftOption]
+    keyDown.flags = flags
+    keyUp.flags = flags
+    keyDown.postToPid(frontApp.processIdentifier)
+    Thread.sleep(forTimeInterval: 0.02)
+    keyUp.postToPid(frontApp.processIdentifier)
+    exit(0)
+}
+if isGridReset && frontApp.bundleIdentifier != "com.github.wez.wezterm" {
+    print("WezTerm is no longer frontmost")
+    exit(1)
 }
 
 let appElement = AXUIElementCreateApplication(frontApp.processIdentifier)
@@ -305,7 +339,7 @@ var value: AnyObject?
 let result = AXUIElementCopyAttributeValue(appElement, kAXFocusedWindowAttribute as CFString, &value)
 guard result == .success else {
     print("No focused window found")
-    exit(0)
+    exit(isGridReset ? 1 : 0)
 }
 
 let window = value as! AXUIElement
@@ -324,6 +358,9 @@ var targetWidth: CGFloat = 0
 var targetHeight: CGFloat = 0
 
 switch direction {
+case "center":
+    targetWidth = currentSize.width
+    targetHeight = currentSize.height
 case "left", "right":
     targetWidth = (v.width - totalGapX) / 2
     targetHeight = v.height - 2 * margin
@@ -339,10 +376,12 @@ case "plus":
 case "up", "top", "bottom", "down":
     targetWidth = v.width - 2 * margin
     targetHeight = (v.height - totalGapY) / 2
-case "reset" where isWeztermReset:
-    targetWidth = currentSize.width
-    targetHeight = currentSize.height
-default: // "reset" and "center"
+case "wezterm-grid":
+    // This configuration has no title/tab bars or borders. Relating the AX frame
+    // to WezTerm's pixel dimensions handles Retina scaling without a fixed DPI.
+    targetWidth = currentSize.width * CGFloat(gridMetrics[2] / gridMetrics[0])
+    targetHeight = currentSize.height * CGFloat(gridMetrics[3] / gridMetrics[1])
+default: // "reset"
     targetWidth = v.width * 0.4
     targetHeight = v.height * 0.5
 }
@@ -376,7 +415,7 @@ default: // reset
 // We set position first to ensure the window has room to grow into the target size
 let newCocoaRect = CGRect(x: x, y: y, width: targetWidth, height: targetHeight)
 let newAXRect = cocoaToAX(newCocoaRect)
-animateWindow(window, from: CGRect(origin: currentPos, size: currentSize), to: newAXRect, resize: !isWeztermReset)
+animateWindow(window, from: CGRect(origin: currentPos, size: currentSize), to: newAXRect, resize: shouldResize)
 // Apply the exact final frame after animation (or immediately with Reduce Motion).
 var newPos = newAXRect.origin
 
@@ -386,12 +425,12 @@ if let p = AXValueCreate(.cgPoint, &newPos) {
 
 // 3. Set Size
 var newSize = CGSize(width: targetWidth, height: targetHeight)
-if !isWeztermReset, let s = AXValueCreate(.cgSize, &newSize) {
+if shouldResize, let s = AXValueCreate(.cgSize, &newSize) {
     AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, s)
 }
 
 // 4. (Optional) For "reset", re-center if actual size differs from target
-if direction == "reset" || direction == "center" {
+if direction == "reset" || direction == "center" || isGridReset {
     var axSizeValue: AnyObject?
     var actualSize = newSize
     if AXUIElementCopyAttributeValue(window, kAXSizeAttribute as CFString, &axSizeValue) == .success,

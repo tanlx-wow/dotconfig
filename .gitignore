@@ -35,6 +35,7 @@ lazy-lock.json
 .netrwhist
 
 # Tool-specific directories to ignore
+shell_tool/bin/
 clash/
 docker/
 filezilla/
