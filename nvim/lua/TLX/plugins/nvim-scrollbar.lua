@@ -7,11 +7,17 @@ return {
 		"kevinhwang91/nvim-hlslens",
 	},
 	config = function()
+		local right_gutter = require("TLX.core.right-gutter")
+		right_gutter.setup()
 		-- hlslens displays match counts; v2 collects scrollbar search marks natively.
 		require("hlslens").setup({})
 
 		require("scrollbar").setup({
 			set_highlights = true,
+			-- Keyed exclusions preserve the plugin's default exclusion list.
+			exclude = {
+				filetypes = { right_gutter = true },
+			},
 			providers = {
 				cursor = true,
 				diagnostic = true,
@@ -23,6 +29,7 @@ return {
 			scrollbar = {
 				show = true,
 				visibility = "all",
+				placement = right_gutter.scrollbar_placement,
 			},
 		})
 

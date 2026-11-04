@@ -2,6 +2,8 @@
 
 ## 2026-11-04
 
+- Excluded the blank `right_gutter` buffer from scrollbar rendering to prevent an extra scrollbar from appearing in the editor after resizing; removed the unnecessary resize-delay and forced-redraw workarounds.
+- Added a separate Neovim right-gutter module that reserves two columns beside wrapped editing windows and positions the scrollbar outside the text, with a `:RightGutterToggle` command.
 - Fixed Karabiner's configuration JSON by merging the Hyper+C → Fn+C rule into the selected profile alongside Caps Lock → Hyper, and corrected the Caps Lock rule description.
 - Enabled Karabiner event modification for the LowCorne keyboard (vendor 7504, product 24926).
 - Added the left-Option device flag (`0x20`) to Swift's generated WezTerm reset shortcut because WezTerm requires it alongside the generic Option flag to recognize Alt.
