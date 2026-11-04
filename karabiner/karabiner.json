@@ -5,7 +5,7 @@
             "complex_modifications": {
                 "rules": [
                     {
-                        "description": "Change caps_lock key to command+control+option+shift. (Use shift+caps_lock as caps_lock)",
+                        "description": "Change caps_lock key to command+control+option+shift",
                         "manipulators": [
                             {
                                 "from": {
@@ -21,9 +21,38 @@
                                 "type": "basic"
                             }
                         ]
+                    },
+                    {
+                        "description": "Hyper+C → Fn+C (Control Center)",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "c",
+                                    "modifiers": { "mandatory": ["control", "option", "command", "shift"] }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "c",
+                                        "modifiers": ["fn"]
+                                    }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
                     }
                 ]
             },
+            "devices": [
+                {
+                    "identifiers": {
+                        "is_keyboard": true,
+                        "is_pointing_device": true,
+                        "product_id": 24926,
+                        "vendor_id": 7504
+                    },
+                    "ignore": false
+                }
+            ],
             "name": "Default profile",
             "selected": true,
             "virtual_hid_keyboard": { "keyboard_type_v2": "ansi" }

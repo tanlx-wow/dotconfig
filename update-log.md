@@ -2,6 +2,8 @@
 
 ## 2026-11-04
 
+- Fixed Karabiner's configuration JSON by merging the Hyper+C → Fn+C rule into the selected profile alongside Caps Lock → Hyper, and corrected the Caps Lock rule description.
+- Enabled Karabiner event modification for the LowCorne keyboard (vendor 7504, product 24926).
 - Added the left-Option device flag (`0x20`) to Swift's generated WezTerm reset shortcut because WezTerm requires it alongside the generic Option flag to recognize Alt.
 - Changed Swift's generated WezTerm reset shortcut and the matching WezTerm binding to Cmd+Ctrl+Option+R; Alfred's trigger remains Option+R.
 - Removed the direct WezTerm Option+R binding; Alfred handles Option+R, and Swift waits for hotkey release before sending the internal reset shortcut directly to WezTerm using an isolated event source.
