@@ -1,5 +1,9 @@
 # Update Log
 
+## 2026-11-05
+
+- Added a Zsh `vmd` alias that runs VMD's startup script directly without opening another Terminal window.
+
 ## 2026-11-04
 
 - Excluded the blank `right_gutter` buffer from scrollbar rendering to prevent an extra scrollbar from appearing in the editor after resizing; removed the unnecessary resize-delay and forced-redraw workarounds.

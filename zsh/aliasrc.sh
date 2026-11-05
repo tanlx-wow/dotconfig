@@ -11,10 +11,15 @@ alias pwdcp="pwd | tr -d '\n' | pbcopy"
 
 # clear screen
 alias cl="clear"
+
 # nvim
 alias v="nvim"
+
 # lazygit
 alias lag="lazygit"
+
+# vmd
+alias vmd="/Applications/VMD2b1.app/Contents/MacOS/startup.command"
 
 # windows size
 # alias winsize='swift $HOME/.config/shell_tool/resize_windows.swift'
