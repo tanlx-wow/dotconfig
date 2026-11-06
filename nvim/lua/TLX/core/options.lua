@@ -43,12 +43,41 @@ opt.swapfile = false
 
 -- reload files changed outside of Neovim, such as edits made by opencode
 opt.autoread = true
-vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI", "TermClose", "TermLeave" }, {
-  group = vim.api.nvim_create_augroup("AutoReadExternalChanges", { clear = true }),
-  callback = function()
-    if vim.fn.mode() ~= "c" then
-      vim.cmd("checktime")
+local autoread_group = vim.api.nvim_create_augroup("AutoReadExternalChanges", { clear = true })
+local function check_external_changes()
+  -- Avoid interrupting typing, command entry, or an active dialog.
+  local mode = vim.api.nvim_get_mode().mode
+  if mode ~= "n" and mode ~= "t" then
+    return
+  end
+
+  local checked_buffers = {}
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    local buf = vim.api.nvim_win_get_buf(win)
+    if not checked_buffers[buf]
+      and vim.bo[buf].buftype == ""
+      and not vim.bo[buf].modified
+      and vim.api.nvim_buf_get_name(buf) ~= "" then
+      checked_buffers[buf] = true
+      vim.cmd("checktime " .. buf)
     end
+  end
+end
+
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "InsertLeave", "TermClose", "TermLeave" }, {
+  group = autoread_group,
+  callback = check_external_changes,
+})
+
+-- Focus events are not reliable across tmux panes or separate terminal windows.
+local autoread_timer = vim.uv.new_timer()
+autoread_timer:start(1000, 1000, vim.schedule_wrap(check_external_changes))
+vim.api.nvim_create_autocmd("VimLeavePre", {
+  group = autoread_group,
+  once = true,
+  callback = function()
+    autoread_timer:stop()
+    autoread_timer:close()
   end,
 })
 

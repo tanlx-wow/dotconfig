@@ -1,5 +1,11 @@
 # Update Log
 
+## 2026-11-06
+
+- Added one-second Neovim checks for external changes in visible, unmodified file buffers so OpenCode edits reload without requiring focus changes; unsaved edits remain protected.
+- Shortened Fastfetch's section borders to end just after the disk filesystem label, keeping all three sections aligned.
+- Added an editable OpenCode V2 `cli.json` with numbered session tabs, common UI preferences, and a configuration reference in `opencode/README.md`.
+
 ## 2026-11-05
 
 - Added a Zsh `vmd` alias that runs VMD's startup script directly without opening another Terminal window.
